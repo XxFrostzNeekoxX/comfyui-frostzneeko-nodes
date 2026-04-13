@@ -1,0 +1,14 @@
+# Example wildcard file
+# Each line is a possible replacement for __example__ in prompts
+# Lines starting with # are ignored
+red
+blue
+green
+purple
+golden
+silver
+pink
+cyan
+orange
+white
+black

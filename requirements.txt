@@ -1,0 +1,3 @@
+# FrotszNeeko Nodes
+# No additional dependencies required beyond ComfyUI's defaults.
+# ComfyUI already includes: torch, numpy, Pillow, etc.
