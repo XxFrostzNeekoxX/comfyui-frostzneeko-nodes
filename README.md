@@ -46,8 +46,20 @@ Download and extract into `ComfyUI/custom_nodes/comfyui-frotszneeko-nodes/`.
 After installing, **restart ComfyUI**. All nodes appear under **FrotszNeeko 🔹** in the node menu.
 
 ### Dependencies
-- [ComfyUI Impact Pack](https://github.com/ltdrdata/ComfyUI-Impact-Pack) — required for Face Detailer (detection models)
-- [pysssss Custom Scripts](https://github.com/pythongosssss/ComfyUI-Custom-Scripts) — optional, for ShowText integration
+
+This pack has **no hard dependencies** on other custom node packs. Everything is self-contained.
+
+| Package | Required? | What for |
+|---|---|---|
+| `ultralytics` | Only for Face Detailer | YOLO face/body detection models |
+| `opencv-python` | Optional | Better mask dilation (falls back to numpy if missing) |
+
+If you use the Face Detailer, install ultralytics:
+```bash
+pip install ultralytics
+```
+
+You'll also need YOLO detection models (e.g. `face_yolov8m.pt`) in `ComfyUI/models/ultralytics/bbox/`. These are the same models used by Impact Pack — if you already have them, they'll work automatically.
 
 ---
 
@@ -231,7 +243,7 @@ Yes. The sampling and CLIP encoding logic is identical to ComfyUI's built-in nod
 <details>
 <summary><b>Do I need Impact Pack installed?</b></summary>
 
-Only if you use **FN Face Detailer**. It needs Impact Pack's Ultralytics detection models. The other nodes work independently.
+**No.** The Face Detailer is fully self-contained — it reimplements the entire detection and detailing pipeline internally. You just need the `ultralytics` pip package and YOLO model files (`.pt`). If you already have Impact Pack installed, the same model files will work automatically.
 </details>
 
 <details>
