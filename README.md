@@ -1,4 +1,14 @@
 <p align="center">
+  <b>🌐 Language:</b>
+  <a href="README.md">English</a> •
+  <a href="docs/README_pt-BR.md">Português</a> •
+  <a href="docs/README_es.md">Español</a> •
+  <a href="docs/README_zh-CN.md">中文</a> •
+  <a href="docs/README_ja.md">日本語</a> •
+  <a href="docs/README_ko.md">한국어</a>
+</p>
+
+<p align="center">
   <img src="img/mascot.png" alt="FrotszNeeko Mascot" width="200"/>
 </p>
 
