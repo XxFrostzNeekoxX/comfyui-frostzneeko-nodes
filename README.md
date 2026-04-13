@@ -59,7 +59,7 @@ If you use the Face Detailer, install ultralytics:
 pip install ultralytics
 ```
 
-You'll also need YOLO detection models (e.g. `face_yolov8m.pt`) in `ComfyUI/models/ultralytics/bbox/`. These are the same models used by Impact Pack — if you already have them, they'll work automatically.
+You'll also need Ultralytics detection models (`.pt` files) in `ComfyUI/models/ultralytics/bbox/` or `ComfyUI/models/ultralytics/segm/`. Any YOLO model works — face detection, person detection, etc. If you already have Impact Pack installed, your existing models work automatically.
 
 ---
 
@@ -72,7 +72,7 @@ The brain of bulk generation workflows. Reads prompts from a `.txt` file and han
 | Feature | Description |
 |---|---|
 | **Line Selection** | `auto_cycle` (advances each run), `sequential` (seed-based), `random`, `ping_pong` |
-| **Auto-Cycle** | Each queue run advances to the next line. Cancel + re-queue resets to line 1 |
+| **Auto-Cycle** | Each run = next line in order. New queue always starts from line 1 |
 | **Wildcards** | `__tag__` syntax — reads from a `wildcards/` folder |
 | **Inline LoRAs** | `<lora:name:weight>` tags in your prompt — auto-loaded and applied |
 | **Checkpoint** | Optional built-in checkpoint loader — no separate node needed |
@@ -253,9 +253,9 @@ It's a clean CLIP model **without LoRA patches**. Some workflows encode the nega
 </details>
 
 <details>
-<summary><b>What's `auto_cycle` mode?</b></summary>
+<summary><b>What's <code>auto_cycle</code> mode?</b></summary>
 
-Every time you queue a generation, it advances to the next line in your prompt file. If you have 100 prompts and queue 100 runs, it goes through all of them in order, then loops back to line 1. If you cancel and re-queue, it resets to line 1 (use the `reset` toggle to force a reset).
+Every run in a batch uses the next line: run 1 = line 1, run 2 = line 2, run 3 = line 3, then loops back. When you start a **new queue** (cancel all and re-queue, or after a batch finishes), it always resets to **line 1**. If you cancel just one run mid-batch, the next queued run picks the next line normally.
 </details>
 
 ---

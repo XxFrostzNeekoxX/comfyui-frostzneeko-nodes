@@ -23,6 +23,7 @@ Display widgets:
 import os
 import re
 import random
+import time
 
 import folder_paths
 import comfy.sd
@@ -32,6 +33,8 @@ import comfy.utils
 class FNPromptFromFile:
 
     _auto_counter = 0
+    _last_exec_time = 0.0
+    _BATCH_GAP = 5.0  # seconds — gap longer than this = new batch → reset
 
     @classmethod
     def INPUT_TYPES(cls):
@@ -240,11 +243,14 @@ class FNPromptFromFile:
         """
         Pick a line index based on mode and seed.
 
-        auto_cycle:  Uses a class-level counter that auto-increments each run.
-                     Wraps around when it reaches the end. Reset via the
-                     'reset' toggle to go back to line 0.
+        auto_cycle:  Advances one line per run (0, 1, 2, 0, 1, 2, ...).
+                     Automatically detects new batches: if the gap between
+                     runs exceeds _BATCH_GAP seconds, the counter resets
+                     to 0 (back to the first prompt).  Within a batch,
+                     lines advance in order — even if you cancel one run,
+                     the next queued run picks the next line.
         sequential:  seed % num_lines (seed-driven)
-        random:      Random(seed) picks a line
+        random:      Random(seed).randint(...)
         ping_pong:   seed-based ping-pong oscillation
         """
         n = len(lines)
@@ -252,8 +258,17 @@ class FNPromptFromFile:
             return 0, ""
 
         if mode == "auto_cycle":
+            now = time.time()
+            elapsed = now - cls._last_exec_time
+
+            # Detect new batch: long gap since last execution → reset to line 1
+            if cls._last_exec_time > 0 and elapsed > cls._BATCH_GAP:
+                cls._auto_counter = 0
+                print("[FrotszNeeko] 🔄 New batch detected — starting from line 1")
+
             idx = cls._auto_counter % n
             cls._auto_counter += 1
+            cls._last_exec_time = now
         elif mode == "sequential":
             idx = seed % n
         elif mode == "random":
@@ -307,6 +322,7 @@ class FNPromptFromFile:
         # 1. Handle auto_cycle reset -----------------------------------
         if reset and mode == "auto_cycle":
             FNPromptFromFile._auto_counter = 0
+            FNPromptFromFile._last_exec_time = 0.0
             print("[FrotszNeeko] 🔄 Auto-cycle counter reset to 0")
 
         # 2. Read lines -----------------------------------------------
