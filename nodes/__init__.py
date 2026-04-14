@@ -27,7 +27,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "FNClipDualEncode": "FN CLIP Dual Encode 🔹",
     "FNClipAdvanced": "FN CLIP Text Encode (Advanced) 🔹",
     "FNCheckpointLoader": "FN Checkpoint Loader 🔹",
-    "FNKSamplerPreview": "FN KSampler Preview 🔹",
+    "FNKSamplerPreview": "FN Supreme KSampler 🔹",
     "FNFaceDetailer": "FN Face Detailer 🔹",
     "FNImageSaver": "FN Image Saver 🔹",
 }
