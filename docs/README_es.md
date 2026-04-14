@@ -26,13 +26,23 @@
 
 ---
 
-Genero contenido AI en masa y me cansé de workflows desordenados con 30+ nodos haciendo cosas simples. Así que construí estos nodos todo-en-uno para mantener todo limpio y rápido — pasando de **~40 nodos a ~7** sin perder control. Si haces generación masiva, estos te ahorrarán mucho tiempo.
+## 💬 Por qué lo creé
+
+Publico contenido en **Patreon**, **Pixiv**, **DeviantArt** y otras plataformas — lo que significa que genero imágenes AI en masa todos los días. Cuando empecé con ComfyUI, cada workflow que encontraba online era una pesadilla: **30, 40, a veces 50+ nodos** solo para hacer una generación básica con fix de rostro. Cables por todos lados, imposible de debuggear, y nadie en la comunidad estaba dispuesto a ayudar a simplificar.
+
+Así que dije al diablo con todo y construí los míos.
+
+Estos nodos comprimen pipelines enteros en bloques únicos y limpios. Lo que antes necesitaba **~40 nodos** ahora necesita **~7** — misma calidad, mismo control, cero dolor de cabeza. Los hice para mí primero, pero sé que hay otros creadores ahí afuera luchando con el mismo caos. **Si puedo ahorrarte horas de frustración, valió la pena.** Nadie me ayudó a descifrar estas cosas, así que quiero ser la persona que te ayude a ti.
+
+Ya sea para generación masiva para tu Patreon, armar una galería en Pixiv, o simplemente tener un workflow más limpio — estos nodos son para ti.
+
+---
 
 ## ✨ Destacados
 
 - 🎨 **Tema cyan neón** — todos los nodos tienen un look dark teal personalizado que resalta
 - 📄 **Prompt From File** — lee prompts de `.txt`, auto-cicla entre ellos, resuelve wildcards, carga LoRAs inline
-- ⚡ **KSampler todo-en-uno** — latent vacío integrado, preview en vivo, upscaler y toggles de detailer
+- ⚡ **Supreme KSampler** — latent vacío integrado, preview en vivo, upscaler y toggles de detailer en una bestia
 - 👁️ **Face Detailer en un nodo** — reemplaza 3+ nodos del Impact Pack con un solo nodo
 - 🔧 **Soporte BREAK y corchetes** — keyword `BREAK` y `[de-emphasis]` funcionan en todas partes
 - 🎛️ **UI organizada** — secciones colapsables para encontrar lo que necesitas
@@ -94,9 +104,9 @@ El cerebro de los workflows de generación masiva. Lee prompts de un archivo `.t
 
 ---
 
-### FN KSampler Preview
+### FN Supreme KSampler
 
-El caballo de batalla. KSampler completo con extras integrados.
+El caballo de batalla. KSampler completo con todo integrado — el único nodo de sampler que necesitarás.
 
 | Característica | Descripción |
 |---|---|
@@ -151,10 +161,12 @@ Guarda imágenes con control total de formato y nomenclatura. Soporta PNG, JPEG 
 ## 🔌 Workflow Típico
 
 ```
-FN Prompt From File → FN CLIP Dual Encode → FN KSampler Preview → FN Face Detailer → FN Image Saver
+FN Prompt From File → FN CLIP Dual Encode → FN Supreme KSampler → FN Face Detailer → FN Image Saver
 ```
 
 **~12 nodos → 5 nodos.** Mismos resultados, workflow más limpio.
+
+> 📁 Revisa la carpeta `workflows/` para templates de workflow listos para importar directamente en ComfyUI.
 
 ---
 

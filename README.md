@@ -26,13 +26,23 @@
 
 ---
 
-I mass generate AI content and got tired of messy workflows with 30+ nodes doing simple things. So I built these all-in-one nodes to keep things clean and fast — going from **~40 nodes down to ~7** while keeping full control. If you're doing bulk generation, these should save you a lot of time.
+## 💬 Why I Made This
+
+I run content on **Patreon**, **Pixiv**, **DeviantArt** and other platforms — which means I mass generate AI images every single day. When I first started with ComfyUI, every workflow I found online was a nightmare: **30, 40, sometimes 50+ nodes** just to do basic generation with a face fix. Spaghetti wires everywhere, impossible to debug, and nobody in the community was willing to help simplify things.
+
+So I said screw it and built my own.
+
+These nodes compress entire pipelines into single, clean blocks. What used to take **~40 nodes** now takes **~7** — same quality, same control, zero headache. I made them for myself first, but I know there are other creators out there grinding through the same mess I was. **If I can save you hours of frustration, this was worth it.** Nobody helped me figure this stuff out, so I want to be the person that helps you.
+
+Whether you're doing bulk generation for your Patreon, building a Pixiv gallery, or just want a cleaner workflow — these nodes are for you.
+
+---
 
 ## ✨ Highlights
 
 - 🎨 **Cyan neon theme** — all nodes have a custom dark teal look that stands out
 - 📄 **Prompt From File** — reads prompts from `.txt`, auto-cycles through them, resolves wildcards, loads LoRAs inline
-- ⚡ **All-in-one KSampler** — built-in empty latent, live preview, upscaler, and detailer toggle slots
+- ⚡ **Supreme KSampler** — built-in empty latent, live preview, upscaler, and detailer toggle slots in one beast
 - 👁️ **One-node Face Detailer** — replaces 3+ Impact Pack nodes with a single node
 - 🔧 **BREAK & bracket support** — `BREAK` keyword and `[de-emphasis]` brackets work everywhere
 - 🎛️ **Organized UI** — collapsible widget sections so you can actually find what you need
@@ -106,9 +116,9 @@ Each line is one prompt. Empty lines are skipped. LoRA tags are extracted and ap
 
 ---
 
-### FN KSampler Preview
+### FN Supreme KSampler
 
-The main workhorse. Full KSampler with extras built in.
+The main workhorse. Full KSampler with everything built in — the only sampler node you'll ever need.
 
 | Feature | Description |
 |---|---|
@@ -120,7 +130,7 @@ The main workhorse. Full KSampler with extras built in.
 
 **Outputs:** `LATENT`, `IMAGE`, `detail_pipe`
 
-> The `detail_pipe` output connects to FN Face Detailer nodes. Name your detailers (e.g. "Eyes", "Face") and toggle them on/off from the KSampler without rewiring.
+> The `detail_pipe` output connects to FN Face Detailer nodes. Name your detailers (e.g. "Eyes", "Face") and toggle them on/off from the Supreme KSampler without rewiring.
 
 ---
 
@@ -201,18 +211,20 @@ Saves images with full control over format and naming.
 A complete generation + face detail pipeline with just **5 nodes**:
 
 ```
-FN Prompt From File → FN CLIP Dual Encode → FN KSampler Preview → FN Face Detailer → FN Image Saver
+FN Prompt From File → FN CLIP Dual Encode → FN Supreme KSampler → FN Face Detailer → FN Image Saver
 ```
 
 | Node | Replaces |
 |---|---|
 | FN Prompt From File | Load Line From File + Extract LoRA + Lora Loader + CLIPSetLastLayer + Checkpoint Loader |
 | FN CLIP Dual Encode | 2× CLIPTextEncode |
-| FN KSampler Preview | EmptyLatentImage + KSampler + PreviewImage |
+| FN Supreme KSampler | EmptyLatentImage + KSampler + PreviewImage |
 | FN Face Detailer | UltralyticsProvider + BBOX Detector + SEGS Merge + DetailerForEach |
 | FN Image Saver | SaveImage |
 
 **~12 nodes → 5 nodes.** Same results, cleaner workflow.
+
+> 📁 Check the `workflows/` folder for ready-to-use workflow templates you can import directly into ComfyUI.
 
 ---
 
