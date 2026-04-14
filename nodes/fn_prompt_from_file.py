@@ -29,11 +29,11 @@ import comfy.sd
 import comfy.utils
 
 
-class FNPromptFromFile:
+# Module-level state — survives ComfyUI cache resets and cancels
+_auto_state = {}  # {node_unique_id: {"counter": int, "prev_remaining": int}}
 
-    def __init__(self):
-        self._auto_counter = 0
-        self._prev_remaining = 0  # tracks queue size for batch detection
+
+class FNPromptFromFile:
 
     @classmethod
     def INPUT_TYPES(cls):
@@ -75,6 +75,9 @@ class FNPromptFromFile:
                     {"default": "", "multiline": True,
                      "placeholder": "🔗 LoRAs & Wildcards will appear here..."},
                 ),
+            },
+            "hidden": {
+                "unique_id": "UNIQUE_ID",
             },
         }
 
@@ -237,14 +240,13 @@ class FNPromptFromFile:
 
     # ── Line selection ────────────────────────────────────────────────
 
-    def _pick_line(self, lines, mode, seed):
+    @staticmethod
+    def _pick_line(lines, mode, seed, uid="default"):
         """
         Pick a line index based on mode and seed.
 
         auto_cycle:  Advances one line per run (0, 1, 2, 0, 1, 2, ...).
-                     Cycles forever. Use the 'reset' toggle to go back
-                     to line 1 (one-shot: toggle ON resets once, won't
-                     keep resetting on subsequent runs).
+                     Resets to line 1 when a new batch is queued.
         sequential:  seed % num_lines (seed-driven)
         random:      Random(seed).randint(...)
         ping_pong:   seed-based ping-pong oscillation
@@ -254,8 +256,11 @@ class FNPromptFromFile:
             return 0, ""
 
         if mode == "auto_cycle":
-            idx = self._auto_counter % n
-            self._auto_counter += 1
+            if uid not in _auto_state:
+                _auto_state[uid] = {"counter": 0, "prev_remaining": 0}
+            st = _auto_state[uid]
+            idx = st["counter"] % n
+            st["counter"] += 1
             print(f"[FrotszNeeko] 📄 Auto-cycle: line {idx + 1}/{n}")
         elif mode == "sequential":
             idx = seed % n
@@ -291,6 +296,7 @@ class FNPromptFromFile:
         wildcard_dir="",
         current_prompt="",
         active_loras_wildcards="",
+        **kwargs
     ):
         # ── resolve model / clip / vae ────────────────────────────────
         vae = None
@@ -309,6 +315,11 @@ class FNPromptFromFile:
 
         # 1. Handle auto_cycle batch detection ----------------------------
         if mode == "auto_cycle":
+            uid = kwargs.get("unique_id", "default")
+            if uid not in _auto_state:
+                _auto_state[uid] = {"counter": 0, "prev_remaining": 0}
+            st = _auto_state[uid]
+
             # Detect new batch via ComfyUI's prompt queue
             try:
                 from server import PromptServer
@@ -317,15 +328,15 @@ class FNPromptFromFile:
                 remaining = -1
 
             if remaining >= 0:
-                if remaining >= self._prev_remaining:
+                if remaining >= st["prev_remaining"]:
                     # Queue grew or same size → new batch → reset to line 1
-                    self._auto_counter = 0
-                    print("[FrotszNeeko] \U0001f504 New batch detected — starting from line 1")
-                self._prev_remaining = remaining
+                    st["counter"] = 0
+                    print("[FrotszNeeko] 🔄 New batch detected — starting from line 1")
+                st["prev_remaining"] = remaining
 
             # Manual reset override
             if reset:
-                self._auto_counter = 0
+                st["counter"] = 0
 
         # 2. Read lines -----------------------------------------------
         raw_prompt = ""
@@ -338,7 +349,7 @@ class FNPromptFromFile:
                 lines = [l.strip() for l in fh if l.strip()]
 
             if lines:
-                line_num, raw_prompt = self._pick_line(lines, mode, seed)
+                line_num, raw_prompt = self._pick_line(lines, mode, seed, uid=kwargs.get("unique_id", "default"))
                 if mode == "auto_cycle":
                     print(f"[FrotszNeeko] 🔄 Auto-cycle: line {line_num + 1}/{len(lines)}")
 
