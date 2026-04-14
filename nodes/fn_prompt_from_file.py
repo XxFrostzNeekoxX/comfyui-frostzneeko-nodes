@@ -23,7 +23,6 @@ Display widgets:
 import os
 import re
 import random
-import time
 
 import folder_paths
 import comfy.sd
@@ -34,7 +33,7 @@ class FNPromptFromFile:
 
     def __init__(self):
         self._auto_counter = 0
-        self._was_reset = False
+        self._prev_remaining = 0  # tracks queue size for batch detection
 
     @classmethod
     def INPUT_TYPES(cls):
@@ -308,16 +307,25 @@ class FNPromptFromFile:
                 "Connect MODEL + CLIP inputs or select a checkpoint."
             )
 
-        # 1. Handle auto_cycle reset (one-shot) --------------------------
+        # 1. Handle auto_cycle batch detection ----------------------------
         if mode == "auto_cycle":
-            if reset and not self._was_reset:
-                # First time seeing reset=True → actually reset
+            # Detect new batch via ComfyUI's prompt queue
+            try:
+                from server import PromptServer
+                remaining = PromptServer.instance.prompt_queue.get_tasks_remaining()
+            except Exception:
+                remaining = -1
+
+            if remaining >= 0:
+                if remaining >= self._prev_remaining:
+                    # Queue grew or same size → new batch → reset to line 1
+                    self._auto_counter = 0
+                    print("[FrotszNeeko] \U0001f504 New batch detected — starting from line 1")
+                self._prev_remaining = remaining
+
+            # Manual reset override
+            if reset:
                 self._auto_counter = 0
-                self._was_reset = True
-                print("[FrotszNeeko] 🔄 Auto-cycle counter reset to 0")
-            elif not reset:
-                # User turned reset OFF → allow future resets
-                self._was_reset = False
 
         # 2. Read lines -----------------------------------------------
         raw_prompt = ""
