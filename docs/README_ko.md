@@ -57,7 +57,7 @@ ComfyUI Manager에서 **FrostzNeeko**를 검색하고 설치를 클릭하세요.
 ### 방법 2: Git Clone
 ```bash
 cd ComfyUI/custom_nodes/
-git clone git clone https://github.com/XxFrostzNeekoxX/comfyui-frotszneeko-nodes.git
+git clone https://github.com/XxFrostzNeekoxX/comfyui-frotszneeko-nodes.git
 ```
 
 ### 방법 3: ZIP 다운로드
