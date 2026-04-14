@@ -57,11 +57,11 @@ ComfyUI Managerで **FrostzNeeko** を検索してインストールをクリッ
 ### 方法2: Git Clone
 ```bash
 cd ComfyUI/custom_nodes/
-git clone https://github.com/XxFrostzNeekoxX/comfyui-FrostzNeeko-nodes.git
+git clone git clone https://github.com/XxFrostzNeekoxX/comfyui-frotszneeko-nodes.git
 ```
 
 ### 方法3: ZIPダウンロード
-ダウンロードして `ComfyUI/custom_nodes/comfyui-FrostzNeeko-nodes/` に展開。
+ダウンロードして `ComfyUI/custom_nodes/comfyui-frostzneeko-nodes/` に展開。
 
 インストール後、**ComfyUIを再起動**。すべてのノードがノードメニューの **FrostzNeeko 🔹** に表示されます。
 
