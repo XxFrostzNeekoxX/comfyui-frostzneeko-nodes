@@ -162,7 +162,7 @@ def _inference_bbox(model, pil_image, confidence=0.3):
         results[0].append(pred[0].names[int(pred[0].boxes[i].cls.item())])
         results[1].append(bboxes[i])
         results[2].append(segms[i])
-        results[3].append(pred[0].boxes[i].conf.cpu().numpy().item())
+        results[3].append(pred[0].boxes[i].conf.item())
 
     return results
 
@@ -221,7 +221,7 @@ def _inference_segm(model, pil_image, confidence=0.3):
         scaled_mask = scaled_mask.squeeze().squeeze()
 
         results[2].append(scaled_mask.numpy())
-        results[3].append(pred[0].boxes[i].conf.cpu().numpy().item())
+        results[3].append(pred[0].boxes[i].conf.item())
 
     return results
 
@@ -734,7 +734,24 @@ def run_face_detail(
                 paste_mask,
             )
 
-            conf_val = float(np.asarray(seg.confidence).flat[0])
+            try:
+                # Safely extract confidence value from various numpy/array formats
+                confidence = seg.confidence
+                conf_array = np.asarray(confidence)
+                
+                if conf_array.ndim == 0:
+                    # Already a scalar
+                    conf_val = float(conf_array)
+                elif conf_array.size > 0:
+                    # Array with elements - extract first one safely using .item()
+                    conf_val = float(conf_array.flat[0].item())
+                else:
+                    # Empty array - use default
+                    conf_val = 0.0
+            except (TypeError, ValueError, AttributeError) as e:
+                # Final fallback
+                print(f"[FrostzNeeko] ⚠️ Warning: Could not extract confidence - {e}")
+                conf_val = 0.0
             print(f"[FrostzNeeko]    ✅ Detection {i + 1} [{mode_label}] detailed (conf={conf_val:.2f})")
 
     return image
