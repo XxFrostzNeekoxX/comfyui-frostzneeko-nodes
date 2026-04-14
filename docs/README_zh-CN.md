@@ -57,11 +57,11 @@
 ### 方式二：Git Clone
 ```bash
 cd ComfyUI/custom_nodes/
-git clone https://github.com/XxFrostzNeekoxX/comfyui-FrostzNeeko-nodes.git
+git git clone https://github.com/XxFrostzNeekoxX/comfyui-frotszneeko-nodes.git
 ```
 
 ### 方式三：下载 ZIP
-下载并解压到 `ComfyUI/custom_nodes/comfyui-FrostzNeeko-nodes/`。
+下载并解压到 `ComfyUI/custom_nodes/comfyui-frostzneeko-nodes/`。
 
 安装后，**重启 ComfyUI**。所有节点出现在节点菜单的 **FrostzNeeko 🔹** 下。
 
