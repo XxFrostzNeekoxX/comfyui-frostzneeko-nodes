@@ -57,7 +57,7 @@
 ### 方式二：Git Clone
 ```bash
 cd ComfyUI/custom_nodes/
-git git clone https://github.com/XxFrostzNeekoxX/comfyui-frotszneeko-nodes.git
+git git clone git clone https://github.com/XxFrostzNeekoxX/comfyui-frotszneeko-nodes.git
 ```
 
 ### 方式三：下载 ZIP
