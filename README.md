@@ -57,11 +57,11 @@ Search for **FrostzNeeko** in ComfyUI Manager and click Install.
 ### Option 2: Git Clone
 ```bash
 cd ComfyUI/custom_nodes/
-git clone https://github.com/FrostzNeeko/comfyui-FrostzNeeko-nodes.git
+git clone https://github.com/XxFrostzNeekoxX/comfyui-frotszneeko-nodes.git
 ```
 
 ### Option 3: Download ZIP
-Download and extract into `ComfyUI/custom_nodes/comfyui-FrostzNeeko-nodes/`.
+Download and extract into `ComfyUI/custom_nodes/comfyui-frostzneeko-nodes/`.
 
 After installing, **restart ComfyUI**. All nodes appear under **FrostzNeeko 🔹** in the node menu.
 
