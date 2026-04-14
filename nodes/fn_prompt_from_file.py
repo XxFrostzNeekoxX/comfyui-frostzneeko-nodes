@@ -94,7 +94,7 @@ class FNPromptFromFile:
     )
     FUNCTION = "process"
     OUTPUT_NODE = True
-    CATEGORY = "FrotszNeeko 🔹/Prompt"
+    CATEGORY = "FrostzNeeko 🔹/Prompt"
 
     @classmethod
     def IS_CHANGED(cls, **kwargs):
@@ -142,7 +142,7 @@ class FNPromptFromFile:
                         ]
                     replacement = rng.choice(lines) if lines else name
                 else:
-                    print(f"[FrotszNeeko] ⚠️  Wildcard file not found: {wc_path}")
+                    print(f"[FrostzNeeko] ⚠️  Wildcard file not found: {wc_path}")
                     replacement = name
                 replacements.append((f"__{name}__", replacement))
                 result = result.replace(f"__{name}__", replacement, 1)
@@ -191,7 +191,7 @@ class FNPromptFromFile:
 
             lora_file = cls._find_lora_file(lora_name, lora_list)
             if lora_file is None:
-                print(f"[FrotszNeeko] ⚠️  LoRA not found: {lora_name}")
+                print(f"[FrostzNeeko] ⚠️  LoRA not found: {lora_name}")
                 lora_info.append((lora_name, weight, False))
                 continue
             try:
@@ -200,10 +200,10 @@ class FNPromptFromFile:
                 cur_model, cur_clip = comfy.sd.load_lora_for_models(
                     cur_model, cur_clip, lora, weight, weight
                 )
-                print(f"[FrotszNeeko] ✅ Loaded LoRA: {lora_name} (w={weight})")
+                print(f"[FrostzNeeko] ✅ Loaded LoRA: {lora_name} (w={weight})")
                 lora_info.append((lora_name, weight, True))
             except Exception as exc:
-                print(f"[FrotszNeeko] ❌ Failed to load LoRA '{lora_name}': {exc}")
+                print(f"[FrostzNeeko] ❌ Failed to load LoRA '{lora_name}': {exc}")
                 lora_info.append((lora_name, weight, False))
 
         return clean, cur_model, cur_clip, lora_info
@@ -221,7 +221,7 @@ class FNPromptFromFile:
         ckpt_path = folder_paths.get_full_path("checkpoints", ckpt_name)
         if ckpt_path is None:
             raise FileNotFoundError(
-                f"[FrotszNeeko] Checkpoint not found: {ckpt_name}"
+                f"[FrostzNeeko] Checkpoint not found: {ckpt_name}"
             )
 
         out = comfy.sd.load_checkpoint_guess_config(
@@ -235,7 +235,7 @@ class FNPromptFromFile:
         ckpt_vae = out[2]
 
         cls._ckpt_cache[ckpt_name] = (ckpt_model, ckpt_clip, ckpt_vae)
-        print(f"[FrotszNeeko] ✅ Loaded checkpoint: {ckpt_name}")
+        print(f"[FrostzNeeko] ✅ Loaded checkpoint: {ckpt_name}")
         return (ckpt_model, ckpt_clip, ckpt_vae)
 
     # ── Line selection ────────────────────────────────────────────────
@@ -261,7 +261,7 @@ class FNPromptFromFile:
             st = _auto_state[uid]
             idx = st["counter"] % n
             st["counter"] += 1
-            print(f"[FrotszNeeko] 📄 Auto-cycle: line {idx + 1}/{n}")
+            print(f"[FrostzNeeko] 📄 Auto-cycle: line {idx + 1}/{n}")
         elif mode == "sequential":
             idx = seed % n
         elif mode == "random":
@@ -309,7 +309,7 @@ class FNPromptFromFile:
 
         if model is None or clip is None:
             raise ValueError(
-                "[FrotszNeeko] No model/clip available. "
+                "[FrostzNeeko] No model/clip available. "
                 "Connect MODEL + CLIP inputs or select a checkpoint."
             )
 
@@ -331,7 +331,7 @@ class FNPromptFromFile:
                 if remaining >= st["prev_remaining"]:
                     # Queue grew or same size → new batch → reset to line 1
                     st["counter"] = 0
-                    print("[FrotszNeeko] 🔄 New batch detected — starting from line 1")
+                    print("[FrostzNeeko] 🔄 New batch detected — starting from line 1")
                 st["prev_remaining"] = remaining
 
             # Manual reset override
@@ -343,7 +343,7 @@ class FNPromptFromFile:
         line_num = 0
 
         if not os.path.isfile(file_path):
-            print(f"[FrotszNeeko] ❌ File not found: {file_path}")
+            print(f"[FrostzNeeko] ❌ File not found: {file_path}")
         else:
             with open(file_path, "r", encoding="utf-8") as fh:
                 lines = [l.strip() for l in fh if l.strip()]
@@ -351,7 +351,7 @@ class FNPromptFromFile:
             if lines:
                 line_num, raw_prompt = self._pick_line(lines, mode, seed, uid=kwargs.get("unique_id", "default"))
                 if mode == "auto_cycle":
-                    print(f"[FrotszNeeko] 🔄 Auto-cycle: line {line_num + 1}/{len(lines)}")
+                    print(f"[FrostzNeeko] 🔄 Auto-cycle: line {line_num + 1}/{len(lines)}")
 
         # 2. Wildcards -------------------------------------------------
         full = raw_prompt
@@ -372,7 +372,7 @@ class FNPromptFromFile:
             # Apply clip_skip to detailer clip too
             base_clip = base_clip.clone()
             base_clip.clip_layer(-(clip_skip))
-            print(f"[FrotszNeeko] 🔧 CLIP Skip: -{clip_skip}")
+            print(f"[FrostzNeeko] 🔧 CLIP Skip: -{clip_skip}")
 
         # 5. CLIP encode (with BREAK + [bracket] support) ----------------
         from .fn_clip_advanced import FNClipAdvanced
@@ -419,13 +419,13 @@ class FNPromptFromFile:
 
         display_loras_wc = "\n".join(display_lines)
 
-        print(f"[FrotszNeeko] 📄 Line {line_num}: {clean_prompt[:100]}…")
+        print(f"[FrostzNeeko] 📄 Line {line_num}: {clean_prompt[:100]}…")
         if lora_info:
             loaded = sum(1 for _, _, ok in lora_info if ok)
             total = len(lora_info)
-            print(f"[FrotszNeeko] 🔗 LoRAs: {loaded}/{total} applied to model")
+            print(f"[FrostzNeeko] 🔗 LoRAs: {loaded}/{total} applied to model")
         if wildcard_replacements:
-            print(f"[FrotszNeeko] 🎲 Wildcards: {len(wildcard_replacements)} resolved")
+            print(f"[FrostzNeeko] 🎲 Wildcards: {len(wildcard_replacements)} resolved")
 
         return {
             "ui": {

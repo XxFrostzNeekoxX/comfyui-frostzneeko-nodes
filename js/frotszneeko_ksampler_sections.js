@@ -1,7 +1,7 @@
 import { app } from "../../scripts/app.js";
 
 /*
- * FrotszNeeko — KSampler Preview: Section Headers + Styled Toggles
+ * FrostzNeeko — KSampler Preview: Section Headers + Styled Toggles
  * Cyan neon theme
  */
 
@@ -64,7 +64,7 @@ function createSectionHeader(label) {
 }
 
 app.registerExtension({
-    name: "FrotszNeeko.KSamplerSections",
+    name: "FrostzNeeko.KSamplerSections",
 
     async beforeRegisterNodeDef(nodeType, nodeData, _app) {
         if (nodeData.name !== "FNKSamplerPreview") return;

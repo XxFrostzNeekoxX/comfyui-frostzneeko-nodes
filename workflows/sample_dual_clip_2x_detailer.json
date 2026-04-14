@@ -200,7 +200,7 @@
       ],
       "properties": { "Node name for S&R": "FNImageSaver" },
       "widgets_values": [
-        "FrotszNeeko",
+        "FrostzNeeko",
         "png",
         95,
         true
@@ -229,7 +229,7 @@
   ],
   "groups": [
     {
-      "title": "🔹 FrotszNeeko — All-in-One + Dual CLIP + 2x Detailer",
+      "title": "🔹 FrostzNeeko — All-in-One + Dual CLIP + 2x Detailer",
       "bounding": [70, 120, 2120, 900],
       "color": "#00E5FF",
       "font_size": 24

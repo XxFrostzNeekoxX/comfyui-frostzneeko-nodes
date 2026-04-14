@@ -9,10 +9,10 @@
 </p>
 
 <p align="center">
-  <img src="img/mascot.png" alt="FrotszNeeko Mascot" width="200"/>
+  <img src="img/mascot.png" alt="FrostzNeeko Mascot" width="200"/>
 </p>
 
-<h1 align="center">🔹 FrotszNeeko Nodes</h1>
+<h1 align="center">🔹 FrostzNeeko Nodes</h1>
 
 <p align="center">
   <b>All-in-one custom nodes for ComfyUI — built for bulk generation workflows</b>
@@ -52,18 +52,18 @@ Whether you're doing bulk generation for your Patreon, building a Pixiv gallery,
 ## 📦 Installation
 
 ### Option 1: ComfyUI Manager (Recommended)
-Search for **FrotszNeeko** in ComfyUI Manager and click Install.
+Search for **FrostzNeeko** in ComfyUI Manager and click Install.
 
 ### Option 2: Git Clone
 ```bash
 cd ComfyUI/custom_nodes/
-git clone https://github.com/FrotszNeeko/comfyui-frotszneeko-nodes.git
+git clone https://github.com/FrostzNeeko/comfyui-FrostzNeeko-nodes.git
 ```
 
 ### Option 3: Download ZIP
-Download and extract into `ComfyUI/custom_nodes/comfyui-frotszneeko-nodes/`.
+Download and extract into `ComfyUI/custom_nodes/comfyui-FrostzNeeko-nodes/`.
 
-After installing, **restart ComfyUI**. All nodes appear under **FrotszNeeko 🔹** in the node menu.
+After installing, **restart ComfyUI**. All nodes appear under **FrostzNeeko 🔹** in the node menu.
 
 ### Dependencies
 
@@ -289,7 +289,7 @@ MIT — do whatever you want with it.
 ---
 
 <p align="center">
-  <img src="img/mascot.png" alt="FrotszNeeko" width="80"/>
+  <img src="img/mascot.png" alt="FrostzNeeko" width="80"/>
   <br/>
-  <sub>Made with ❤️ by FrotszNeeko</sub>
+  <sub>Made with ❤️ by FrostzNeeko</sub>
 </p>

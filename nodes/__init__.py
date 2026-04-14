@@ -1,5 +1,5 @@
 """
-FrotszNeeko Nodes — nodes package init
+FrostzNeeko Nodes — nodes package init
 Imports all node classes and builds the ComfyUI registration mappings.
 """
 

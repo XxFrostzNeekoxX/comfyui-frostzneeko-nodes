@@ -29,7 +29,7 @@ class FNClipAdvanced:
     RETURN_TYPES = ("CONDITIONING",)
     RETURN_NAMES = ("conditioning",)
     FUNCTION = "encode"
-    CATEGORY = "FrotszNeeko 🔹/Conditioning"
+    CATEGORY = "FrostzNeeko 🔹/Conditioning"
 
     # ── Square-bracket de-emphasis ────────────────────────────────────
     # ComfyUI's tokeniser handles (parentheses) but NOT [brackets].
@@ -82,7 +82,7 @@ class FNClipAdvanced:
     def encode(self, clip, text):
         if clip is None:
             raise RuntimeError(
-                "[FrotszNeeko] CLIP input is None — your checkpoint may "
+                "[FrostzNeeko] CLIP input is None — your checkpoint may "
                 "not contain a valid CLIP / text encoder model."
             )
 

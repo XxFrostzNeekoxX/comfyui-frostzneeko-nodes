@@ -28,7 +28,7 @@ class FNImageSaver:
         return {
             "required": {
                 "images": ("IMAGE",),
-                "filename_prefix": ("STRING", {"default": "FrotszNeeko"}),
+                "filename_prefix": ("STRING", {"default": "FrostzNeeko"}),
                 "format": (["png", "jpeg", "webp"],),
                 "quality": ("INT", {"default": 95, "min": 1, "max": 100}),
                 "add_timestamp": ("BOOLEAN", {"default": True}),
@@ -46,12 +46,12 @@ class FNImageSaver:
     RETURN_NAMES = ("images",)
     FUNCTION = "save_images"
     OUTPUT_NODE = True
-    CATEGORY = "FrotszNeeko 🔹/Image"
+    CATEGORY = "FrostzNeeko 🔹/Image"
 
     def save_images(
         self,
         images,
-        filename_prefix="FrotszNeeko",
+        filename_prefix="FrostzNeeko",
         format="png",
         quality=95,
         add_timestamp=True,
@@ -121,7 +121,7 @@ class FNImageSaver:
                 }
             )
             counter += 1
-            print(f"[FrotszNeeko] 💾 Saved: {os.path.join(full_output_folder, file)}")
+            print(f"[FrostzNeeko] 💾 Saved: {os.path.join(full_output_folder, file)}")
 
         # Return UI preview AND pass images through
         return {"ui": {"images": results}, "result": (images,)}

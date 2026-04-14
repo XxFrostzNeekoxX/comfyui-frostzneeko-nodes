@@ -1,7 +1,7 @@
 import { app } from "../../scripts/app.js";
 
 /*
- * FrotszNeeko Nodes — Cyan Neon Theme v2
+ * FrostzNeeko Nodes — Cyan Neon Theme v2
  * Clean neon glow, bold titles, premium look.
  */
 
@@ -25,7 +25,7 @@ const CYAN = {
 };
 
 app.registerExtension({
-    name: "FrotszNeeko.CyanNeonTheme",
+    name: "FrostzNeeko.CyanNeonTheme",
 
     async beforeRegisterNodeDef(nodeType, nodeData, _app) {
         if (!FROTSZ_NODES.includes(nodeData.name)) return;

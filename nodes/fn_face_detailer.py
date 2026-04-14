@@ -133,7 +133,7 @@ class FNFaceDetailer:
     RETURN_NAMES = ("image",)
     FUNCTION = "detail"
     OUTPUT_NODE = True
-    CATEGORY = "FrotszNeeko 🔹/Detailer"
+    CATEGORY = "FrostzNeeko 🔹/Detailer"
 
     # ─────────────────────────────────────────────────────────────────
     def detail(
@@ -176,17 +176,17 @@ class FNFaceDetailer:
             toggles = detail_pipe.get("toggles", {})
             if display_name in toggles and not toggles[display_name]:
                 print(
-                    f"[FrotszNeeko] ⏭️  '{display_name}' is DISABLED — passing through"
+                    f"[FrostzNeeko] ⏭️  '{display_name}' is DISABLED — passing through"
                 )
                 preview = self._save_preview(image, prompt, extra_pnginfo)
                 return {"ui": {"images": preview}, "result": (image,)}
             elif display_name in toggles and toggles[display_name]:
                 print(
-                    f"[FrotszNeeko] 🎯 '{display_name}' is ENABLED via toggle"
+                    f"[FrostzNeeko] 🎯 '{display_name}' is ENABLED via toggle"
                 )
             else:
                 print(
-                    f"[FrotszNeeko] ℹ️  '{display_name}' not in toggle list — running"
+                    f"[FrostzNeeko] ℹ️  '{display_name}' not in toggle list — running"
                 )
 
         # ── handle wildcard spec conditioning ────────────────────────
@@ -196,14 +196,14 @@ class FNFaceDetailer:
                 tokens = clip.tokenize(wildcard_spec.strip())
                 detail_positive = clip.encode_from_tokens_scheduled(tokens)
                 print(
-                    f"[FrotszNeeko] 📝 Using wildcard spec: "
+                    f"[FrostzNeeko] 📝 Using wildcard spec: "
                     f"{wildcard_spec.strip()[:60]}…"
                 )
             except Exception as exc:
-                print(f"[FrotszNeeko] ⚠️  Wildcard spec encode failed: {exc}")
+                print(f"[FrostzNeeko] ⚠️  Wildcard spec encode failed: {exc}")
 
         # ── run the detail pass ──────────────────────────────────────
-        print(f"[FrotszNeeko] 🎯 '{display_name}' — running detail pass")
+        print(f"[FrostzNeeko] 🎯 '{display_name}' — running detail pass")
 
         detailed = run_face_detail(
             image,

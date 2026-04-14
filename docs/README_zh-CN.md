@@ -9,10 +9,10 @@
 </p>
 
 <p align="center">
-  <img src="../img/mascot.png" alt="FrotszNeeko Mascot" width="200"/>
+  <img src="../img/mascot.png" alt="FrostzNeeko Mascot" width="200"/>
 </p>
 
-<h1 align="center">🔹 FrotszNeeko Nodes</h1>
+<h1 align="center">🔹 FrostzNeeko Nodes</h1>
 
 <p align="center">
   <b>ComfyUI 一体化自定义节点 — 专为批量生成工作流设计</b>
@@ -52,18 +52,18 @@
 ## 📦 安装
 
 ### 方式一：ComfyUI Manager（推荐）
-在 ComfyUI Manager 中搜索 **FrotszNeeko** 并点击安装。
+在 ComfyUI Manager 中搜索 **FrostzNeeko** 并点击安装。
 
 ### 方式二：Git Clone
 ```bash
 cd ComfyUI/custom_nodes/
-git clone https://github.com/XxFrostzNeekoxX/comfyui-frotszneeko-nodes.git
+git clone https://github.com/XxFrostzNeekoxX/comfyui-FrostzNeeko-nodes.git
 ```
 
 ### 方式三：下载 ZIP
-下载并解压到 `ComfyUI/custom_nodes/comfyui-frotszneeko-nodes/`。
+下载并解压到 `ComfyUI/custom_nodes/comfyui-FrostzNeeko-nodes/`。
 
-安装后，**重启 ComfyUI**。所有节点出现在节点菜单的 **FrotszNeeko 🔹** 下。
+安装后，**重启 ComfyUI**。所有节点出现在节点菜单的 **FrostzNeeko 🔹** 下。
 
 ### 依赖
 
@@ -177,7 +177,7 @@ MIT — 随便用。
 ---
 
 <p align="center">
-  <img src="../img/mascot.png" alt="FrotszNeeko" width="80"/>
+  <img src="../img/mascot.png" alt="FrostzNeeko" width="80"/>
   <br/>
-  <sub>用 ❤️ 制作 by FrotszNeeko</sub>
+  <sub>用 ❤️ 制作 by FrostzNeeko</sub>
 </p>

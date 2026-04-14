@@ -1,7 +1,7 @@
 import { app } from "../../scripts/app.js";
 
 /*
- * FrotszNeeko — Prompt From File: mascot image + display updater
+ * FrostzNeeko — Prompt From File: mascot image + display updater
  *
  * Strategy: spacer widget reserves space, onDrawForeground renders
  * the image at the spacer's actual Y position (via widget.last_y).
@@ -20,17 +20,17 @@ function ensureMascotLoaded() {
         app.graph?.setDirtyCanvas(true, true);
     };
     mascotImg.onerror = () => {
-        console.warn("[FrotszNeeko] Could not load mascot");
+        console.warn("[FrostzNeeko] Could not load mascot");
         mascotImg = null;
     };
-    mascotImg.src = "/frotszneeko/mascot?v=" + Date.now();
+    mascotImg.src = "/FrostzNeeko/mascot?v=" + Date.now();
 }
 ensureMascotLoaded();
 
 const IMG_BLOCK_H = 160;
 
 app.registerExtension({
-    name: "FrotszNeeko.PromptFromFileDisplay",
+    name: "FrostzNeeko.PromptFromFileDisplay",
 
     async beforeRegisterNodeDef(nodeType, nodeData, _app) {
         if (nodeData.name !== "FNPromptFromFile") return;

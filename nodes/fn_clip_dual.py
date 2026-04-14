@@ -41,14 +41,14 @@ class FNClipDualEncode:
     RETURN_TYPES = ("CONDITIONING", "CONDITIONING", "CLIP")
     RETURN_NAMES = ("positive", "negative", "clip")
     FUNCTION = "encode"
-    CATEGORY = "FrotszNeeko 🔹/Conditioning"
+    CATEGORY = "FrostzNeeko 🔹/Conditioning"
 
     # ── encode a single text with [bracket] conversion + BREAK ───────
     @staticmethod
     def _encode_text(clip, text):
         if clip is None:
             raise RuntimeError(
-                "[FrotszNeeko] CLIP input is None — your checkpoint may "
+                "[FrostzNeeko] CLIP input is None — your checkpoint may "
                 "not contain a valid CLIP / text encoder model."
             )
 

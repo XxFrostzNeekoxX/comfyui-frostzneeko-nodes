@@ -94,13 +94,13 @@ def _load_upscale_model(name: str):
 
     if _SpandrelLoader is None:
         raise ImportError(
-            "[FrotszNeeko] 'spandrel' library is required for upscaling.  "
+            "[FrostzNeeko] 'spandrel' library is required for upscaling.  "
             "It should be bundled with ComfyUI."
         )
 
     path = folder_paths.get_full_path("upscale_models", name)
     if path is None:
-        raise FileNotFoundError(f"[FrotszNeeko] Upscale model not found: {name}")
+        raise FileNotFoundError(f"[FrostzNeeko] Upscale model not found: {name}")
 
     sd = comfy.utils.load_torch_file(path, safe_load=True)
 
@@ -110,7 +110,7 @@ def _load_upscale_model(name: str):
 
     up_model = _SpandrelLoader().load_from_state_dict(sd).eval()
     _upscale_cache[name] = up_model
-    print(f"[FrotszNeeko] ✅ Loaded upscale model: {name}")
+    print(f"[FrostzNeeko] ✅ Loaded upscale model: {name}")
     return up_model
 
 
@@ -246,7 +246,7 @@ class FNKSamplerPreview:
     RETURN_NAMES = ("latent", "image", "detail_pipe")
     FUNCTION = "sample_and_preview"
     OUTPUT_NODE = True
-    CATEGORY = "FrotszNeeko 🔹/Sampling"
+    CATEGORY = "FrostzNeeko 🔹/Sampling"
 
     # ─────────────────────────────────────────────────────────────────
     def sample_and_preview(
@@ -389,11 +389,11 @@ class FNKSamplerPreview:
         output_image = decoded
 
         if upscale_model_name and upscale_model_name != "none":
-            print(f"[FrotszNeeko] 🔎 Upscaling with {upscale_model_name}…")
+            print(f"[FrostzNeeko] 🔎 Upscaling with {upscale_model_name}…")
             up_model = _load_upscale_model(upscale_model_name)
             output_image = _apply_upscale(up_model, decoded)
             print(
-                f"[FrotszNeeko] ✅ Upscaled: "
+                f"[FrostzNeeko] ✅ Upscaled: "
                 f"{decoded.shape[2]}×{decoded.shape[1]} → "
                 f"{output_image.shape[2]}×{output_image.shape[1]}"
             )
@@ -415,9 +415,9 @@ class FNKSamplerPreview:
             enabled_list = [n for n, v in toggles.items() if v]
             disabled_list = [n for n, v in toggles.items() if not v]
             if enabled_list:
-                print(f"[FrotszNeeko] 🎯 Detailers ON:  {', '.join(enabled_list)}")
+                print(f"[FrostzNeeko] 🎯 Detailers ON:  {', '.join(enabled_list)}")
             if disabled_list:
-                print(f"[FrotszNeeko] ⏭️  Detailers OFF: {', '.join(disabled_list)}")
+                print(f"[FrostzNeeko] ⏭️  Detailers OFF: {', '.join(disabled_list)}")
 
         return {
             "ui": preview_ui,

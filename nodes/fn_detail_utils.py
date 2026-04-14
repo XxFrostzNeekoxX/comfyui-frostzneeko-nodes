@@ -92,7 +92,7 @@ def load_detector(name: str):
         from ultralytics import YOLO
     except ImportError:
         raise ImportError(
-            "[FrotszNeeko] 'ultralytics' not installed.  pip install ultralytics"
+            "[FrostzNeeko] 'ultralytics' not installed.  pip install ultralytics"
         )
 
     path = None
@@ -106,11 +106,11 @@ def load_detector(name: str):
             continue
 
     if path is None:
-        raise FileNotFoundError(f"[FrotszNeeko] Detector not found: {name}")
+        raise FileNotFoundError(f"[FrostzNeeko] Detector not found: {name}")
 
     model = YOLO(path)
     _detector_cache[name] = model
-    print(f"[FrotszNeeko] ✅ Loaded detector: {name}")
+    print(f"[FrostzNeeko] ✅ Loaded detector: {name}")
     return model
 
 
@@ -556,7 +556,7 @@ def _enhance_detail(
 
     if not force_inpaint:
         if upscale <= 1.0 or new_w == 0 or new_h == 0:
-            print(f"[FrotszNeeko] ℹ️  skip (upscale={upscale:.2f})")
+            print(f"[FrostzNeeko] ℹ️  skip (upscale={upscale:.2f})")
             return None
     else:
         if upscale <= 1.0 or new_w == 0 or new_h == 0:
@@ -568,7 +568,7 @@ def _enhance_detail(
     new_w = max(8, ((new_w + 7) // 8) * 8)
     new_h = max(8, ((new_h + 7) // 8) * 8)
 
-    print(f"[FrotszNeeko]    upscale ({bbox_w:.0f}x{bbox_h:.0f}) | crop {w}x{h} × {upscale:.2f} → {new_w}x{new_h}")
+    print(f"[FrostzNeeko]    upscale ({bbox_w:.0f}x{bbox_h:.0f}) | crop {w}x{h} × {upscale:.2f} → {new_w}x{new_h}")
 
     # Upscale the cropped image
     upscaled = _tensor_resize(cropped_image, new_w, new_h)
@@ -684,11 +684,11 @@ def run_face_detail(
         )
 
         if not segs:
-            print(f"[FrotszNeeko] ℹ️  No detections in batch {b}")
+            print(f"[FrostzNeeko] ℹ️  No detections in batch {b}")
             continue
 
         mode_label = "segm" if has_segm else "bbox"
-        print(f"[FrotszNeeko] 🔍 {len(segs)} detection(s) [{mode_label}] in batch {b}")
+        print(f"[FrostzNeeko] 🔍 {len(segs)} detection(s) [{mode_label}] in batch {b}")
 
         for i, seg in enumerate(segs):
             crop_region = seg.crop_region
@@ -734,6 +734,6 @@ def run_face_detail(
                 paste_mask,
             )
 
-            print(f"[FrotszNeeko]    ✅ Detection {i + 1} [{mode_label}] detailed (conf={float(seg.confidence):.2f})")
+            print(f"[FrostzNeeko]    ✅ Detection {i + 1} [{mode_label}] detailed (conf={float(seg.confidence):.2f})")
 
     return image

@@ -1,5 +1,5 @@
 """
-🔹 FrotszNeeko Nodes
+🔹 FrostzNeeko Nodes
 Custom node pack for ComfyUI — nodes with a cyan neon theme.
 """
 
@@ -17,7 +17,7 @@ try:
     from aiohttp import web
     import server
 
-    @server.PromptServer.instance.routes.get("/frotszneeko/mascot")
+    @server.PromptServer.instance.routes.get("/FrostzNeeko/mascot")
     async def _serve_mascot(request):
         if os.path.isfile(_MASCOT_PATH):
             return web.FileResponse(_MASCOT_PATH)

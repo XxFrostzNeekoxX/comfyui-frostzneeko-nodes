@@ -21,13 +21,13 @@ class FNCheckpointLoader:
     RETURN_TYPES = ("MODEL", "CLIP", "VAE")
     RETURN_NAMES = ("model", "clip", "vae")
     FUNCTION = "load_checkpoint"
-    CATEGORY = "FrotszNeeko 🔹/Loaders"
+    CATEGORY = "FrostzNeeko 🔹/Loaders"
 
     def load_checkpoint(self, ckpt_name):
         ckpt_path = folder_paths.get_full_path("checkpoints", ckpt_name)
         if ckpt_path is None:
             raise FileNotFoundError(
-                f"[FrotszNeeko] Checkpoint not found: {ckpt_name}"
+                f"[FrostzNeeko] Checkpoint not found: {ckpt_name}"
             )
 
         out = comfy.sd.load_checkpoint_guess_config(
@@ -38,6 +38,6 @@ class FNCheckpointLoader:
         )
 
         model, clip, vae = out[:3]
-        print(f"[FrotszNeeko] ✅ Loaded checkpoint: {ckpt_name}")
+        print(f"[FrostzNeeko] ✅ Loaded checkpoint: {ckpt_name}")
 
         return (model, clip, vae)
