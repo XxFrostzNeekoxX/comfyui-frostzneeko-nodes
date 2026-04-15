@@ -35,6 +35,7 @@ class FNImageSaver:
                 "add_timestamp": ("BOOLEAN", {"default": True}),
                 "numbering_style": (["comfy_default", "prefix_number"], {"default": "comfy_default"}),
                 "save_pretty_metadata": ("BOOLEAN", {"default": True}),
+                "append_notepad_metadata_tail": ("BOOLEAN", {"default": True}),
             },
             "optional": {
                 "subfolder": ("STRING", {"default": ""}),
@@ -174,6 +175,7 @@ class FNImageSaver:
         add_timestamp=True,
         numbering_style="comfy_default",
         save_pretty_metadata=True,
+        append_notepad_metadata_tail=True,
         subfolder="",
         number_padding=3,
         prompt=None,
@@ -209,6 +211,7 @@ class FNImageSaver:
 
             if format == "png":
                 metadata = None
+                pretty_meta = None
                 if not args.disable_metadata:
                     metadata = PngInfo()
                     if save_pretty_metadata:
@@ -238,7 +241,24 @@ class FNImageSaver:
                 file = f"{filename}_{counter:0{number_padding}d}.{ext}"
             else:
                 file = f"{filename}_{counter:05}_.{ext}"
-            img.save(os.path.join(full_output_folder, file), **save_kwargs)
+            file_path = os.path.join(full_output_folder, file)
+            img.save(file_path, **save_kwargs)
+
+            # Optional plain-text tail for easy Notepad viewing.
+            # PNG readers ignore trailing bytes after IEND.
+            if (
+                format == "png"
+                and append_notepad_metadata_tail
+                and save_pretty_metadata
+                and pretty_meta
+            ):
+                tail = (
+                    "\n\n===== FROSTZNEEKO METADATA (NOTEPAD) =====\n"
+                    + pretty_meta
+                    + "\n===== END FROSTZNEEKO METADATA =====\n"
+                )
+                with open(file_path, "ab") as f:
+                    f.write(tail.encode("utf-8", errors="ignore"))
 
             results.append(
                 {
@@ -248,7 +268,7 @@ class FNImageSaver:
                 }
             )
             counter += 1
-            print(f"[FrostzNeeko] 💾 Saved: {os.path.join(full_output_folder, file)}")
+            print(f"[FrostzNeeko] 💾 Saved: {file_path}")
 
         # Return UI preview AND pass images through
         return {"ui": {"images": results}, "result": (images,)}
