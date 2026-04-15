@@ -3,6 +3,7 @@ FN Metadata Reader
 Read metadata from saved images and present a formatted text view.
 """
 
+import json
 import os
 import re
 
@@ -148,14 +149,141 @@ class FNMetadataReader:
         }
 
     @staticmethod
-    def _compose_normalized_metadata(info, selected_path, fmt, size, mode):
+    def _maybe_json_obj(value):
+        if isinstance(value, dict):
+            return value
+        if isinstance(value, str) and value.strip():
+            try:
+                obj = json.loads(value)
+                if isinstance(obj, dict):
+                    return obj
+            except Exception:
+                return {}
+        return {}
+
+    @staticmethod
+    def _lookup_prompt_node(prompt_obj, node_id):
+        if not isinstance(prompt_obj, dict):
+            return None
+        sid = str(node_id)
+        if sid in prompt_obj and isinstance(prompt_obj[sid], dict):
+            return prompt_obj[sid]
+        return None
+
+    def _resolve_prompt_text_ref(self, prompt_obj, value, visited=None, depth=0):
+        if visited is None:
+            visited = set()
+        if depth > 24:
+            return ""
+        if isinstance(value, str):
+            return value.strip()
+        if not isinstance(value, (list, tuple)) or len(value) != 2:
+            return ""
+        try:
+            src_id = int(value[0])
+            out_idx = int(value[1])
+        except (TypeError, ValueError):
+            return ""
+        key = (src_id, out_idx)
+        if key in visited:
+            return ""
+        visited.add(key)
+        node = self._lookup_prompt_node(prompt_obj, src_id)
+        if not isinstance(node, dict):
+            return ""
+        ctype = node.get("class_type")
+        inputs = node.get("inputs") if isinstance(node.get("inputs"), dict) else {}
+
+        if ctype in ("CLIPTextEncode", "PCTextEncode"):
+            return self._resolve_prompt_text_ref(prompt_obj, inputs.get("text"), visited, depth + 1)
+        if ctype in ("FNClipDualEncode", "FNCLIPDualEncode"):
+            if out_idx == 1:
+                return self._resolve_prompt_text_ref(prompt_obj, inputs.get("negative"), visited, depth + 1)
+            return self._resolve_prompt_text_ref(prompt_obj, inputs.get("positive"), visited, depth + 1)
+        if ctype == "FNPromptFromFile":
+            for k in ("current_prompt", "processed_prompt", "raw_prompt"):
+                v = inputs.get(k)
+                if isinstance(v, str) and v.strip():
+                    return v.strip()
+            return ""
+        if ctype == "PrimitiveString":
+            return self._resolve_prompt_text_ref(prompt_obj, inputs.get("value"), visited, depth + 1)
+
+        for k in ("text", "string", "value"):
+            if k in inputs:
+                r = self._resolve_prompt_text_ref(prompt_obj, inputs.get(k), visited, depth + 1)
+                if r:
+                    return r
+        return ""
+
+    def _extract_from_comfy_prompt(self, info):
+        prompt_obj = self._maybe_json_obj(info.get("prompt"))
+        if not prompt_obj:
+            return {}
+
+        positive = ""
+        negative = ""
+        fields = {}
+        model = "?"
+        clip_skip = "?"
+
+        # 1) Pull seed/steps/cfg/sampler/scheduler from sampler-like nodes
+        for _, node in prompt_obj.items():
+            if not isinstance(node, dict):
+                continue
+            ctype = node.get("class_type")
+            inputs = node.get("inputs") if isinstance(node.get("inputs"), dict) else {}
+            if ctype in (
+                "KSampler",
+                "KSamplerAdvanced",
+                "KSampler (Efficient)",
+                "Efficient KSampler",
+                "FNKSamplerPreview",
+            ):
+                for key in ("seed", "steps", "cfg", "sampler_name", "scheduler"):
+                    if key in inputs:
+                        fields[key] = inputs.get(key)
+                p = inputs.get("positive")
+                n = inputs.get("negative")
+                if not positive:
+                    positive = self._resolve_prompt_text_ref(prompt_obj, p)
+                if not negative:
+                    negative = self._resolve_prompt_text_ref(prompt_obj, n)
+            if ctype in ("CheckpointLoaderSimple", "FNCheckpointLoader", "FNPromptFromFile"):
+                ck = inputs.get("ckpt_name", inputs.get("checkpoint_name"))
+                if isinstance(ck, str) and ck.strip():
+                    model = ck.strip()
+                cs = inputs.get("clip_skip")
+                if cs is not None and str(cs).strip():
+                    clip_skip = str(cs).strip()
+            if ctype == "CLIPSetLastLayer":
+                cs = inputs.get("stop_at_clip_layer")
+                if cs is not None and str(cs).strip():
+                    clip_skip = str(cs).strip()
+            if ctype in ("CLIPTextEncode", "PCTextEncode", "FNClipDualEncode", "FNCLIPDualEncode"):
+                if not positive:
+                    positive = self._resolve_prompt_text_ref(prompt_obj, inputs.get("text", inputs.get("positive")))
+                if not negative:
+                    negative = self._resolve_prompt_text_ref(prompt_obj, inputs.get("negative"))
+
+        return {
+            "positive": positive.strip(),
+            "negative": negative.strip(),
+            "fields": fields,
+            "model": model,
+            "clip_skip": clip_skip,
+        }
+
+    def _compose_normalized_metadata(self, info, selected_path, fmt, size, mode):
         """Normalize external metadata into FrostzNeeko-style readable block."""
         parameters = info.get("parameters", "")
         parsed = FNMetadataReader._parse_parameters_text(parameters)
+        comfy = self._extract_from_comfy_prompt(info)
 
-        positive = parsed.get("positive", "")
-        negative = parsed.get("negative", "")
-        fields = parsed.get("fields", {})
+        positive = parsed.get("positive", "") or comfy.get("positive", "")
+        negative = parsed.get("negative", "") or comfy.get("negative", "")
+        fields = dict(parsed.get("fields", {}) or {})
+        fields.update(comfy.get("fields", {}) or {})
 
         def pick(*keys, default="?"):
             for k in keys:
@@ -167,10 +295,10 @@ class FNMetadataReader:
         seed = pick("Seed", "seed")
         steps = pick("Steps", "steps")
         cfg = pick("CFG scale", "CFG", "cfg", "cfg scale")
-        sampler = pick("Sampler", "sampler")
+        sampler = pick("Sampler", "sampler", "sampler_name")
         scheduler = pick("Schedule type", "Scheduler", "scheduler")
-        model = pick("Model", "Model hash", "model")
-        clip_skip = pick("Clip skip", "clip_skip", "clip skip")
+        model = pick("Model", "Model hash", "model", default=comfy.get("model", "?"))
+        clip_skip = pick("Clip skip", "clip_skip", "clip skip", default=comfy.get("clip_skip", "?"))
         size_field = pick("Size", default=size)
 
         lines = [
