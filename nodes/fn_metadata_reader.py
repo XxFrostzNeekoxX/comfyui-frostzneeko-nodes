@@ -18,6 +18,9 @@ class FNMetadataReader:
             "required": {
                 "image_path": ("STRING", {"default": "", "multiline": False}),
                 "prefer_output_dir": ("BOOLEAN", {"default": True}),
+                "path_mode": (["file", "folder"], {"default": "file"}),
+                "selection_mode": (["latest", "index"], {"default": "latest"}),
+                "image_index": ("INT", {"default": 0, "min": 0, "max": 999999, "step": 1}),
             },
         }
 
@@ -62,14 +65,52 @@ class FNMetadataReader:
         except Exception:
             return str(value)
 
-    def read_metadata(self, image_path, prefer_output_dir=True):
+    @staticmethod
+    def _list_image_files(folder_path: str):
+        exts = {".png", ".jpg", ".jpeg", ".webp", ".bmp"}
+        out = []
+        try:
+            for name in os.listdir(folder_path):
+                full = os.path.join(folder_path, name)
+                if not os.path.isfile(full):
+                    continue
+                if os.path.splitext(name)[1].lower() in exts:
+                    out.append(full)
+        except Exception:
+            return []
+        return sorted(out, key=lambda p: os.path.getmtime(p), reverse=True)
+
+    def read_metadata(
+        self,
+        image_path,
+        prefer_output_dir=True,
+        path_mode="file",
+        selection_mode="latest",
+        image_index=0,
+    ):
         resolved = self._resolve_path(image_path, prefer_output_dir)
         if not resolved or not os.path.exists(resolved):
             msg = f"❌ File not found: {resolved or image_path}"
             return {"ui": {"text": [msg]}, "result": (msg, "{}")}
 
+        selected_path = resolved
+        candidates = []
+        if path_mode == "folder":
+            if not os.path.isdir(resolved):
+                msg = f"❌ Expected a folder path but got: {resolved}"
+                return {"ui": {"text": [msg]}, "result": (msg, "{}")}
+            candidates = self._list_image_files(resolved)
+            if not candidates:
+                msg = f"⚠️ No image files found in folder: {resolved}"
+                return {"ui": {"text": [msg]}, "result": (msg, "{}")}
+            if selection_mode == "index":
+                idx = max(0, min(int(image_index), len(candidates) - 1))
+                selected_path = candidates[idx]
+            else:
+                selected_path = candidates[0]
+
         try:
-            with Image.open(resolved) as img:
+            with Image.open(selected_path) as img:
                 info = dict(img.info or {})
                 fmt = img.format or "unknown"
                 size = f"{img.width}x{img.height}"
@@ -78,16 +119,22 @@ class FNMetadataReader:
             msg = f"❌ Failed to open image metadata: {exc}"
             return {"ui": {"text": [msg]}, "result": (msg, "{}")}
 
-        tail = self._extract_notepad_tail(resolved)
+        tail = self._extract_notepad_tail(selected_path)
         pretty_block = info.get("fn_pretty_metadata", "")
         parameters = info.get("parameters", "")
 
         summary = [
             "🧾 FrostzNeeko Metadata Reader",
-            f"📂 Path: {resolved}",
+            f"📂 Path: {selected_path}",
             f"🖼️ Format: {fmt} | Size: {size} | Mode: {mode}",
             f"🧩 Embedded keys: {', '.join(sorted(info.keys())) if info else 'none'}",
         ]
+        if path_mode == "folder":
+            summary.append(f"📁 Folder mode: {len(candidates)} image(s) found")
+            summary.append(f"🎯 Selection: {selection_mode} (index={image_index})")
+            preview_names = [os.path.basename(p) for p in candidates[:12]]
+            summary.append("🗂️ Recent files:")
+            summary.append("\n".join(f"- {n}" for n in preview_names))
 
         if tail:
             summary.append("")
@@ -112,6 +159,16 @@ class FNMetadataReader:
             summary.append("🔧 Workflow metadata key found.")
 
         pretty_text = "\n".join(summary)
-        raw_json = self._safe_json({"path": resolved, "image_info": info, "notepad_tail": tail})
+        raw_json = self._safe_json(
+            {
+                "path": selected_path,
+                "path_mode": path_mode,
+                "selection_mode": selection_mode,
+                "image_index": image_index,
+                "folder_candidates": candidates[:100],
+                "image_info": info,
+                "notepad_tail": tail,
+            }
+        )
         return {"ui": {"text": [pretty_text]}, "result": (pretty_text, raw_json)}
 
