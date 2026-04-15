@@ -654,6 +654,7 @@ def _enhance_detail(
     refiner_model=None,
     refiner_positive=None,
     refiner_negative=None,
+    sigmas_override=None,
 ):
     """
     Detail pass:
@@ -737,15 +738,21 @@ def _enhance_detail(
         latent_dict["noise_mask"] = nm_resized
 
     # Compute sigmas with proper denoise step calculation
-    # When denoise < 1.0, we need more total sigmas and only sample a subset
-    total_steps = math.floor(steps / denoise) if denoise > 0 and denoise < 1.0 else steps
-    start_step = total_steps - steps
+    # When denoise < 1.0, we need more total sigmas and only sample a subset.
+    if sigmas_override is not None and torch.is_tensor(sigmas_override) and sigmas_override.numel() > 1:
+        full_sigmas = sigmas_override.detach().clone().to(latent.device)
+        if denoise > 0 and denoise < 1.0:
+            keep = max(2, int(round(full_sigmas.numel() * denoise)))
+            sigmas = full_sigmas[-keep:]
+        else:
+            sigmas = full_sigmas
+    else:
+        total_steps = math.floor(steps / denoise) if denoise > 0 and denoise < 1.0 else steps
+        start_step = total_steps - steps
 
-    model_sampling = model.get_model_object("model_sampling")
-    full_sigmas = comfy.samplers.calculate_sigmas(model_sampling, scheduler, total_steps)
-
-    # Slice sigmas for our denoise range
-    sigmas = full_sigmas[start_step:]
+        model_sampling = model.get_model_object("model_sampling")
+        full_sigmas = comfy.samplers.calculate_sigmas(model_sampling, scheduler, total_steps)
+        sigmas = full_sigmas[start_step:]
 
     # Build sampler object
     sampler_obj = comfy.samplers.sampler_object(sampler_name)
@@ -837,6 +844,7 @@ def run_face_detail(
     refiner_model=None,
     refiner_positive=None,
     refiner_negative=None,
+    sigmas_override=None,
 ) -> torch.Tensor:
     """
     Detect regions and detail them:
@@ -967,6 +975,7 @@ def run_face_detail(
                 refiner_model=refiner_model,
                 refiner_positive=refiner_positive,
                 refiner_negative=refiner_negative,
+                sigmas_override=sigmas_override,
             )
 
             if enhanced is None:

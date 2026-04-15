@@ -116,6 +116,7 @@ class FNFaceDetailer:
             },
             "optional": {
                 "detail_pipe": ("FN_DETAIL_PIPE",),
+                "sigmas_opt": ("SIGMAS",),
                 "refiner_model": ("MODEL",),
                 "refiner_positive": ("CONDITIONING",),
                 "refiner_negative": ("CONDITIONING",),
@@ -174,6 +175,7 @@ class FNFaceDetailer:
         tiled_encode,
         tiled_decode,
         detail_pipe=None,
+        sigmas_opt=None,
         refiner_model=None,
         refiner_positive=None,
         refiner_negative=None,
@@ -253,6 +255,7 @@ class FNFaceDetailer:
             refiner_model=refiner_model,
             refiner_positive=refiner_positive,
             refiner_negative=refiner_negative,
+            sigmas_override=sigmas_opt,
         )
 
         if mask_preview == "enabled":
