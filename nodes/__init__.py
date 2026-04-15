@@ -10,6 +10,7 @@ from .fn_checkpoint_loader import FNCheckpointLoader
 from .fn_ksampler_preview import FNKSamplerPreview
 from .fn_face_detailer import FNFaceDetailer
 from .fn_image_saver import FNImageSaver
+from .fn_metadata_reader import FNMetadataReader
 
 
 NODE_CLASS_MAPPINGS = {
@@ -20,6 +21,7 @@ NODE_CLASS_MAPPINGS = {
     "FNKSamplerPreview": FNKSamplerPreview,
     "FNFaceDetailer": FNFaceDetailer,
     "FNImageSaver": FNImageSaver,
+    "FNMetadataReader": FNMetadataReader,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -30,4 +32,5 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "FNKSamplerPreview": "FN Supreme KSampler 🔹",
     "FNFaceDetailer": "FN Face Detailer 🔹",
     "FNImageSaver": "FN Image Saver 🔹",
+    "FNMetadataReader": "FN Metadata Reader 🔹",
 }
