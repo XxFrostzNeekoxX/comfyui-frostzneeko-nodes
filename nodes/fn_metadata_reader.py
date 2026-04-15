@@ -5,11 +5,18 @@ Read metadata from saved images and present a formatted text view.
 
 import os
 
+import numpy as np
 from PIL import Image
 
+import folder_paths
 
 
 class FNMetadataReader:
+    def __init__(self):
+        self.output_dir = folder_paths.get_temp_directory()
+        self.type = "temp"
+        self.compress_level = 1
+
     @classmethod
     def INPUT_TYPES(cls):
         return {
@@ -20,6 +27,16 @@ class FNMetadataReader:
                 "selection_mode": (["latest", "index"], {"default": "latest"}),
                 "image_index": ("INT", {"default": 0, "min": 0, "max": 999999, "step": 1}),
                 "output_pretty_metadata": ("BOOLEAN", {"default": True}),
+            },
+            "optional": {
+                "metadata_textbox": (
+                    "STRING",
+                    {
+                        "default": "",
+                        "multiline": True,
+                        "placeholder": "🧾 Metadata will appear here after execution...",
+                    },
+                ),
             },
         }
 
@@ -72,6 +89,20 @@ class FNMetadataReader:
             return []
         return sorted(out, key=lambda p: os.path.getmtime(p), reverse=True)
 
+    def _save_ui_preview(self, pil_img, selected_path):
+        arr = np.array(pil_img.convert("RGB"), dtype=np.uint8)
+        base = os.path.splitext(os.path.basename(selected_path))[0] or "FNMeta"
+        folder, fname, counter, sub, _ = folder_paths.get_save_image_path(
+            f"FNMetaReader_{base}",
+            self.output_dir,
+            arr.shape[1],
+            arr.shape[0],
+        )
+        file = f"{fname}_{counter:05}_.png"
+        full_path = os.path.join(folder, file)
+        Image.fromarray(arr).save(full_path, compress_level=self.compress_level)
+        return [{"filename": file, "subfolder": sub, "type": self.type}]
+
     def read_metadata(
         self,
         image_path,
@@ -80,6 +111,7 @@ class FNMetadataReader:
         selection_mode="latest",
         image_index=0,
         output_pretty_metadata=True,
+        metadata_textbox="",
     ):
         resolved = self._resolve_path(image_path, prefer_output_dir)
         if not resolved or not os.path.exists(resolved):
@@ -110,6 +142,7 @@ class FNMetadataReader:
                 fmt = img.format or "unknown"
                 size = f"{img.width}x{img.height}"
                 mode = img.mode
+                rgb = img.convert("RGB")
         except Exception as exc:
             msg = f"❌ Failed to open image metadata: {exc}"
             return {"ui": {"text": [msg], "pretty_metadata": [msg], "selected_image_path": [""], "selected_index": [0], "total_images": [0]}, "result": ()}
@@ -154,9 +187,12 @@ class FNMetadataReader:
             summary.append("🔧 Workflow metadata key found.")
 
         pretty_text = "\n".join(summary) if output_pretty_metadata else ""
+        ui_images = self._save_ui_preview(rgb, selected_path)
         return {
             "ui": {
                 "text": [pretty_text or "🧾 Pretty metadata output disabled."],
+                "images": ui_images,
+                "metadata_textbox": [pretty_text or ""],
                 "pretty_metadata": [pretty_text or ""],
                 "selected_image_path": [selected_path],
                 "selected_index": [int(selected_idx)],
