@@ -58,6 +58,25 @@ app.registerExtension({
             const idxToggle = this.widgets.findIndex((w) => w.name === "prefer_output_dir");
             if (idxToggle >= 0) this.widgets.splice(idxToggle, 0, createSectionHeader("Resolve Mode"));
 
+            const idxSel = this.widgets.findIndex((w) => w.name === "selection_mode");
+            if (idxSel >= 0) this.widgets.splice(idxSel, 0, createSectionHeader("Folder Navigation"));
+
+            const imageIndexWidget = this.widgets.find((w) => w.name === "image_index");
+            const selectionModeWidget = this.widgets.find((w) => w.name === "selection_mode");
+
+            const prevBtn = this.addWidget("button", "⬅ Prev Image", null, () => {
+                if (selectionModeWidget) selectionModeWidget.value = "index";
+                if (imageIndexWidget) imageIndexWidget.value = Math.max(0, (imageIndexWidget.value || 0) - 1);
+                this.setDirtyCanvas(true, true);
+            });
+            const nextBtn = this.addWidget("button", "Next Image ➡", null, () => {
+                if (selectionModeWidget) selectionModeWidget.value = "index";
+                if (imageIndexWidget) imageIndexWidget.value = (imageIndexWidget.value || 0) + 1;
+                this.setDirtyCanvas(true, true);
+            });
+            prevBtn.options = { serialize: false };
+            nextBtn.options = { serialize: false };
+
             const self = this;
             requestAnimationFrame(() => {
                 const sz = self.computeSize();

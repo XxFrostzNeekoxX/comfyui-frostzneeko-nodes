@@ -91,9 +91,15 @@ class FNImageSaver:
         if isinstance(pf, dict):
             inp = pf.get("inputs", {})
             clip_skip = inp.get("clip_skip", clip_skip)
+            ckpt_pf = inp.get("checkpoint_name", inp.get("ckpt_name", ""))
+            if isinstance(ckpt_pf, str) and ckpt_pf.strip():
+                model_name = ckpt_pf
             p2 = inp.get("processed_prompt", "")
             if isinstance(p2, str) and p2.strip():
                 positive_txt = p2
+            p3 = inp.get("raw_prompt", "")
+            if isinstance(p3, str) and p3.strip() and not positive_txt:
+                positive_txt = p3
 
         if isinstance(cd, dict):
             inp = cd.get("inputs", {})
