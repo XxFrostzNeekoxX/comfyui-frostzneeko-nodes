@@ -1,4 +1,16 @@
-**🌐 Language:**[English](README.md) • Português • Español • 中文 • 日本語 • 한국어
+<p align="center">
+  <b>🌐 Language:</b>
+  <a href="README.md">English</a> •
+  <a href="docs/README_pt-BR.md">Português</a> •
+  <a href="docs/README_es.md">Español</a> •
+  <a href="docs/README_zh-CN.md">中文</a> •
+  <a href="docs/README_ja.md">日本語</a> •
+  <a href="docs/README_ko.md">한국어</a>
+</p>
+
+<p align="center">
+  <img src="img/mascot.png" alt="FrostzNeeko Mascot" width="200"/>
+</p>
 
 
 
@@ -293,6 +305,14 @@ It uses stateful progression with `increment`, `decrement`, `random`, `random no
 ## 📄 License
 
 MIT — do whatever you want with it.
+
+---
+
+<p align="center">
+  <img src="img/mascot.png" alt="FrostzNeeko" width="80"/>
+  <br/>
+  <sub>Made with ❤️ by FrostzNeeko</sub>
+</p>
 
 ---
 
