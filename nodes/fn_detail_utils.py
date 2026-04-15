@@ -789,6 +789,7 @@ def run_face_detail(
     cycle: int = 1,
     noise_mask_feather: int = 20,
     drop_size: int = 10,
+    return_mask_preview: bool = False,
 ) -> torch.Tensor:
     """
     Detect regions and detail them:
@@ -836,6 +837,14 @@ def run_face_detail(
         # Also check by model name
         has_segm = 'segm' in detector_model_name.lower() or 'seg' in detector_model_name.lower()
 
+    mask_preview = None
+    if return_mask_preview:
+        mask_preview = torch.zeros(
+            (image.shape[0], image.shape[1], image.shape[2], 1),
+            dtype=image.dtype,
+            device=image.device,
+        )
+
     for b in range(image.shape[0]):
         single_image = image[b:b+1]
 
@@ -880,6 +889,14 @@ def run_face_detail(
             paste_mask = _tensor_gaussian_blur_mask(paste_mask_t, feather)
             # paste_mask is now [1, H, W, 1]
 
+            if return_mask_preview and mask_preview is not None:
+                h_m = min(cr_y2 - cr_y1, paste_mask.shape[1])
+                w_m = min(cr_x2 - cr_x1, paste_mask.shape[2])
+                if h_m > 0 and w_m > 0:
+                    existing = mask_preview[b:b+1, cr_y1:cr_y1 + h_m, cr_x1:cr_x1 + w_m, :]
+                    incoming = paste_mask[:, :h_m, :w_m, :].to(existing.device, dtype=existing.dtype)
+                    mask_preview[b:b+1, cr_y1:cr_y1 + h_m, cr_x1:cr_x1 + w_m, :] = torch.maximum(existing, incoming)
+
             # enhance_detail
             # bbox for upscale calculation: use the seg.bbox (YOLO xyxy)
             # Crop conditioning masks (if present) into crop_region
@@ -913,4 +930,6 @@ def run_face_detail(
             conf_val = _confidence_to_float(seg.confidence)
             print(f"[FrostzNeeko]    ✅ Detection {i + 1} [{mode_label}] detailed (conf={conf_val:.2f})")
 
+    if return_mask_preview:
+        return image, mask_preview
     return image

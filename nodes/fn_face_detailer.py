@@ -110,6 +110,7 @@ class FNFaceDetailer:
                     "INT",
                     {"default": 1, "min": 1, "max": 10, "step": 1},
                 ),
+                "mask_preview": (["disabled", "enabled"],),
             },
             "optional": {
                 "detail_pipe": ("FN_DETAIL_PIPE",),
@@ -125,8 +126,8 @@ class FNFaceDetailer:
             },
         }
 
-    RETURN_TYPES = ("IMAGE",)
-    RETURN_NAMES = ("image",)
+    RETURN_TYPES = ("IMAGE", "IMAGE")
+    RETURN_NAMES = ("image", "mask_preview")
     FUNCTION = "detail"
     OUTPUT_NODE = True
     CATEGORY = "FrostzNeeko 🔹/Detailer"
@@ -160,6 +161,7 @@ class FNFaceDetailer:
         force_inpaint,
         noise_mask_feather,
         cycle,
+        mask_preview,
         detail_pipe=None,
         wildcard_spec="",
         prompt=None,
@@ -174,8 +176,11 @@ class FNFaceDetailer:
                 print(
                     f"[FrostzNeeko] ⏭️  '{display_name}' is DISABLED — passing through"
                 )
-                preview = self._save_preview(image, prompt, extra_pnginfo)
-                return {"ui": {"images": preview}, "result": (image,)}
+                empty_mask = image[:, :, :, :1] * 0.0
+                preview = self._save_preview(image, prompt, extra_pnginfo, prefix_base="FNDetailer")
+                if mask_preview == "enabled":
+                    preview += self._save_preview(empty_mask, prompt, extra_pnginfo, prefix_base="FNDetailerMask")
+                return {"ui": {"images": preview}, "result": (image, empty_mask)}
             elif display_name in toggles and toggles[display_name]:
                 print(
                     f"[FrostzNeeko] 🎯 '{display_name}' is ENABLED via toggle"
@@ -201,7 +206,7 @@ class FNFaceDetailer:
         # ── run the detail pass ──────────────────────────────────────
         print(f"[FrostzNeeko] 🎯 '{display_name}' — running detail pass")
 
-        detailed = run_face_detail(
+        result = run_face_detail(
             image,
             model,
             vae,
@@ -226,14 +231,23 @@ class FNFaceDetailer:
             cycle=cycle,
             noise_mask_feather=noise_mask_feather,
             drop_size=drop_size,
+            return_mask_preview=(mask_preview == "enabled"),
         )
 
-        preview = self._save_preview(detailed, prompt, extra_pnginfo)
-        return {"ui": {"images": preview}, "result": (detailed,)}
+        if mask_preview == "enabled":
+            detailed, mask_img = result
+            preview = self._save_preview(detailed, prompt, extra_pnginfo, prefix_base="FNDetailer")
+            preview += self._save_preview(mask_img, prompt, extra_pnginfo, prefix_base="FNDetailerMask")
+            return {"ui": {"images": preview}, "result": (detailed, mask_img)}
+
+        detailed = result
+        empty_mask = image[:, :, :, :1] * 0.0
+        preview = self._save_preview(detailed, prompt, extra_pnginfo, prefix_base="FNDetailer")
+        return {"ui": {"images": preview}, "result": (detailed, empty_mask)}
 
     # ── preview helper ───────────────────────────────────────────────
-    def _save_preview(self, images, prompt, extra_pnginfo):
-        prefix = "FNDetailer" + self.prefix_append
+    def _save_preview(self, images, prompt, extra_pnginfo, prefix_base="FNDetailer"):
+        prefix = prefix_base + self.prefix_append
         folder, fname, counter, subfolder, _ = folder_paths.get_save_image_path(
             prefix,
             self.output_dir,
@@ -244,6 +258,8 @@ class FNFaceDetailer:
         results = []
         for idx in range(images.shape[0]):
             arr = (255.0 * images[idx].cpu().numpy()).clip(0, 255).astype(np.uint8)
+            if arr.ndim == 3 and arr.shape[2] == 1:
+                arr = np.repeat(arr, 3, axis=2)
             img = Image.fromarray(arr)
 
             meta = None
