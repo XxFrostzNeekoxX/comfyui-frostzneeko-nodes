@@ -13,7 +13,7 @@ stateful modes:
   • random no repetitions
 
 Batch progression is driven by the hidden ``count`` input (fed by frontend JS),
-with optional manual reset.
+and resets automatically per queued batch.
 
 Display widgets:
   • current_prompt → the clean prompt text (no lora tags, wildcards resolved)
@@ -57,7 +57,6 @@ class FNPromptFromFile:
                     "INT",
                     {"default": 0, "min": 0, "step": 1},
                 ),
-                "reset": ("BOOLEAN", {"default": False}),
             },
             "optional": {
                 "ckpt_name": (ckpt_list, {"default": "none"}),
@@ -273,13 +272,13 @@ class FNPromptFromFile:
         return _line_state[uid]
 
     @classmethod
-    def _pick_line(cls, lines, mode, uid="default", start=0, count=0, reset=False):
+    def _pick_line(cls, lines, mode, uid="default", start=0, count=0):
         """
         Pick a line index using the same stateful style as Butcher:
-          - count==0 (or reset=True): reset counters and start position
+          - count==0: reset counters and start position
           - increment/decrement/fixed use persistent line counter
-          - random uses per-node RNG reseeded on reset
-          - random no repetitions shuffles once per reset and walks that list
+          - random uses per-node RNG reseeded on batch start
+          - random no repetitions shuffles once per batch and walks that list
         """
         n = len(lines)
         if n == 0:
@@ -287,7 +286,7 @@ class FNPromptFromFile:
 
         st = cls._get_state(uid)
 
-        if count == 0 or reset:
+        if count == 0:
             st["batch_counter"] = 0
             st["line_counter"] = start
             st["random_list"] = []
@@ -296,14 +295,14 @@ class FNPromptFromFile:
         st["batch_counter"] += 1
 
         if mode == "random no repetitions":
-            if count == 0 or reset or len(st["random_list"]) != n:
+            if count == 0 or len(st["random_list"]) != n:
                 st["rng"].seed(cls._unique_seed())
                 st["random_list"] = list(range(0, n))
                 st["rng"].shuffle(st["random_list"])
             rnd = st["batch_counter"] % len(st["random_list"])
             st["line_counter"] = st["random_list"][rnd]
         elif mode == "random":
-            if count == 0 or reset:
+            if count == 0:
                 st["rng"].seed(cls._unique_seed())
             st["line_counter"] = st["rng"].randint(0, n - 1)
 
@@ -328,7 +327,6 @@ class FNPromptFromFile:
         mode,
         line_to_start_from,
         count=0,
-        reset=False,
         ckpt_name="none",
         model=None,
         clip=None,
@@ -372,7 +370,6 @@ class FNPromptFromFile:
                     uid=uid,
                     start=line_to_start_from,
                     count=count,
-                    reset=reset,
                 )
                 print(
                     f"[FrostzNeeko] 📄 Batch {batch_counter} -> "
