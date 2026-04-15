@@ -648,6 +648,8 @@ def _enhance_detail(
     force_inpaint,
     noise_mask_feather=0,
     cycle=1,
+    tiled_encode=False,
+    tiled_decode=False,
 ):
     """
     Detail pass:
@@ -707,7 +709,11 @@ def _enhance_detail(
     upscaled = _tensor_resize_image_lanczos(cropped_image, new_w, new_h)
 
     # Encode to latent
-    latent = vae.encode(upscaled[:, :, :, :3])
+    encode_in = upscaled[:, :, :, :3]
+    if tiled_encode and hasattr(vae, "encode_tiled"):
+        latent = vae.encode_tiled(encode_in)
+    else:
+        latent = vae.encode(encode_in)
 
     if hasattr(comfy.sample, "fix_empty_latent_channels"):
         latent = comfy.sample.fix_empty_latent_channels(model, latent)
@@ -757,7 +763,10 @@ def _enhance_detail(
         )
 
     # Decode
-    refined = vae.decode(latent_dict["samples"])
+    if tiled_decode and hasattr(vae, "decode_tiled"):
+        refined = vae.decode_tiled(latent_dict["samples"])
+    else:
+        refined = vae.decode(latent_dict["samples"])
 
     if len(refined.shape) == 5:
         refined = refined.squeeze(0)
@@ -790,6 +799,8 @@ def run_face_detail(
     noise_mask_feather: int = 20,
     drop_size: int = 10,
     return_mask_preview: bool = False,
+    tiled_encode: bool = False,
+    tiled_decode: bool = False,
 ) -> torch.Tensor:
     """
     Detect regions and detail them:
@@ -914,6 +925,8 @@ def run_face_detail(
                 force_inpaint,
                 noise_mask_feather=noise_mask_feather,
                 cycle=cycle,
+                tiled_encode=tiled_encode,
+                tiled_decode=tiled_decode,
             )
 
             if enhanced is None:

@@ -111,6 +111,8 @@ class FNFaceDetailer:
                     {"default": 1, "min": 1, "max": 10, "step": 1},
                 ),
                 "mask_preview": (["disabled", "enabled"],),
+                "tiled_encode": (["disabled", "enabled"],),
+                "tiled_decode": (["disabled", "enabled"],),
             },
             "optional": {
                 "detail_pipe": ("FN_DETAIL_PIPE",),
@@ -162,6 +164,8 @@ class FNFaceDetailer:
         noise_mask_feather,
         cycle,
         mask_preview,
+        tiled_encode,
+        tiled_decode,
         detail_pipe=None,
         wildcard_spec="",
         prompt=None,
@@ -232,6 +236,8 @@ class FNFaceDetailer:
             noise_mask_feather=noise_mask_feather,
             drop_size=drop_size,
             return_mask_preview=(mask_preview == "enabled"),
+            tiled_encode=(tiled_encode == "enabled"),
+            tiled_decode=(tiled_decode == "enabled"),
         )
 
         if mask_preview == "enabled":
