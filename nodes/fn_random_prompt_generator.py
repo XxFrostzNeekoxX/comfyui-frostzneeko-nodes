@@ -134,7 +134,7 @@ class FNRandomPromptGenerator:
                     {
                         "default": "",
                         "multiline": False,
-                        "placeholder": "Empty = bundled popular list (~2.5k tags). Or path to your full .txt",
+                        "placeholder": "Empty = bundled 300 female adult tags. Or path to your own .txt",
                     },
                 ),
                 "content_mode": (
@@ -170,8 +170,8 @@ class FNRandomPromptGenerator:
     CATEGORY = "FrostzNeeko 🔹/Prompt"
     DESCRIPTION = (
         "Random Danbooru-style positive prompt from curated pools. "
-        "Leave character_list_path empty to use the bundled popular-adult tag list (from your export, filtered). "
-        "Or set a path to a comma-separated label,tag file. Rebuild the bundle with scripts/build_popular_adult_characters.py."
+        "Leave character_list_path empty to use the bundled list of 300 curated female adult-presenting tags. "
+        "Or set a path to a label,tag file. Edit scripts/write_300_female_adult_tags.py to change the 300."
     )
 
     @classmethod

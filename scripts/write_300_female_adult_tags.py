@@ -1,5 +1,8 @@
-# 300 curated female adult-presenting character tags (Danbooru-style).
-# Edit scripts/write_300_female_adult_tags.py (RAW) to change the set.
+"""Writes nodes/data/popular_adult_characters.txt — exactly 300 female adult-presenting tags."""
+from pathlib import Path
+
+# One tag per line below (Danbooru-style). Exactly 300 entries — verify with: python write_300_female_adult_tags.py
+RAW = r"""
 sakura miko
 houshou marine
 shirakami fubuki
@@ -300,3 +303,32 @@ hitagi senjougahara
 hanekawa tsubasa
 yukinoshita yukino
 yuigahama yui
+"""
+
+
+def main() -> None:
+    lines = [ln.strip() for ln in RAW.strip().splitlines() if ln.strip() and not ln.strip().startswith("#")]
+    seen: set[str] = set()
+    uniq: list[str] = []
+    for ln in lines:
+        k = ln.lower()
+        if k in seen:
+            continue
+        seen.add(k)
+        uniq.append(ln)
+    n = len(uniq)
+    if n != 300:
+        raise SystemExit(f"Expected 300 unique tags, got {n}. Edit RAW in this script.")
+    root = Path(__file__).resolve().parents[1]
+    out = root / "nodes" / "data" / "popular_adult_characters.txt"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    header = (
+        "# 300 curated female adult-presenting character tags (Danbooru-style).\n"
+        "# Edit scripts/write_300_female_adult_tags.py (RAW) to change the set.\n"
+    )
+    out.write_text(header + "\n".join(uniq) + "\n", encoding="utf-8")
+    print(f"OK: {n} tags -> {out}")
+
+
+if __name__ == "__main__":
+    main()

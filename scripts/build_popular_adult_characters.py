@@ -1,6 +1,9 @@
 """
-Build nodes/data/popular_adult_characters.txt from TODOS OS CHARACTERS.txt style export.
-Keeps only text after the first comma; filters to popular franchises + adult-safe heuristics.
+Optional: rebuild nodes/data/popular_adult_characters.txt from a huge export (label,tag lines).
+
+The default bundled list in the repo is maintained by scripts/write_300_female_adult_tags.py
+(300 hand-picked female adult tags). Use this script only if you want to replace that file
+with an auto-filtered slice from your own master list.
 
 Usage (from repo root):
   python scripts/build_popular_adult_characters.py "path/to/TODOS OS CHARACTERS.txt"
