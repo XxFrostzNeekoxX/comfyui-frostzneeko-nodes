@@ -23,6 +23,18 @@ try:
             return web.FileResponse(_MASCOT_PATH)
         return web.Response(status=404, text="mascot not found")
 
+    @server.PromptServer.instance.routes.get("/FrostzNeeko/metadata-image")
+    async def _serve_metadata_image(request):
+        path = request.query.get("path", "")
+        if not path:
+            return web.Response(status=400, text="path is required")
+        if not os.path.isfile(path):
+            return web.Response(status=404, text="image not found")
+        ext = os.path.splitext(path)[1].lower()
+        if ext not in {".png", ".jpg", ".jpeg", ".webp", ".bmp"}:
+            return web.Response(status=400, text="unsupported image type")
+        return web.FileResponse(path)
+
 except Exception:
     pass  # non-critical — mascot just won't show
 
