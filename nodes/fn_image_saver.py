@@ -40,6 +40,8 @@ class FNImageSaver:
             "optional": {
                 "subfolder": ("STRING", {"default": ""}),
                 "number_padding": ("INT", {"default": 3, "min": 1, "max": 8}),
+                "positive_prompt": ("STRING", {"default": "", "multiline": True}),
+                "negative_prompt": ("STRING", {"default": "", "multiline": True}),
             },
             "hidden": {
                 "prompt": "PROMPT",
@@ -70,7 +72,7 @@ class FNImageSaver:
             return []
         return re.findall(r"<lora:([^:>]+):([^>]+)>", text, flags=re.IGNORECASE)
 
-    def _build_pretty_metadata(self, prompt_obj, extra_pnginfo):
+    def _build_pretty_metadata(self, prompt_obj, extra_pnginfo, positive_override="", negative_override=""):
         now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         positive_txt = ""
         negative_txt = ""
@@ -82,6 +84,12 @@ class FNImageSaver:
         model_name = "?"
         clip_skip = "?"
         loras = []
+
+        if isinstance(positive_override, str) and positive_override.strip():
+            positive_txt = positive_override.strip()
+            loras.extend(self._extract_loras_from_text(positive_txt))
+        if isinstance(negative_override, str) and negative_override.strip():
+            negative_txt = negative_override.strip()
 
         pf = self._find_first_node_by_types(prompt_obj, {"FNPromptFromFile"})
         kd = self._find_first_node_by_types(prompt_obj, {"FNKSamplerPreview", "KSampler", "KSamplerAdvanced"})
@@ -105,10 +113,10 @@ class FNImageSaver:
             inp = cd.get("inputs", {})
             pos = inp.get("positive", "")
             neg = inp.get("negative", "")
-            if isinstance(pos, str) and pos.strip():
+            if isinstance(pos, str) and pos.strip() and not positive_txt:
                 positive_txt = pos
                 loras.extend(self._extract_loras_from_text(pos))
-            if isinstance(neg, str) and neg.strip():
+            if isinstance(neg, str) and neg.strip() and not negative_txt:
                 negative_txt = neg
 
         if isinstance(kd, dict):
@@ -184,6 +192,8 @@ class FNImageSaver:
         append_notepad_metadata_tail=True,
         subfolder="",
         number_padding=3,
+        positive_prompt="",
+        negative_prompt="",
         prompt=None,
         extra_pnginfo=None,
     ):
@@ -221,7 +231,12 @@ class FNImageSaver:
                 if not args.disable_metadata:
                     metadata = PngInfo()
                     if save_pretty_metadata:
-                        pretty_meta, parameters_meta = self._build_pretty_metadata(prompt, extra_pnginfo)
+                        pretty_meta, parameters_meta = self._build_pretty_metadata(
+                            prompt,
+                            extra_pnginfo,
+                            positive_override=positive_prompt,
+                            negative_override=negative_prompt,
+                        )
                         metadata.add_text("fn_pretty_metadata", pretty_meta)
                         metadata.add_text("parameters", parameters_meta)
                     if prompt is not None:
