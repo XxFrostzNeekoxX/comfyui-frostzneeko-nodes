@@ -161,12 +161,22 @@ class FNRandomPromptGenerator:
                     "STRING",
                     {"default": "", "multiline": False},
                 ),
+                # Display-only — filled from execution (same pattern as FN Prompt From File)
+                "generated_prompt": (
+                    "STRING",
+                    {
+                        "default": "",
+                        "multiline": True,
+                        "placeholder": "🎲 Generated prompt appears here after you run the workflow…",
+                    },
+                ),
             },
         }
 
     RETURN_TYPES = ("STRING",)
     RETURN_NAMES = ("prompt",)
     FUNCTION = "generate"
+    OUTPUT_NODE = True
     CATEGORY = "FrostzNeeko 🔹/Prompt"
     DESCRIPTION = (
         "Random Danbooru-style positive prompt from curated pools. "
@@ -184,6 +194,7 @@ class FNRandomPromptGenerator:
         include_quality_prefix,
         exclude_line_substrings="",
         extra_tags_append="",
+        generated_prompt="",  # display-only; ignored for cache key
     ):
         if int(seed) < 0:
             return time.time_ns()
@@ -198,6 +209,7 @@ class FNRandomPromptGenerator:
         include_quality_prefix,
         exclude_line_substrings="",
         extra_tags_append="",
+        generated_prompt="",
     ):
         rng = random.Random(int(seed)) if int(seed) >= 0 else random.Random()
 
@@ -263,4 +275,7 @@ class FNRandomPromptGenerator:
             parts.append(extra_tags_append.strip())
 
         prompt = _join_prompt(parts)
-        return (prompt,)
+        return {
+            "ui": {"generated_prompt": (prompt,)},
+            "result": (prompt,),
+        }

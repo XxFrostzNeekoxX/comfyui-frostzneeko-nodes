@@ -7,6 +7,7 @@ import { app } from "../../scripts/app.js";
 
 const FROTSZ_NODES = [
     "FNPromptFromFile",
+    "FNRandomPromptGenerator",
     "FNClipDualEncode",
     "FNClipAdvanced",
     "FNCheckpointLoader",
