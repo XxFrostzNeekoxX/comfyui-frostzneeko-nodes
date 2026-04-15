@@ -303,9 +303,10 @@ def _inference_segm(model, pil_image, confidence=0.3):
     if n == 0:
         return [[], [], [], []]
 
-    # Some models may return boxes but omit masks.
+    # Some models may return boxes but omit masks. In that case,
+    # fallback to bbox inference instead of dropping detections.
     if pred[0].masks is None or getattr(pred[0].masks, "data", None) is None:
-        return [[], [], [], []]
+        return _inference_bbox(model, pil_image, confidence)
     segms_raw = pred[0].masks.data.cpu().numpy()
 
     h_segms = segms_raw.shape[1]
@@ -362,7 +363,11 @@ def _create_segmasks(results):
 
     out = []
     for i in range(len(segms)):
-        item = (bboxes[i], segms[i].astype(np.float32), confidences[i])
+        mask = np.asarray(segms[i], dtype=np.float32)
+        # sanitize mask values to avoid NaN/Inf artifacts in paste/noise masking
+        mask = np.nan_to_num(mask, nan=0.0, posinf=1.0, neginf=0.0)
+        mask = np.clip(mask, 0.0, 1.0)
+        item = (bboxes[i], mask, confidences[i])
         out.append(item)
     return out
 
@@ -609,6 +614,8 @@ def _detect_segs(detector, image_tensor, threshold, dilation, crop_factor, drop_
             crop_h = cr_y2 - cr_y1
             crop_w = cr_x2 - cr_x1
             cropped_mask = _crop_ndarray2(item_mask.astype(np.float32), crop_region)
+            cropped_mask = np.nan_to_num(cropped_mask, nan=0.0, posinf=1.0, neginf=0.0)
+            cropped_mask = np.clip(cropped_mask, 0.0, 1.0)
 
             # Fallback to bbox rectangle if crop/mask comes invalid or empty.
             if cropped_mask.size == 0 or cropped_mask.shape != (crop_h, crop_w):
@@ -848,7 +855,10 @@ def run_face_detail(
         # Process large areas first, then small regions (small details last)
         segs_sorted = sorted(
             segs,
-            key=lambda s: ((s.bbox[2] - s.bbox[0]) * (s.bbox[3] - s.bbox[1])),
+            key=lambda s: (
+                ((s.bbox[2] - s.bbox[0]) * (s.bbox[3] - s.bbox[1])),
+                _confidence_to_float(s.confidence),
+            ),
             reverse=True,
         )
 
