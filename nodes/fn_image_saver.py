@@ -34,6 +34,7 @@ class FNImageSaver:
                 "quality": ("INT", {"default": 95, "min": 1, "max": 100}),
                 "add_timestamp": ("BOOLEAN", {"default": True}),
                 "numbering_style": (["comfy_default", "prefix_number"], {"default": "comfy_default"}),
+                "save_pretty_metadata": ("BOOLEAN", {"default": True}),
             },
             "optional": {
                 "subfolder": ("STRING", {"default": ""}),
@@ -172,6 +173,7 @@ class FNImageSaver:
         quality=95,
         add_timestamp=True,
         numbering_style="comfy_default",
+        save_pretty_metadata=True,
         subfolder="",
         number_padding=3,
         prompt=None,
@@ -209,9 +211,10 @@ class FNImageSaver:
                 metadata = None
                 if not args.disable_metadata:
                     metadata = PngInfo()
-                    pretty_meta, parameters_meta = self._build_pretty_metadata(prompt, extra_pnginfo)
-                    metadata.add_text("fn_pretty_metadata", pretty_meta)
-                    metadata.add_text("parameters", parameters_meta)
+                    if save_pretty_metadata:
+                        pretty_meta, parameters_meta = self._build_pretty_metadata(prompt, extra_pnginfo)
+                        metadata.add_text("fn_pretty_metadata", pretty_meta)
+                        metadata.add_text("parameters", parameters_meta)
                     if prompt is not None:
                         metadata.add_text("prompt", json.dumps(prompt))
                     if extra_pnginfo is not None:

@@ -43,9 +43,17 @@
 - 🎨 **青色霓虹主题** — 所有节点都有自定义深青色外观，在工作流中一目了然
 - 📄 **文件提示词** — 从 `.txt` 读取提示词，使用有状态行模式，解析通配符并内联加载 LoRA
 - ⚡ **Supreme KSampler** — 内置空白潜空间、实时预览、放大器和细节器开关，一个节点搞定一切
-- 👁️ **单节点面部细节器** — 用一个节点替代 3+ 个 Impact Pack 节点
+- 👁️ **单节点面部细节器** — 一个节点完成检测 + 细化
 - 🔧 **BREAK 和方括号支持** — `BREAK` 关键词和 `[降权]` 方括号全局可用
 - 🎛️ **有组织的界面** — 可折叠的组件区域，轻松找到所需设置
+
+---
+
+## 🆕 最近更新
+
+- Face Detailer：新增蒙版预览、tiled VAE encode/decode、refiner 阶段和可选 `SIGMAS` 输入。
+- Image Saver：新增美观 PNG 元数据（时间、seed、sampler、prompt、LoRA）。
+- Image Saver：新增 `save_pretty_metadata` 开关，可按需关闭该格式化元数据。
 
 ---
 
@@ -79,7 +87,7 @@ git clone https://github.com/XxFrostzNeekoxX/comfyui-frotszneeko-nodes.git
 pip install ultralytics
 ```
 
-你还需要 Ultralytics 检测模型（`.pt` 文件）放在 `ComfyUI/models/ultralytics/bbox/` 或 `ComfyUI/models/ultralytics/segm/` 中。任何 YOLO 模型都可以。如果已安装 Impact Pack，现有模型会自动生效。
+你还需要 Ultralytics 检测模型（`.pt` 文件）放在 `ComfyUI/models/ultralytics/bbox/` 或 `ComfyUI/models/ultralytics/segm/` 中。任何 YOLO 模型都可以。
 
 ---
 
@@ -123,9 +131,9 @@ pip install ultralytics
 
 ### FN Face Detailer
 
-自动面部检测和重绘。用**一个节点**替代整个 Impact Pack 管线。
+自动面部检测和重绘，全部在**一个节点**内完成。
 
-**输出：** `IMAGE`
+**输出：** `IMAGE`、`mask_preview`
 
 ---
 
@@ -155,7 +163,7 @@ pip install ultralytics
 
 ### FN Image Saver
 
-保存图像，完全控制格式和命名。支持 PNG、JPEG 和 WebP。
+保存图像，完全控制格式和命名。支持 PNG、JPEG 和 WebP，并支持可选美观元数据（`save_pretty_metadata`）。
 
 ---
 

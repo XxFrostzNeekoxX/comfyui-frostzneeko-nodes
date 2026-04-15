@@ -43,9 +43,17 @@ Ya sea para generación masiva para tu Patreon, armar una galería en Pixiv, o s
 - 🎨 **Tema cyan neón** — todos los nodos tienen un look dark teal personalizado que resalta
 - 📄 **Prompt From File** — lee prompts de `.txt` con modos de línea con estado, resuelve wildcards y carga LoRAs inline
 - ⚡ **Supreme KSampler** — latent vacío integrado, preview en vivo, upscaler y toggles de detailer en una bestia
-- 👁️ **Face Detailer en un nodo** — reemplaza 3+ nodos del Impact Pack con un solo nodo
+- 👁️ **Face Detailer en un nodo** — detección + detalle en un solo nodo
 - 🔧 **Soporte BREAK y corchetes** — keyword `BREAK` y `[de-emphasis]` funcionan en todas partes
 - 🎛️ **UI organizada** — secciones colapsables para encontrar lo que necesitas
+
+---
+
+## 🆕 Novedades recientes
+
+- Face Detailer: preview de máscara, tiled VAE encode/decode, etapa de refiner y entrada opcional de `SIGMAS`.
+- Image Saver: metadata PNG bonita (fecha/hora, seed, sampler, prompts y LoRAs).
+- Image Saver: nuevo toggle `save_pretty_metadata` para activar/desactivar ese bloque formateado.
 
 ---
 
@@ -79,7 +87,7 @@ Si usas el Face Detailer, instala ultralytics:
 pip install ultralytics
 ```
 
-También necesitas modelos Ultralytics (`.pt`) en `ComfyUI/models/ultralytics/bbox/` o `ComfyUI/models/ultralytics/segm/`. Cualquier modelo YOLO funciona. Si ya tienes Impact Pack instalado, tus modelos existentes funcionan automáticamente.
+También necesitas modelos Ultralytics (`.pt`) en `ComfyUI/models/ultralytics/bbox/` o `ComfyUI/models/ultralytics/segm/`. Cualquier modelo YOLO funciona.
 
 ---
 
@@ -123,9 +131,9 @@ El caballo de batalla. KSampler completo con todo integrado — el único nodo d
 
 ### FN Face Detailer
 
-Detección e inpainting automático de rostros. Reemplaza toda la pipeline del Impact Pack en **un solo nodo**.
+Detección e inpainting automático de rostros en **un solo nodo**.
 
-**Salidas:** `IMAGE`
+**Salidas:** `IMAGE`, `mask_preview`
 
 ---
 
@@ -155,7 +163,7 @@ Cargador de checkpoint limpio, consistente con el tema del pack.
 
 ### FN Image Saver
 
-Guarda imágenes con control total de formato y nomenclatura. Soporta PNG, JPEG y WebP.
+Guarda imágenes con control total de formato y nomenclatura. Soporta PNG, JPEG y WebP, con metadata bonita opcional (`save_pretty_metadata`).
 
 ---
 

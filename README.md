@@ -49,6 +49,14 @@ Whether you're doing bulk generation for your Patreon, building a Pixiv gallery,
 
 ---
 
+## 🆕 Recent Updates
+
+- Face Detailer: mask preview output, tiled VAE encode/decode, integrated refiner stage, optional custom `SIGMAS` input.
+- Image Saver: pretty PNG metadata block with generation info (date/time, seed, sampler, prompts, LoRAs).
+- Image Saver: new `save_pretty_metadata` toggle so users can disable the pretty metadata block.
+
+---
+
 ## 📦 Installation
 
 ### Option 1: ComfyUI Manager (Recommended)
@@ -155,9 +163,10 @@ Automatic face/feature detection and inpainting in **one node**.
 | **Detection**      | Threshold, dilation, crop factor, drop size — all configurable        |
 | **Sampling**       | Full sampler controls (seed, steps, cfg, sampler, scheduler, denoise) |
 | **Inpainting**     | Feather, noise mask, force inpaint, noise mask feather                |
+| **Advanced Detail**| Tiled VAE encode/decode, optional refiner stage (`refiner_ratio`)      |
 | **Toggle Control** | Name-based enable/disable via `detail_pipe` from KSampler             |
 | **Wildcard Spec**  | Optional text prompt override for the detailer pass                   |
-| **Preview**        | Built-in preview of the detailed result                               |
+| **Preview**        | Built-in preview of result + optional mask preview output             |
 
 
 **Outputs:** `IMAGE`
@@ -219,7 +228,7 @@ Saves images with full control over format and naming.
 | **Naming**          | Custom prefix + optional timestamp                                        |
 | **Numbering Style** | `comfy_default` or `prefix_number` (`teto_001`) with configurable padding |
 | **Subfolder**       | Custom output subfolder                                                   |
-| **Metadata**        | Full workflow metadata embedded (PNG)                                     |
+| **Metadata**        | Full workflow metadata + optional pretty metadata block (`save_pretty_metadata`) |
 | **Preview**         | Built-in preview of saved images                                          |
 | **Passthrough**     | `IMAGE` output for chaining                                               |
 

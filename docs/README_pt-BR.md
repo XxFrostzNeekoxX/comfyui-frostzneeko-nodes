@@ -43,9 +43,17 @@ Seja pra geração em massa pro seu Patreon, montar uma galeria no Pixiv, ou só
 - 🎨 **Tema cyan neon** — todos os nodes têm visual dark teal customizado que se destaca
 - 📄 **Prompt From File** — lê prompts de `.txt` com modos de linha stateful, resolve wildcards e carrega LoRAs inline
 - ⚡ **Supreme KSampler** — latent vazio embutido, preview ao vivo, upscaler e toggles de detailer em um monstro só
-- 👁️ **Face Detailer em um node** — substitui 3+ nodes do Impact Pack em um único node
+- 👁️ **Face Detailer em um node** — detecção + detalhe em um único node
 - 🔧 **Suporte a BREAK & colchetes** — keyword `BREAK` e `[de-emphasis]` funcionam em todo lugar
 - 🎛️ **UI organizada** — seções colapsáveis pra você encontrar o que precisa
+
+---
+
+## 🆕 Atualizações Recentes
+
+- Face Detailer: preview de máscara, tiled VAE encode/decode, estágio de refiner e entrada opcional de `SIGMAS`.
+- Image Saver: metadata PNG bonita (com data/hora, seed, sampler, prompts e LoRAs).
+- Image Saver: novo toggle `save_pretty_metadata` para ativar/desativar essa metadata formatada.
 
 ---
 
@@ -79,7 +87,7 @@ Se usar o Face Detailer, instale o ultralytics:
 pip install ultralytics
 ```
 
-Você também precisa de modelos Ultralytics (`.pt`) em `ComfyUI/models/ultralytics/bbox/` ou `ComfyUI/models/ultralytics/segm/`. Qualquer modelo YOLO funciona. Se já tem o Impact Pack instalado, seus modelos existentes funcionam automaticamente.
+Você também precisa de modelos Ultralytics (`.pt`) em `ComfyUI/models/ultralytics/bbox/` ou `ComfyUI/models/ultralytics/segm/`. Qualquer modelo YOLO funciona.
 
 ---
 
@@ -137,16 +145,17 @@ O carro-chefe. KSampler completo com tudo embutido — o único node de sampler 
 
 ### FN Face Detailer
 
-Detecção e inpainting automático de rosto/features. Substitui toda a pipeline do Impact Pack (`UltralyticsDetectorProvider` → `BBOX Detector` → `Detailer`) em **um único node**.
+Detecção e inpainting automático de rosto/features em **um único node**.
 
 | Recurso | Descrição |
 |---|---|
 | **Detecção** | Threshold, dilatação, crop factor, drop size — tudo configurável |
 | **Sampling** | Controles completos de sampler (seed, steps, cfg, sampler, scheduler, denoise) |
 | **Inpainting** | Feather, noise mask, force inpaint, noise mask feather |
+| **Detalhe Avançado** | Tiled VAE encode/decode, estágio de refiner (`refiner_ratio`) e `SIGMAS` opcional |
 | **Controle por Toggle** | Ativar/desativar por nome via `detail_pipe` do KSampler |
 | **Wildcard Spec** | Override de prompt de texto opcional para o passo de detailing |
-| **Preview** | Preview embutido do resultado detalhado |
+| **Preview** | Preview embutido do resultado + preview de máscara opcional |
 
 **Saídas:** `IMAGE`
 
@@ -202,7 +211,7 @@ Salva imagens com controle total de formato e nomenclatura.
 | **Nomenclatura** | Prefixo customizado + timestamp opcional |
 | **Estilo de Numeração** | `comfy_default` ou `prefix_number` (`teto_001`) com padding configurável |
 | **Subpasta** | Subpasta de saída customizada |
-| **Metadata** | Metadata completa do workflow embutida (PNG) |
+| **Metadata** | Metadata completa do workflow + bloco formatado opcional (`save_pretty_metadata`) |
 | **Preview** | Preview embutido das imagens salvas |
 | **Passthrough** | Saída `IMAGE` para encadeamento |
 
@@ -239,9 +248,9 @@ Sim. A lógica de sampling e encoding CLIP é idêntica aos nodes nativos do Com
 </details>
 
 <details>
-<summary><b>Preciso do Impact Pack instalado?</b></summary>
+<summary><b>Preciso de outros packs de nodes instalados?</b></summary>
 
-**Não.** O Face Detailer é totalmente independente — reimplementa toda a pipeline de detecção e detalhamento internamente. Você só precisa do pacote pip `ultralytics` e dos arquivos de modelo YOLO (`.pt`). Se já tem o Impact Pack instalado, os mesmos arquivos de modelo funcionam automaticamente.
+**Não.** O pack é independente. No Face Detailer você só precisa do pacote pip `ultralytics` e dos modelos YOLO (`.pt`).
 </details>
 
 <details>
