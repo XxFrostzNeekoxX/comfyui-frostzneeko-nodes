@@ -4,6 +4,7 @@ Read metadata from saved images and present a formatted text view.
 """
 
 import os
+import re
 
 import numpy as np
 from PIL import Image
@@ -89,6 +90,125 @@ class FNMetadataReader:
             return []
         return sorted(out, key=lambda p: os.path.getmtime(p), reverse=True)
 
+    @staticmethod
+    def _parse_parameters_text(parameters: str):
+        """Parse common 'parameters' blocks (A1111 style) into a structured dict."""
+        if not isinstance(parameters, str) or not parameters.strip():
+            return {"positive": "", "negative": "", "fields": {}, "raw": ""}
+        raw = parameters.strip()
+        lines = [ln.strip() for ln in raw.splitlines() if ln.strip()]
+        if not lines:
+            return {"positive": "", "negative": "", "fields": {}, "raw": raw}
+
+        # Typical shape:
+        # <positive prompt lines>
+        # Negative prompt: <text>
+        # Steps: 30, Sampler: Euler, CFG scale: 7, Seed: 123, Size: 512x512, ...
+        positive = []
+        negative = ""
+        fields = {}
+        in_positive = True
+
+        for i, line in enumerate(lines):
+            low = line.lower()
+            if low.startswith("negative prompt:"):
+                in_positive = False
+                negative = line.split(":", 1)[1].strip() if ":" in line else ""
+                continue
+
+            # Last metadata line usually starts with "Steps:"
+            if re.match(r"^steps\s*:", line, flags=re.IGNORECASE):
+                parts = [p.strip() for p in line.split(",") if p.strip()]
+                for part in parts:
+                    if ":" not in part:
+                        continue
+                    k, v = part.split(":", 1)
+                    fields[k.strip()] = v.strip()
+                continue
+
+            # If we are after prompt sections and the line looks like k:v list
+            if not in_positive and ":" in line and i >= max(1, len(lines) - 2):
+                parts = [p.strip() for p in line.split(",") if p.strip()]
+                if any(":" in p for p in parts):
+                    for part in parts:
+                        if ":" not in part:
+                            continue
+                        k, v = part.split(":", 1)
+                        fields[k.strip()] = v.strip()
+                    continue
+
+            if in_positive:
+                positive.append(line)
+
+        return {
+            "positive": "\n".join(positive).strip(),
+            "negative": negative.strip(),
+            "fields": fields,
+            "raw": raw,
+        }
+
+    @staticmethod
+    def _compose_normalized_metadata(info, selected_path, fmt, size, mode):
+        """Normalize external metadata into FrostzNeeko-style readable block."""
+        parameters = info.get("parameters", "")
+        parsed = FNMetadataReader._parse_parameters_text(parameters)
+
+        positive = parsed.get("positive", "")
+        negative = parsed.get("negative", "")
+        fields = parsed.get("fields", {})
+
+        def pick(*keys, default="?"):
+            for k in keys:
+                if k in fields and str(fields[k]).strip():
+                    return str(fields[k]).strip()
+            return default
+
+        # Common aliases across tools
+        seed = pick("Seed", "seed")
+        steps = pick("Steps", "steps")
+        cfg = pick("CFG scale", "CFG", "cfg", "cfg scale")
+        sampler = pick("Sampler", "sampler")
+        scheduler = pick("Schedule type", "Scheduler", "scheduler")
+        model = pick("Model", "Model hash", "model")
+        clip_skip = pick("Clip skip", "clip_skip", "clip skip")
+        size_field = pick("Size", default=size)
+
+        lines = [
+            "🧊 FrostzNeeko Metadata (normalized)",
+            f"📂 Path: {selected_path}",
+            f"🖼️ Format: {fmt} | Size: {size_field} | Mode: {mode}",
+            f"🎲 Seed: {seed}",
+            f"🪜 Steps: {steps}",
+            f"🎛️ CFG: {cfg}",
+            f"🧪 Sampler: {sampler}",
+            f"🗓️ Scheduler: {scheduler}",
+            f"🧠 Model: {model}",
+            f"🎚️ Clip Skip: {clip_skip}",
+            "",
+            "🟢 Positive:",
+            positive or "(not found)",
+            "",
+            "🔴 Negative:",
+            negative or "(not found)",
+        ]
+
+        # Keep a compact dump of remaining fields for transparency
+        shown = {"Seed", "seed", "Steps", "steps", "CFG scale", "CFG", "cfg", "cfg scale", "Sampler", "sampler", "Schedule type", "Scheduler", "scheduler", "Model", "Model hash", "model", "Clip skip", "clip_skip", "clip skip", "Size"}
+        leftovers = [(k, v) for k, v in fields.items() if k not in shown]
+        if leftovers:
+            lines.append("")
+            lines.append("📎 Other fields:")
+            for k, v in leftovers:
+                lines.append(f"- {k}: {v}")
+
+        if isinstance(info.get("prompt"), str) and info.get("prompt").strip():
+            lines.append("")
+            lines.append("🧾 Raw prompt key: present")
+        if isinstance(info.get("workflow"), str) and info.get("workflow").strip():
+            lines.append("🔧 Raw workflow key: present")
+
+        return "\n".join(lines)
+
     def _save_ui_preview(self, pil_img, selected_path):
         arr = np.array(pil_img.convert("RGB"), dtype=np.uint8)
         base = os.path.splitext(os.path.basename(selected_path))[0] or "FNMeta"
@@ -164,6 +284,14 @@ class FNMetadataReader:
             summary.append("🗂️ Recent files:")
             summary.append("\n".join(f"- {n}" for n in preview_names))
 
+        normalized_external = ""
+        if not tail and not pretty_block:
+            # If image wasn't saved by FNImageSaver, try to normalize common metadata keys.
+            if parameters or info.get("prompt") or info.get("workflow"):
+                normalized_external = self._compose_normalized_metadata(
+                    info, selected_path, fmt, size, mode
+                )
+
         if tail:
             summary.append("")
             summary.append("📘 Notepad tail block found:")
@@ -172,6 +300,10 @@ class FNMetadataReader:
             summary.append("")
             summary.append("📘 Pretty metadata (PNG text):")
             summary.append(str(pretty_block))
+        elif normalized_external:
+            summary.append("")
+            summary.append("📘 External metadata detected and normalized:")
+            summary.append(normalized_external)
         elif parameters:
             summary.append("")
             summary.append("📘 Parameters:")
