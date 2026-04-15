@@ -650,6 +650,10 @@ def _enhance_detail(
     cycle=1,
     tiled_encode=False,
     tiled_decode=False,
+    refiner_ratio=0.0,
+    refiner_model=None,
+    refiner_positive=None,
+    refiner_negative=None,
 ):
     """
     Detail pass:
@@ -668,6 +672,10 @@ def _enhance_detail(
 
         # Improve soft-mask transitions when supported
         model = _maybe_wrap_differential_diffusion(model, enable=(noise_mask_feather > 0))
+        if refiner_model is not None:
+            refiner_model = _maybe_wrap_differential_diffusion(
+                refiner_model, enable=(noise_mask_feather > 0)
+            )
 
     h = cropped_image.shape[1]
     w = cropped_image.shape[2]
@@ -743,24 +751,48 @@ def _enhance_detail(
     sampler_obj = comfy.samplers.sampler_object(sampler_name)
 
     # Sample with cycles
+    use_refiner = (
+        refiner_model is not None
+        and refiner_ratio is not None
+        and float(refiner_ratio) > 0.0
+    )
+    rr = float(refiner_ratio) if refiner_ratio is not None else 0.0
+    rr = max(0.0, min(1.0, rr))
+
+    ref_pos = refiner_positive if refiner_positive is not None else positive
+    ref_neg = refiner_negative if refiner_negative is not None else negative
+
     for c in range(cycle):
         noise = comfy.sample.prepare_noise(latent_dict["samples"], seed + c)
 
-        cb = None
-        if _lp is not None:
-            try:
-                cb = _lp.prepare_callback(model, len(sigmas) - 1)
-            except Exception:
-                pass
+        def _run_sample(sampling_model, pos, neg, current_sigmas):
+            cb = None
+            if _lp is not None:
+                try:
+                    cb = _lp.prepare_callback(sampling_model, max(1, len(current_sigmas) - 1))
+                except Exception:
+                    pass
+            return comfy.sample.sample_custom(
+                sampling_model, noise, cfg, sampler_obj, current_sigmas,
+                pos, neg, latent_dict["samples"],
+                noise_mask=latent_dict.get("noise_mask"),
+                callback=cb,
+                disable_pbar=not comfy.utils.PROGRESS_BAR_ENABLED,
+                seed=seed + c,
+            )
 
-        latent_dict["samples"] = comfy.sample.sample_custom(
-            model, noise, cfg, sampler_obj, sigmas,
-            positive, negative, latent_dict["samples"],
-            noise_mask=latent_dict.get("noise_mask"),
-            callback=cb,
-            disable_pbar=not comfy.utils.PROGRESS_BAR_ENABLED,
-            seed=seed + c,
-        )
+        if use_refiner and len(sigmas) >= 4:
+            split = int(round(len(sigmas) * (1.0 - rr)))
+            split = max(2, min(len(sigmas) - 2, split))
+            base_sigmas = sigmas[:split]
+            refiner_sigmas = sigmas[split - 1:]
+
+            latent_dict["samples"] = _run_sample(model, positive, negative, base_sigmas)
+            latent_dict["samples"] = _run_sample(
+                refiner_model, ref_pos, ref_neg, refiner_sigmas
+            )
+        else:
+            latent_dict["samples"] = _run_sample(model, positive, negative, sigmas)
 
     # Decode
     if tiled_decode and hasattr(vae, "decode_tiled"):
@@ -801,6 +833,10 @@ def run_face_detail(
     return_mask_preview: bool = False,
     tiled_encode: bool = False,
     tiled_decode: bool = False,
+    refiner_ratio: float = 0.0,
+    refiner_model=None,
+    refiner_positive=None,
+    refiner_negative=None,
 ) -> torch.Tensor:
     """
     Detect regions and detail them:
@@ -927,6 +963,10 @@ def run_face_detail(
                 cycle=cycle,
                 tiled_encode=tiled_encode,
                 tiled_decode=tiled_decode,
+                refiner_ratio=refiner_ratio,
+                refiner_model=refiner_model,
+                refiner_positive=refiner_positive,
+                refiner_negative=refiner_negative,
             )
 
             if enhanced is None:

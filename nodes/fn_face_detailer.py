@@ -116,6 +116,13 @@ class FNFaceDetailer:
             },
             "optional": {
                 "detail_pipe": ("FN_DETAIL_PIPE",),
+                "refiner_model": ("MODEL",),
+                "refiner_positive": ("CONDITIONING",),
+                "refiner_negative": ("CONDITIONING",),
+                "refiner_ratio": (
+                    "FLOAT",
+                    {"default": 0.0, "min": 0.0, "max": 1.0, "step": 0.01},
+                ),
                 # wildcard spec for the detail prompt
                 "wildcard_spec": (
                     "STRING",
@@ -167,6 +174,10 @@ class FNFaceDetailer:
         tiled_encode,
         tiled_decode,
         detail_pipe=None,
+        refiner_model=None,
+        refiner_positive=None,
+        refiner_negative=None,
+        refiner_ratio=0.0,
         wildcard_spec="",
         prompt=None,
         extra_pnginfo=None,
@@ -238,6 +249,10 @@ class FNFaceDetailer:
             return_mask_preview=(mask_preview == "enabled"),
             tiled_encode=(tiled_encode == "enabled"),
             tiled_decode=(tiled_decode == "enabled"),
+            refiner_ratio=refiner_ratio,
+            refiner_model=refiner_model,
+            refiner_positive=refiner_positive,
+            refiner_negative=refiner_negative,
         )
 
         if mask_preview == "enabled":
