@@ -72,6 +72,129 @@ class FNImageSaver:
             return []
         return re.findall(r"<lora:([^:>]+):([^>]+)>", text, flags=re.IGNORECASE)
 
+    @staticmethod
+    def _lookup_prompt_node(prompt_obj, node_id):
+        if not isinstance(prompt_obj, dict):
+            return None
+        sid = str(node_id)
+        if sid in prompt_obj:
+            return prompt_obj[sid]
+        try:
+            iid = int(node_id)
+            k = str(iid)
+            if k in prompt_obj:
+                return prompt_obj[k]
+        except (TypeError, ValueError):
+            pass
+        return None
+
+    @staticmethod
+    def _find_workflow_node(extra_pnginfo, node_id):
+        if not extra_pnginfo or not isinstance(extra_pnginfo, dict):
+            return None
+        wf = extra_pnginfo.get("workflow")
+        if isinstance(wf, str):
+            try:
+                wf = json.loads(wf)
+            except (json.JSONDecodeError, TypeError):
+                wf = None
+        if not isinstance(wf, dict):
+            return None
+        nodes = wf.get("nodes")
+        if not isinstance(nodes, list):
+            return None
+        for n in nodes:
+            if not isinstance(n, dict):
+                continue
+            nid = n.get("id")
+            if nid == node_id or str(nid) == str(node_id):
+                return n
+        return None
+
+    @staticmethod
+    def _workflow_widget_string(workflow_node, widget_name):
+        """Map a widget name to its value in LiteGraph `widgets_values` (incl. leading batch slot)."""
+        if not isinstance(workflow_node, dict):
+            return ""
+        wv = workflow_node.get("widgets_values")
+        inputs = workflow_node.get("inputs")
+        if not isinstance(wv, list) or not isinstance(inputs, list):
+            return ""
+        widget_slot = -1
+        n = 0
+        for inp in inputs:
+            if not isinstance(inp, dict):
+                continue
+            w = inp.get("widget")
+            if not isinstance(w, dict):
+                continue
+            if w.get("name") == widget_name:
+                widget_slot = n
+                break
+            n += 1
+        if widget_slot < 0:
+            return ""
+        for idx in (widget_slot, widget_slot + 1):
+            if idx < len(wv) and isinstance(wv[idx], str) and wv[idx].strip():
+                return wv[idx].strip()
+        return ""
+
+    def _resolve_linked_text(self, prompt_obj, value, extra_pnginfo, depth=0, visited=None):
+        """Turn ComfyUI prompt references [node_id, output_index] into a string when possible."""
+        if visited is None:
+            visited = set()
+        if depth > 24:
+            return ""
+        if isinstance(value, str):
+            return value.strip()
+        if not isinstance(value, (list, tuple)) or len(value) != 2:
+            return ""
+        try:
+            src_id = int(value[0])
+            out_idx = int(value[1])
+        except (TypeError, ValueError):
+            return ""
+        key = (src_id, out_idx)
+        if key in visited:
+            return ""
+        visited.add(key)
+        node = self._lookup_prompt_node(prompt_obj, src_id)
+        if not isinstance(node, dict):
+            return ""
+        ctype = node.get("class_type")
+        inputs = node.get("inputs") if isinstance(node.get("inputs"), dict) else {}
+        if ctype == "CLIPTextEncode":
+            return self._resolve_linked_text(
+                prompt_obj, inputs.get("text"), extra_pnginfo, depth + 1, visited
+            )
+        if ctype == "FNPromptFromFile":
+            if out_idx in (5, 6):
+                cp = inputs.get("current_prompt")
+                if isinstance(cp, str) and cp.strip():
+                    return cp.strip()
+                wf_node = self._find_workflow_node(extra_pnginfo, src_id)
+                if isinstance(wf_node, dict):
+                    s = self._workflow_widget_string(wf_node, "current_prompt")
+                    if s:
+                        return s
+            return ""
+        if ctype == "PrimitiveString":
+            v = inputs.get("value", "")
+            if isinstance(v, str) and v.strip():
+                return v.strip()
+            return self._resolve_linked_text(
+                prompt_obj, v, extra_pnginfo, depth + 1, visited
+            )
+        for k in ("text", "string", "value"):
+            v = inputs.get(k)
+            if v is not None and v is not value:
+                r = self._resolve_linked_text(
+                    prompt_obj, v, extra_pnginfo, depth + 1, visited
+                )
+                if r:
+                    return r
+        return ""
+
     def _build_pretty_metadata(self, prompt_obj, extra_pnginfo, positive_override="", negative_override=""):
         now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         positive_txt = ""
@@ -93,7 +216,9 @@ class FNImageSaver:
 
         pf = self._find_first_node_by_types(prompt_obj, {"FNPromptFromFile"})
         kd = self._find_first_node_by_types(prompt_obj, {"FNKSamplerPreview", "KSampler", "KSamplerAdvanced"})
-        cd = self._find_first_node_by_types(prompt_obj, {"FNCLIPDualEncode", "CLIPTextEncode"})
+        cd = self._find_first_node_by_types(
+            prompt_obj, {"FNClipDualEncode", "FNCLIPDualEncode", "CLIPTextEncode"}
+        )
         ck = self._find_first_node_by_types(prompt_obj, {"CheckpointLoaderSimple", "FNCheckpointLoader"})
 
         if isinstance(pf, dict):
@@ -111,13 +236,29 @@ class FNImageSaver:
 
         if isinstance(cd, dict):
             inp = cd.get("inputs", {})
-            pos = inp.get("positive", "")
-            neg = inp.get("negative", "")
-            if isinstance(pos, str) and pos.strip() and not positive_txt:
-                positive_txt = pos
-                loras.extend(self._extract_loras_from_text(pos))
-            if isinstance(neg, str) and neg.strip() and not negative_txt:
-                negative_txt = neg
+            ctype = cd.get("class_type")
+            if ctype == "CLIPTextEncode":
+                pos = inp.get("text", "")
+                neg = ""
+            else:
+                pos = inp.get("positive", "")
+                neg = inp.get("negative", "")
+            if not positive_txt:
+                if isinstance(pos, str) and pos.strip():
+                    positive_txt = pos
+                else:
+                    resolved = self._resolve_linked_text(prompt_obj, pos, extra_pnginfo)
+                    if resolved:
+                        positive_txt = resolved
+                if positive_txt:
+                    loras.extend(self._extract_loras_from_text(positive_txt))
+            if not negative_txt:
+                if isinstance(neg, str) and neg.strip():
+                    negative_txt = neg
+                else:
+                    resolved_n = self._resolve_linked_text(prompt_obj, neg, extra_pnginfo)
+                    if resolved_n:
+                        negative_txt = resolved_n
 
         if isinstance(kd, dict):
             inp = kd.get("inputs", {})
