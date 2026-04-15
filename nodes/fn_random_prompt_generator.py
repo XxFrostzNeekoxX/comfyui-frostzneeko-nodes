@@ -31,6 +31,10 @@ from .fn_random_prompt_data import (
 _CHARACTER_CACHE: dict[str, tuple[float, list[str]]] = {}
 
 
+def _bundled_popular_characters_path() -> str:
+    return os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "popular_adult_characters.txt")
+
+
 def _resolve_character_file(path: str) -> str:
     p = (path or "").strip()
     if not p:
@@ -130,7 +134,7 @@ class FNRandomPromptGenerator:
                     {
                         "default": "",
                         "multiline": False,
-                        "placeholder": "e.g. Patreon & Pixiv/TODOS OS CHARACTERS.txt (relative to output folder)",
+                        "placeholder": "Empty = bundled popular list (~2.5k tags). Or path to your full .txt",
                     },
                 ),
                 "content_mode": (
@@ -165,8 +169,9 @@ class FNRandomPromptGenerator:
     FUNCTION = "generate"
     CATEGORY = "FrostzNeeko 🔹/Prompt"
     DESCRIPTION = (
-        "Random Danbooru-style positive prompt from curated pools + optional character .txt "
-        "(label,tag per line). Not affiliated with Danbooru; tag list is local only."
+        "Random Danbooru-style positive prompt from curated pools. "
+        "Leave character_list_path empty to use the bundled popular-adult tag list (from your export, filtered). "
+        "Or set a path to a comma-separated label,tag file. Rebuild the bundle with scripts/build_popular_adult_characters.py."
     )
 
     @classmethod
@@ -198,6 +203,10 @@ class FNRandomPromptGenerator:
 
         excl = [s.strip() for s in exclude_line_substrings.split(",") if s.strip()]
         resolved = _resolve_character_file(character_list_path)
+        if not resolved:
+            bundled = _bundled_popular_characters_path()
+            if os.path.isfile(bundled):
+                resolved = bundled
         char_pool = _load_character_tags(resolved, excl)
         if not char_pool:
             char_pool = list(FALLBACK_CHARACTER_TAGS)

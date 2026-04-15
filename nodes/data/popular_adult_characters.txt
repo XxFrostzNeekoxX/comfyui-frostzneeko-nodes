@@ -1,0 +1,2468 @@
+# Popular adult-oriented character tags (Danbooru-style). One per line.
+# Source: TODOS OS CHARACTERS.txt — tag = text after first comma.
+2b (nier automata)
+9a-91 (girls' frontline)
+a2 (nier automata)
+aa-12 (girls' frontline)
+abe nana
+abukuma (kancolle)
+abukuma kai ni (kancolle)
+acheron (honkai  star rail)
+admiral (kancolle)
+admiral graf spee (azur lane)
+admiral hipper (azur lane)
+admire vega (umamusume)
+aegir (azur lane)
+aegis (persona)
+aesc (fate)
+aesc (rain witch) (fate)
+agano (kancolle)
+aglaea (honkai  star rail)
+agnes digital (umamusume)
+agnes tachyon (lunatic lab) (umamusume)
+agnes tachyon (umamusume)
+ahri (league of legends)
+air groove (umamusume)
+air shakur (umamusume)
+aircraft carrier oni
+aircraft carrier water oni
+airfield princess
+aizawa ema
+ajaw (genshin impact)
+ak-12 (girls' frontline)
+ak-15 (girls' frontline)
+akagi (azur lane)
+akagi (kancolle)
+akagi miria
+akashi (azur lane)
+akashi (kancolle)
+akatsuki (kancolle)
+akatsuki kai ni (kancolle)
+akatsuki uni
+akebono (kancolle)
+akebono kai ni (kancolle)
+akechi gorou
+aketa mikoto
+aki minoriko
+aki rosenthal
+aki rosenthal (1st costume)
+aki shizuha
+akigumo (kancolle)
+akigumo kai ni (kancolle)
+akikawa yayoi (umamusume)
+akishimo (kancolle)
+akitsu maru (kancolle)
+akitsushima (kancolle)
+akiyama mizuki
+akizuki (kancolle)
+akizuki ritsuko
+akizuki ryo
+alatreon (monster hunter)
+albedo (genshin impact)
+albedo (overlord)
+alear (female) (fire emblem)
+alear (fire emblem)
+alfonse (fire emblem)
+alhaitham (genshin impact)
+alice (nikke)
+alice margatroid
+alice margatroid (pc-98)
+alice zuberg
+alicia (granblue fantasy)
+alipheese fateburn xvi
+aliza (granblue fantasy)
+altera (fate)
+amagase touma
+amagi (azur lane)
+amagi (kancolle)
+amagi yukiko
+amagiri (kancolle)
+amakusa shirou (fate)
+amami haruka
+amamiya kokoro
+amamiya ren
+amano pikamee
+amatsukaze (kancolle)
+amber (genshin impact)
+amiya (arknights)
+an-94 (girls' frontline)
+anastasia (fate)
+anastasia (idolmaster)
+anastasia (swimsuit archer) (fate)
+anchorage (azur lane)
+andira (granblue fantasy)
+android 18
+android 21
+ange (princess principal)
+angel devil (chainsaw man)
+angelia (girls' frontline)
+angelina (arknights)
+angelina (distinguished visitor) (arknights)
+angelina (summer flower) (arknights)
+anila (granblue fantasy)
+anis (nikke)
+anis (sparkling summer) (nikke)
+anne bonny (fate)
+annie (league of legends)
+annie leonhart
+ansel (arknights)
+antonio salieri (fate)
+antonio salieri (second ascension) (fate)
+aoba (kancolle)
+aoba moca
+aponia (honkai impact)
+apricot the lich
+aqua (konosuba)
+aquila (kancolle)
+aragaki shinjirou
+araki hina
+aranara (genshin impact)
+arashi (kancolle)
+arashi chisato
+arashio (kancolle)
+arashio kai ni (kancolle)
+arataki itto
+archer (fate)
+archer (fate/samurai remnant)
+archetto (arknights)
+architect (girls' frontline)
+argenti (honkai  star rail)
+arisugawa natsuha
+arjuna (fate)
+arjuna alter (fate)
+ark royal (azur lane)
+ark royal (kancolle)
+arlecchino (genshin impact)
+ars almal
+arthur pendragon (fate)
+artoria caster (fate)
+artoria caster (first ascension) (fate)
+artoria caster (second ascension) (fate)
+artoria caster (swimsuit berserker) (fate)
+artoria caster (swimsuit berserker) (first ascension) (fate)
+artoria caster (third ascension) (fate)
+artoria pendragon (alter swimsuit rider) (fate)
+artoria pendragon (alter swimsuit rider) (second ascension) (fate)
+artoria pendragon (fate)
+artoria pendragon (lancer alter) (fate)
+artoria pendragon (lancer alter) (royal icing) (fate)
+artoria pendragon (lancer) (fate)
+artoria pendragon (swimsuit archer) (fate)
+artoria pendragon (swimsuit archer) (first ascension) (fate)
+artoria pendragon (swimsuit ruler) (fate)
+artoria pendragon (swimsuit ruler) (first ascension) (fate)
+arurandeisu
+asada shino
+asagumo (kancolle)
+asahina mafuyu
+asaka karin
+asakaze (kancolle)
+asakura toru
+asari nanami
+asashimo (kancolle)
+asashio (kancolle)
+asashio kai ni (kancolle)
+asclepius (fate)
+ashe (league of legends)
+ashigara (kancolle)
+ashigara kai ni (kancolle)
+ashiya douman (fate)
+assassin (fate/zero)
+asta (honkai  star rail)
+astesia (arknights)
+astolfo (memories at trifas) (fate)
+astolfo (saber) (fate)
+astolfo (saber) (first ascension) (fate)
+astolfo (sailor paladin) (fate)
+aston machan (umamusume)
+asuna (sao)
+asuna (sao-alo)
+atago (azur lane)
+atago (kancolle)
+atago (stunning speedster) (azur lane)
+atago (summer march) (azur lane)
+atalanta (fate)
+atalanta alter (fate)
+atlanta (kancolle)
+august von parseval (azur lane)
+aurelion sol (league of legends)
+aurora (arknights)
+aventurine (honkai  star rail)
+ayanami (azur lane)
+ayanami (kancolle)
+ayanami (retrofit) (azur lane)
+ayanami kai ni (kancolle)
+ayanami rei
+ayase eli
+ayase honoka
+azuma (azur lane)
+azura (fire emblem)
+azusawa kohane
+bache (azur lane)
+bagpipe (arknights)
+bailu (honkai  star rail)
+baizhu (genshin impact)
+balalaika (black lagoon)
+balthier (final fantasy xii)
+baltimore (after-school ace) (azur lane)
+baltimore (azur lane)
+baltimore (finish line flagbearer) (azur lane)
+bambietta basterbine
+banana (girls' frontline)
+banzoin hakka
+baobhan sith (fate)
+baobhan sith (first ascension) (fate)
+baobhan sith (second ascension) (fate)
+baobhan sith (swimsuit pretender) (fate)
+baobhan sith (swimsuit pretender) (first ascension) (fate)
+baobhan sith (swimsuit pretender) (third ascension) (fate)
+barbara (genshin impact)
+barbara (summertime sparkle) (genshin impact)
+barghest (fate)
+barghest (second ascension) (fate)
+barghest (swimsuit archer) (fate)
+baron bunny (genshin impact)
+battleship princess
+battleship water oni
+bayonetta
+bazelgeuse (monster hunter)
+bb (fate)
+bb (fate/extra)
+bb (swimsuit mooncancer) (fate)
+bb (swimsuit mooncancer) (first ascension) (fate)
+bb (swimsuit mooncancer) (second ascension) (fate)
+bb (swimsuit mooncancer) (third ascension) (fate)
+bb dubai (fate)
+beanstalk (arknights)
+beatrice (re zero)
+beatrix (granblue fantasy)
+becky blackbell
+bedivere (fate)
+beerus (dragon ball)
+beeswax (arknights)
+beidou (genshin impact)
+belfast (azur lane)
+belfast (shopping with the head maid) (azur lane)
+beni-enma
+beni-enma (first ascension)
+berserker (fate/zero)
+big boss (metal gear solid)
+bismarck (azur lane)
+bismarck (kancolle)
+biwa hayahide (umamusume)
+black swan (honkai  star rail)
+blade (honkai  star rail)
+blaidd (elden ring)
+blaze (arknights)
+blemishine (arknights)
+blue poison (arknights)
+blue poison (shoal beat) (arknights)
+boa hancock
+boo tao (genshin impact)
+boothill (honkai  star rail)
+bottle miku
+boudica (fate)
+bradamante (fate)
+bradamante (first ascension) (fate)
+brazilian miku
+bremerton (azur lane)
+bremerton (kung fu cruiser) (azur lane)
+bremerton (scorching-hot training) (azur lane)
+bronya rand
+bronya zaychik
+bronya zaychik (herrscher of reason)
+bronya zaychik (herrscher of truth)
+bronya zaychik (silverwing  n-ex)
+brook (one piece)
+bruno bucciarati
+brynhild (fate)
+bulma
+byleth (female) (fire emblem)
+byleth (female) (summer) (fire emblem)
+byleth (fire emblem)
+caelus (honkai  star rail)
+caenis (fate)
+caesar anthonio zeppeli
+cagliostro (granblue fantasy)
+calstone light o (umamusume)
+camilla (fire emblem)
+candace (genshin impact)
+candice catnipp (bleach)
+captain nemo (fate)
+captain nemo (first ascension) (fate)
+caren hortensia
+caren hortensia (amor caren)
+carlos oliviera (resident evil)
+carmilla (fate)
+carnelian (arknights)
+catria (fire emblem)
+catura (granblue fantasy)
+caulifla (dragon ball)
+celica (fire emblem)
+celine (fire emblem)
+ceobe (arknights)
+cesario (umamusume)
+ceylon (arknights)
+ch'en (ageless afterglow) (arknights)
+ch'en (arknights)
+ch'en the holungday (arknights)
+chacha (fate)
+changsheng (genshin impact)
+chapayev (azur lane)
+charlotta (granblue fantasy)
+charlotte (genshin impact)
+charlotte corday (fate)
+chen
+chen (cat)
+chen hai (azur lane)
+cheshire (azur lane)
+cheval grand (umamusume)
+chevalier d'eon (fate)
+chevreuse (genshin impact)
+chi-chi (dragon ball)
+chi-class torpedo cruiser
+chibi miku
+chihaya anon
+chikuma (kancolle)
+chikuma kai ni (kancolle)
+chiori (genshin impact)
+chitose (kancolle)
+chiyoda (kancolle)
+chloe (fire emblem)
+chloe von einzbern
+chloe von einzbern (archer install)
+chomusuke
+chong yue (arknights)
+chongyun (genshin impact)
+chougei (kancolle)
+choukai (kancolle)
+choukai kai ni (kancolle)
+chris (konosuba)
+chrom (fire emblem)
+circe (fate)
+cirno
+citlali (genshin impact)
+citrinne (fire emblem)
+clara (honkai  star rail)
+clarisse (granblue fantasy)
+cleopatra (fate)
+cleveland (azur lane)
+cliffheart (arknights)
+clorinde (genshin impact)
+closure (arknights)
+clownpiece
+collei (genshin impact)
+colorado (kancolle)
+columbina (genshin impact)
+commandant teste (kancolle)
+conte di cavour (kancolle)
+copano rickey (umamusume)
+cordelia (fire emblem)
+corrin (female) (fire emblem)
+crocodile (one piece)
+croissant (arknights)
+crow (la+ darknesss)
+cu chulainn (fate)
+cu chulainn (fate/prototype)
+cu chulainn (fate/stay night)
+curren chan (umamusume)
+cygnet (azur lane)
+cyno (genshin impact)
+daiba nana
+daiichi ruby (umamusume)
+daitaku helios (umamusume)
+daitou (kancolle)
+daiwa scarlet (trifle vacation) (umamusume)
+daiwa scarlet (umamusume)
+daiyousei
+damian desmond
+dan heng (honkai  star rail)
+dan heng (imbibitor lunae) (honkai  star rail)
+dancer (final fantasy)
+dante (devil may cry)
+dantsu flame (umamusume)
+daring tact (umamusume)
+dark sakura
+darkness (konosuba)
+de ruyter (kancolle)
+death (puss in boots)
+degenbrecher (arknights)
+dehya (genshin impact)
+deidara (naruto)
+denji (chainsaw man)
+destroyer (girls' frontline)
+destroyer princess
+deutschland (azur lane)
+diamant (fire emblem)
+diarmuid ua duibhne (lancer) (fate)
+dido (azur lane)
+diluc (genshin impact)
+dio brando
+djeeta (granblue fantasy)
+dobermann (arknights)
+dobrynya nikitich (fate)
+doctor (arknights)
+dodoco (genshin impact)
+dokibird (vtuber)
+dokibird (vtuber) (retro doki)
+dokugamine riruka (bleach)
+dola (nijisanji)
+doremy sweet
+dorothy (arknights)
+dorothy (nikke)
+dottore (genshin impact)
+doujima nanako
+dr. ratio (honkai  star rail)
+dragoon (final fantasy)
+dream journey (umamusume)
+dsr-50 (girls' frontline)
+dunkerque (azur lane)
+duramente (umamusume)
+durandal (honkai impact)
+durandal (umamusume)
+dusk (arknights)
+dusk (everything is a miracle) (arknights)
+ebenholz (arknights)
+echidna (re zero)
+eden (honkai impact)
+edward teach (fate)
+eirika (fire emblem)
+eishin flash (umamusume)
+el condor pasa (umamusume)
+elbe (azur lane)
+eldridge (azur lane)
+elena (street fighter)
+elis (touhou)
+elise (fire emblem)
+eliwood (fire emblem)
+elizabeth (persona)
+elizabeth bathory (brave) (fate)
+elizabeth bathory (fate)
+elizabeth bathory (fate/extra ccc)
+elizabeth bathory (fate/extra)
+ellen (touhou)
+elly (touhou)
+elu (nijisanji)
+elysia (herrscher of human  ego) (honkai impact)
+elysia (honkai impact)
+elysia (miss pink elf) (honkai impact)
+elysia (miss pink) (honkai impact)
+elysium (arknights)
+emilia (re zero)
+emily stewart
+emiya kiritsugu
+emiya shirou
+emma verde
+emperor (arknights)
+enemy aircraft (kancolle)
+enemy lifebuoy (kancolle)
+enkidu (fate)
+enraku tsubakura
+enterprise (azur lane)
+envy (fullmetal alchemist)
+eren yeager
+ereshkigal (fate)
+erina pendleton
+essex (azur lane)
+eternity larva
+etie (fire emblem)
+etorofu (kancolle)
+eula (genshin impact)
+eunectes (arknights)
+europa (granblue fantasy)
+euryale (fate)
+ex-keine
+ex-rumia
+executor (arknights)
+exusiai (arknights)
+eyjafjalla (arknights)
+eyjafjalla (summer flower) (arknights)
+eyjafjalla the hvit aska (arknights)
+fae (fire emblem)
+fairy (kancolle)
+fairy maid (touhou)
+fal (girls' frontline)
+fallenshadow
+fartooth (arknights)
+faruzan (genshin impact)
+fate testarossa
+fate testarossa (impulse form)
+fate testarossa (lightning form)
+fate testarossa (movie 1st form)
+fate testarossa (true sonic form)
+feater (arknights)
+feixiao (honkai  star rail)
+felicia (fire emblem)
+felix argyle
+female admiral (kancolle)
+female commander (girls' frontline)
+female tourist c (arknights)
+female trainer (umamusume)
+ferry (granblue fantasy)
+fi (zelda)
+fiammetta (arknights)
+finana ryugu
+fine motion (umamusume)
+firefly (honkai  star rail)
+fischl (ein immernachtstraum) (genshin impact)
+fischl (genshin impact)
+five-seven (girls' frontline)
+fjorm (fire emblem)
+flametail (arknights)
+flandre scarlet
+flayn (fire emblem)
+fletcher (kancolle)
+fletcher mk ii (kancolle)
+florence nightingale (fate)
+florence nightingale (trick or treatment) (fate)
+flower (vocaloid4)
+focalors (genshin impact)
+formidable (azur lane)
+formidable (the lady of the beach) (azur lane)
+fou (fate)
+framme (fire emblem)
+fran (final fantasy xii)
+franka (arknights)
+frankenstein's monster (fate)
+frankenstein's monster (swimsuit saber) (fate)
+freminet (genshin impact)
+friedrich der grosse (azur lane)
+frieza (dragon ball)
+frostleaf (arknights)
+frostnova (arknights)
+fu hua
+fu hua (azure empyrea)
+fu hua (fenghuang of vicissitude)
+fu hua (herrscher of sentience)
+fu hua (night squire)
+fu hua (phoenix)
+fu hua (shadow knight)
+fu hua (valkyrie accipiter)
+fu xuan (honkai  star rail)
+fubuki (kancolle)
+fubuki kai ni (kancolle)
+fuji kiseki (umamusume)
+fujima sakura
+fujimaru ritsuka (female)
+fujimaru ritsuka (female) (brilliant summer)
+fujimaru ritsuka (female) (decisive battle chaldea uniform)
+fujimaru ritsuka (female) (polar chaldea uniform)
+fujinami (kancolle)
+fujishima megumi
+fujita kotone
+fujiwara hajime
+fujiwara no mokou
+fujiwara no mokou (young)
+fukae (kancolle)
+fukuda noriko
+fukumaru koito
+fumizuki (kancolle)
+fungi (genshin impact)
+funny valentine
+furina (genshin impact)
+furutaka (kancolle)
+furutaka kai ni (kancolle)
+fushiguro megumi
+fusou (kancolle)
+futaba anzu
+futaba sana
+futami ami
+futami mami
+futatsuiwa mamizou
+futatsuiwa mamizou (human)
+fuuma kotarou (fate)
+fuyutsuki (kancolle)
+g11 (girls' frontline)
+g36 (girls' frontline)
+g41 (girls' frontline)
+gaara (naruto)
+galleon (granblue fantasy)
+gambier bay (kancolle)
+gaming (genshin impact)
+ganaha hibiki
+gangut (kancolle)
+gangut dva (kancolle)
+ganyu (genshin impact)
+ganyu (twilight blossom) (genshin impact)
+garen (league of legends)
+gareth (fate)
+gascogne (azur lane)
+gavial (arknights)
+gavis bettel
+gentildonna (umamusume)
+gepard landau
+getou suguru
+ghost miku (project voltage)
+gilgamesh (caster) (fate)
+gilgamesh (fate)
+gilles de rais (caster) (fate)
+gine (dragon ball)
+giorno giovanna
+girl holding a cat (kancolle)
+giselle gewelle (bleach)
+gladiia (arknights)
+glaucus (arknights)
+gogeta (dragon ball)
+gojou satoru
+gold city (umamusume)
+gold ship (run revolt launcher) (umamusume)
+gold ship (umamusume)
+goldenglow (arknights)
+goldmary (fire emblem)
+gore magala (monster hunter)
+gorgon (fate)
+gorou (genshin impact)
+gotland (kancolle)
+goutokuji mike
+graf zeppelin (azur lane)
+graf zeppelin (kancolle)
+gran (granblue fantasy)
+grani (arknights)
+grass wonder (umamusume)
+gravel (arknights)
+gray (fate)
+grecale (kancolle)
+griffith (berserk)
+grima (fire emblem)
+griseo
+grizzly mkv (girls' frontline)
+guido mista
+guinaifen (honkai  star rail)
+gumi
+gummy (arknights)
+guoba (genshin impact)
+guts (berserk)
+gwen (league of legends)
+gyro zeppeli
+habetrot (fate)
+hachijou (kancolle)
+hachimiya meguru
+hagikaze (kancolle)
+hagiwara yukiho
+haguro (kancolle)
+haguro kai ni (kancolle)
+hakozaki serika
+hakurei reimu
+hakurei reimu (pc-98)
+hamaguchi ayame
+hamakaze (kancolle)
+hamanami (kancolle)
+hammann (azur lane)
+hanami saki
+hanami ume
+hanamura yousuke
+hanasato minori
+hanazono tae
+handa roco
+hange zoe (shingeki no kyojin)
+haniyasushin keiki
+happy meek (umamusume)
+harmonie (arknights)
+haru urara (umamusume)
+harukaze (kancolle)
+haruna (2016 swimsuit) (kancolle)
+haruna (kancolle)
+haruna kai ni (kancolle)
+haruno sakura
+harusame (kancolle)
+hashibira inosuke (kimetsu no yaiba)
+hassan of serenity (fate)
+hata no kokoro
+hatakaze (kancolle)
+hataya misuzu
+hatoba tsugu
+hatsuharu (kancolle)
+hatsukaze (kancolle)
+hatsune (princess connect!)
+hatsune miku
+hatsune miku (append)
+hatsune miku (nt)
+hatsune miku (vocaloid4)
+hatsune mikuo
+hatsushimo (kancolle)
+hatsuyuki (kancolle)
+hatsuzuki (kancolle)
+hayakawa aki
+hayakawa tazuna
+hayami kanade
+hayanami (kancolle)
+hayashimo (kancolle)
+hayashio (kancolle)
+hayasui (kancolle)
+hazuki ren
+heanna sumire
+heavy cruiser princess
+hecatia lapislazuli
+hector (fate)
+helena (azur lane)
+helena (kancolle)
+helena blavatsky (fate)
+helianthus (girls' frontline)
+helm (nikke)
+henya the genius
+herta (honkai  star rail)
+hibiki (kancolle)
+hibiscus (arknights)
+hieda no akyuu
+hiei (kancolle)
+hiei kai ni (kancolle)
+hierophant green
+higashikata josuke
+higashiyama kobeni
+high elf archer (goblin slayer!)
+higuchi madoka
+hijiri byakuren
+hikawa hina
+hikawa sayo
+hildr (fate)
+hilichurl (genshin impact)
+himekaidou hatate
+himeko (honkai  star rail)
+himeno (chainsaw man)
+himesaki rinami
+hinanawi tenshi
+hindenburg (azur lane)
+hindenburg (delirious duel) (azur lane)
+hino akane (idolmaster)
+hinoka (fire emblem)
+hinomori shiho
+hinomori shizuku
+hinoshita kaho
+hirato (kancolle)
+hirose koichi
+hirose yasuho
+hiryuu (kancolle)
+hiryuu kai ni (kancolle)
+hisakawa hayate
+hisakawa nagi
+hisau maiya
+hishi akebono (umamusume)
+hishi miracle (umamusume)
+hitsugaya toushirou (bleach)
+hiyou (kancolle)
+hk416 (black kitty's gift) (girls' frontline)
+hk416 (girls' frontline)
+ho'olheyak (arknights)
+hojo karen
+hokko tarumae (umamusume)
+homu (honkai impact)
+honda mio
+hong meiling
+honolulu (azur lane)
+honolulu (kancolle)
+honolulu (umbrella girl) (azur lane)
+hori yuko
+horikawa raiko
+horn (arknights)
+hornet (azur lane)
+hornet (kancolle)
+hortensia (fire emblem)
+hoshi syoko
+hoshiguma (arknights)
+hoshiguma yuugi
+hoshiguma yuugi (kimono)
+hoshii miki
+hoshino ichika (project sekai)
+hoshizora rin
+houjuu nue
+hourai doll
+houraisan kaguya
+houshou (kancolle)
+houshou marine
+houshou marine (1st costume)
+houshou marine (businesswoman)
+houshou marine (marching band)
+houshou marine (summer)
+houston (kancolle)
+hu tao (cherries snow-laden) (genshin impact)
+hu tao (genshin impact)
+hung (arknights)
+huohuo (honkai  star rail)
+hyakumantenbara salome
+hyakumantenbara salome (1st costume)
+hyuuga (kancolle)
+hyuuga hanabi (naruto)
+hyuuga hinata
+hyuuga neji (naruto)
+i-168 (kancolle)
+i-19 (kancolle)
+i-203 (kancolle)
+i-26 (kancolle)
+i-401 (kancolle)
+i-47 (kancolle)
+i-58 (kancolle)
+i-8 (kancolle)
+i-class destroyer
+ia (vocaloid)
+ibaraki douji (fate)
+ibaraki douji (swimsuit lancer) (fate)
+ibaraki kasen
+ibuki (street fighter)
+ibuki douji (fate)
+ibuki suika
+ibuki tsubasa
+ichigaya arisa
+ichihara nina
+ichijou ririka
+ichijou ririka (1st costume)
+ichikawa hinana
+ichinose shiki
+ichinose uruha
+idw (girls' frontline)
+ieiri shoko
+ifrit (arknights)
+igarashi kyoko
+igarashi rika
+iizunamaru megumu
+ikari shinji
+ikaruga luca
+ikazuchi (kancolle)
+ike (fire emblem)
+ike eveland
+ikebukuro akiha
+ikuno dictus (umamusume)
+illuso (jojo no kimyou na bouken)
+illustrious (azur lane)
+illyasviel von einzbern
+illyasviel von einzbern (beast style)
+illyasviel von einzbern (swimsuit archer)
+ilsa (granblue fantasy)
+imai lisa
+imaizumi kagerou
+implacable (azur lane)
+inaba mob (touhou)
+inaba tewi
+inari one (umamusume)
+inazuma (kancolle)
+indianapolis (azur lane)
+indomitable (azur lane)
+indomitable (ms. motivationless maid) (azur lane)
+ines (arknights)
+ines fujin (umamusume)
+inoue orihime
+intrepid (kancolle)
+inubashiri momiji
+inugami korone
+inugami korone (1st costume)
+inugami korone (loungewear)
+inui toko
+io (granblue fantasy)
+iowa (kancolle)
+irako (kancolle)
+irene (arknights)
+iris (konosuba)
+irisviel von einzbern
+irisviel von einzbern (angel's song)
+ironmouse
+ise (kancolle)
+ise nanao (bleach)
+isekai joucho
+ishida uryuu (bleach)
+ishigami nozomi
+ishigami nozomi (1st costume)
+ishtar (fate)
+ishtar (fire emblem)
+ishtar (swimsuit rider) (fate)
+iskandar (fate)
+isokaze (kancolle)
+isonami (kancolle)
+istina (arknights)
+isuzu (kancolle)
+isuzu kai ni (kancolle)
+itadori yuuji
+ivy (fire emblem)
+iws 2000 (girls' frontline)
+izayoi sakuya
+izumi mei
+jack the ripper (fate/apocrypha)
+jacques de molay (foreigner) (fate)
+jade (honkai  star rail)
+janna (league of legends)
+janus (kancolle)
+javelin (azur lane)
+jean (genshin impact)
+jean (sea breeze dandelion) (genshin impact)
+jean bart (azur lane)
+jean pierre polnareff
+jeanne d'arc (fate)
+jeanne d'arc (girl from orleans) (fate)
+jeanne d'arc (granblue fantasy)
+jeanne d'arc (ruler) (fate)
+jeanne d'arc (swimsuit archer) (fate)
+jeanne d'arc (swimsuit archer) (first ascension) (fate)
+jeanne d'arc (swimsuit archer) (second ascension) (fate)
+jeanne d'arc (third ascension) (fate)
+jeanne d'arc alter (avenger) (fate)
+jeanne d'arc alter (avenger) (first ascension) (fate)
+jeanne d'arc alter (avenger) (third ascension) (fate)
+jeanne d'arc alter (fate)
+jeanne d'arc alter (swimsuit berserker) (fate)
+jeanne d'arc alter (ver. shinjuku 1999) (fate)
+jeanne d'arc alter santa lily (fate)
+jervis (kancolle)
+jessica (arknights)
+jinbe (one piece)
+jing yuan
+jingei (kancolle)
+jingliu (honkai  star rail)
+jintsuu (kancolle)
+jintsuu kai ni (kancolle)
+jinx (league of legends)
+jiraiya (naruto)
+johnny joestar
+johnston (kancolle)
+jonathan joestar
+joseph joestar
+joseph joestar (old)
+joseph joestar (young)
+josuiji shinri
+jougasaki mika
+jougasaki rika
+joutouguu mayumi
+julia (fire emblem)
+jun'you (kancolle)
+jungle pocket (umamusume)
+junko (touhou)
+juo sena
+k.s.miracle (umamusume)
+k2 (girls' frontline)
+kaburamaru
+kachina (genshin impact)
+kaedehara kazuha
+kaenbyou rin
+kaeya (genshin impact)
+kafka (honkai  star rail)
+kaga (azur lane)
+kaga (battleship) (azur lane)
+kaga (kancolle)
+kagamine len
+kagamine len (append)
+kagamine rin
+kagamine rin (append)
+kagero (fire emblem)
+kagerou (kancolle)
+kagerou kai ni (kancolle)
+kagiyama hina
+kagura (gintama)
+kagurazaka asuna
+kaiboukan no. 4 (kancolle)
+kaine (nier)
+kaito (vocaloid)
+kakei sumire (naruto)
+kako (kancolle)
+kaku seiga
+kakyoin noriaki
+kal'tsit (arknights)
+kalina (girls' frontline)
+kallen kaslana
+kama (fate)
+kama (first ascension) (fate)
+kama (second ascension) (fate)
+kama (swimsuit avenger) (fate)
+kama (swimsuit avenger) (third ascension) (fate)
+kama (third ascension) (fate)
+kamado nezuko
+kamado tanjirou
+kamikaze (kancolle)
+kamisato ayaka
+kamisato ayaka (springbloom missive)
+kamisato ayato
+kamishirasawa keine
+kamishiro rui
+kamiya nao
+kamoi (kancolle)
+kamui gakupo
+kana (fire emblem)
+kanade izuru
+kanae (nijisanji)
+kaname raana
+kanroji mitsuri
+kanzaki ranko
+kar98k (girls' frontline)
+karna (fate)
+kars (jojo)
+kashima (kancolle)
+kashima (lawson) (kancolle)
+kashino (azur lane)
+kashino (hot springs relaxation) (azur lane)
+kasodani kyouko
+kasumi (kancolle)
+kasumi kai ni (kancolle)
+kasumi kai ni (swimsuit) (kancolle)
+katalina (granblue fantasy)
+katarina (league of legends)
+katori (kancolle)
+katou danzou (fate)
+katsuragi (kancolle)
+katsuragi ace (umamusume)
+katsuragi lilja
+katsushika hokusai (fate)
+katsushika hokusai (swimsuit saber) (fate)
+kaveh (genshin impact)
+kawakami princess (umamusume)
+kawakaze (azur lane)
+kawakaze (kancolle)
+kawakaze kai ni (kancolle)
+kawashima mizuki
+kawashiro nitori
+kayneth el-melloi archibald
+kazagumo (kancolle)
+kazami yuuka
+kazami yuuka (pc-98)
+kazano hiori
+kazuha's friend (genshin impact)
+kazuno sarah
+kearsarge (azur lane)
+kefla (dragon ball)
+keqing (genshin impact)
+keqing (opulent splendor) (genshin impact)
+kiana kaslana
+kiana kaslana (herrscher of finality)
+kiana kaslana (herrscher of flamescion)
+kiana kaslana (herrscher of the void)
+kiana kaslana (white comet)
+kicchou yachie
+kijin seija
+kikuchi makoto
+kikuzuki (kancolle)
+kimeemaru
+kimura natsuki
+kin'iro ryotei (umamusume)
+king halo (umamusume)
+king hassan (fate)
+king hassan (fate/grand order)
+kingprotea (fate)
+kinoshita hinata
+kinshi no ane (92m)
+kinugasa (kancolle)
+kinugasa kai ni (kancolle)
+kiran (fire emblem)
+kirara (genshin impact)
+kirigaya suguha
+kirijou mitsuru
+kirin (monster hunter)
+kirisame marisa
+kirisame marisa (pc-98)
+kirishima (kancolle)
+kirishima kai ni (kancolle)
+kiritani haruka
+kirito
+kirito (sao-alo)
+kirschtaria wodime
+kisaragi (azur lane)
+kisaragi (kancolle)
+kisaragi chihaya
+kisaragi kai ni (kancolle)
+kishibe rohan
+kishin sagume
+kishinami hakuno (female)
+kiso (kancolle)
+kiso kai ni (kancolle)
+kisume
+kitagawa yuusuke
+kitakami (kancolle)
+kitakami kai ni (kancolle)
+kitakami reika
+kitami yuzu
+kitasan black (umamusume)
+kitazawa shiho
+kiyohime (fate)
+kiyohime (swimsuit lancer) (fate)
+kiyohime (swimsuit lancer) (first ascension) (fate)
+kiyoshimo (kancolle)
+kizuna ai
+klaudia valentz
+klee (blossoming starlight) (genshin impact)
+koakuma
+kobayakawa sae
+kobo kanaeru
+kobo kanaeru (1st costume)
+kochiya sanae
+kochou shinobu
+koga koharu
+koharu rikka
+koizumi hanayo
+komakusa sannyo
+komano aunn
+komeiji koishi
+komeiji satori
+komekko
+komiya kaho
+konan (naruto)
+kongou (kancolle)
+kongou kai ni (kancolle)
+konngara (touhou)
+konoe kanata
+konpaku youki
+konpaku youmu
+konpaku youmu (ghost)
+koromaru (persona)
+kosaka honoka
+koshimizu sachiko
+kotetsu isane (bleach)
+kotohime (touhou)
+kotomine kirei
+kotori (takanashi kiara)
+kousaka honoka
+kousaka umi
+koyanskaya (assassin) (first ascension) (fate)
+koyanskaya (chinese lostbelt outfit) (fate)
+koyanskaya (fate)
+krista lenz
+kroos (arknights)
+kuchiki rukia
+kudamaki tsukasa
+kugisaki nobara
+kujikawa rise
+kujo jolyne
+kujo jotaro
+kujou sara
+kuki shinobu
+kukulkan (fate)
+kuma (kancolle)
+kuma (persona 4)
+kumano (kancolle)
+kumano kai ni (kancolle)
+kumbhira (granblue fantasy)
+kumoi ichirin
+kunashiri (kancolle)
+kuramochi meruto
+kuramoto china
+kuririn (dragon ball)
+kurodani yamame
+kurokoma saki
+kurosaki chitose
+kurosaki ichigo
+kuroshio (kancolle)
+kurotsuchi nemu (bleach)
+kurumi (touhou)
+kusanagi nene
+kuwayama chiyuki
+kuzuha (nijisanji)
+la pluma (arknights)
+la pluma (summer flowers) (arknights)
+lady (devil may cry)
+lady avalon (fate)
+lady avalon (second ascension) (fate)
+laffey (azur lane)
+lagiacrus (monster hunter)
+lancelot (fate/grand order)
+lapis (fire emblem)
+lappland (arknights)
+lappland (refined horrormare) (arknights)
+larva tiamat (fate)
+lava (arknights)
+layla (genshin impact)
+layla (idolmaster)
+le malin (azur lane)
+le malin (listless lapin) (azur lane)
+leafa
+leafa (sao)
+leblanc (league of legends)
+lee (arknights)
+lee-enfield (girls' frontline)
+leo (fire emblem fates)
+leona (league of legends)
+leonardo da vinci (fate)
+lethe (fire emblem)
+letty whiterock
+levi (shingeki no kyojin)
+li sushang
+libeccio (kancolle)
+light cruiser oni
+lilina (fire emblem)
+liliya olenyeva
+lily (vocaloid)
+lily white
+lin (arknights)
+ling (arknights)
+lingsha (honkai  star rail)
+lisa (genshin impact)
+lisa lisa
+lisbeth (sao)
+liskarm (arknights)
+lissa (fire emblem)
+little bel (azur lane)
+little blue whale (kancolle)
+little boy admiral (kancolle)
+littorio (kancolle)
+llenn (sao)
+logos (arknights)
+loly aivirrne (bleach)
+lucina (fire emblem)
+lucy (cyberpunk)
+luigi di savoia duca degli abruzzi (kancolle)
+luigi torelli (kancolle)
+lulu (league of legends)
+lumen (arknights)
+lumine (genshin impact)
+lunasa prismriver
+lunastra (monster hunter)
+luocha (honkai  star rail)
+lust (fullmetal alchemist)
+luviagelita edelfelt
+lux (league of legends)
+lyn (fire emblem)
+lynette (genshin impact)
+lyney (genshin impact)
+lyria (granblue fantasy)
+lyrica prismriver
+m14 (girls' frontline)
+m16a1 (boss) (girls' frontline)
+m16a1 (girls' frontline)
+m200 (girls' frontline)
+m4 sopmod ii (girls' frontline)
+m4a1 (girls' frontline)
+m4a1 (mod3) (girls' frontline)
+m950a (girls' frontline)
+mademoiselle crabaletta
+maekawa miku
+maestrale (kancolle)
+magallan (arknights)
+magical mirai miku
+magical mirai miku (2016)
+magisa (granblue fantasy)
+mahira (granblue fantasy)
+mahito (jujutsu kaisen)
+maiden (nikke)
+maihama ayumu
+maikaze (kancolle)
+majin android 21 (dragon ball)
+makabe mizuki
+makigumo (kancolle)
+makima (chainsaw man)
+makinami mari illustrious
+makoto (street fighter)
+male doctor (arknights)
+mamiya (kancolle)
+manhattan cafe (umamusume)
+manjuu (azur lane)
+mano aloe
+manticore (arknights)
+march 7th (honkai  star rail)
+march 7th (hunt) (honkai  star rail)
+march 7th (preservation) (honkai  star rail)
+marciana (nikke)
+maria marionette
+maribel hearn
+marie antoinette (fate)
+marie antoinette (swimsuit caster) (fate)
+marie antoinette alter (fate)
+marie rose (devilish servant against the splashing waves)
+marth (fire emblem)
+martha (fate)
+martha (swimsuit ruler) (fate)
+maru-yu (kancolle)
+maruyama aya
+maruzensky (umamusume)
+marvelous sunday (umamusume)
+mary (fate)
+mary read (fate)
+maryland (kancolle)
+mash kyrielight
+mash kyrielight (dangerous beast)
+mash kyrielight (ortenaus)
+mash kyrielight (swimsuit of perpetual summer)
+massachusetts (azur lane)
+mast (nikke)
+matara okina
+matikane tannhauser (umamusume)
+matikanefukukitaru (umamusume)
+matoba risa
+matou kariya
+matou sakura
+matsubara kanon
+matsuda arisa
+matsumoto rangiku
+matsuura kanan
+mavuika (genshin impact)
+maya (kancolle)
+maya kai ni (kancolle)
+mayano top gun (umamusume)
+mayu (vocaloid)
+mayuzumi fuyuko
+mdr (girls' frontline)
+medb (fate)
+medea (fate)
+medicine melancholy
+medjed (fate)
+medusa (fate)
+medusa (lancer) (fate)
+medusa (rider) (fate)
+megumin
+megurine luka
+mei mei (jujutsu kaisen)
+meika hime
+meika mikoto
+meiko (vocaloid)
+meira (touhou)
+meisho doto (umamusume)
+mejiro ardan (umamusume)
+mejiro bright (umamusume)
+mejiro dober (umamusume)
+mejiro mcqueen (ripple fairlady) (umamusume)
+mejiro mcqueen (umamusume)
+mejiro palmer (umamusume)
+mejiro ramonu (umamusume)
+melina (elden ring)
+meltryllis (fate)
+meltryllis (swimsuit lancer) (fate)
+meltryllis (swimsuit lancer) (first ascension) (fate)
+meltryllis (swimsuit lancer) (second ascension) (fate)
+melusine (fate)
+melusine (second ascension) (fate)
+melusine (swimsuit ruler) (fate)
+melusine (swimsuit ruler) (first ascension) (fate)
+meowy (chainsaw man)
+merlin (fate)
+merlin (fate/prototype)
+merlin (fate/prototype) (second ascension)
+merlin prismriver
+metera (granblue fantasy)
+mia (fire emblem)
+mia taylor
+micaiah (fire emblem)
+michishio (kancolle)
+michishio kai ni (kancolle)
+midway princess
+mifune miyu
+mihono bourbon (umamusume)
+mikasa (azur lane)
+mikasa ackerman
+mikazuki (kancolle)
+mikuma (kancolle)
+mikura (kancolle)
+millie parfait
+mima (touhou)
+mimura kanako
+minami kotori
+minamoto no raikou (fate)
+minamoto no raikou (swimsuit lancer) (fate)
+minase iori
+minato yukina
+minegumo (kancolle)
+minneapolis (azur lane)
+miquella (elden ring)
+miramikaru riran
+misaki akeno
+mishaguji
+miss fortune (league of legends)
+mist (fire emblem)
+mitaka asa
+mitake ran
+mitarashi anko (naruto)
+miteiru (shirakami fubuki)
+mitsugashira enoko
+mitsumine yuika
+miura azusa
+miyamoto frederica
+miyamoto iori (fate)
+miyamoto musashi (fate)
+miyamoto musashi (first ascension) (fate)
+miyamoto musashi (second ascension) (fate)
+miyamoto musashi (swimsuit berserker) (fate)
+miyamoto musashi (swimsuit berserker) (second ascension) (fate)
+miyamoto musashi (third ascension) (fate)
+miyashita ai
+miyu edelfelt
+miyu edelfelt (beast style)
+miyu edelfelt (magical girl)
+miyuki (kancolle)
+mizuhashi parsee
+mizuho (kancolle)
+mizuki (arknights)
+mizuki seira
+mizumoto yukari
+mizutani eri
+mizutsune (monster hunter)
+mobius (honkai impact)
+mochizuki (kancolle)
+mochizuki anna
+mochizuki chiyome (fate)
+mochizuki honami
+mochizuki ryouji
+modernia (nikke)
+mogami (kancolle)
+mogami shizuka
+momo (nikki)
+momoi airi
+momosuzu nene
+momosuzu nene (1st costume)
+mon3tr (arknights)
+mona (genshin impact)
+monarch (azur lane)
+monkey d. luffy
+monomi (danganronpa)
+mononobe alice
+mononobe no futo
+monster hunter (character)
+moonlight flower
+mordekaiser (league of legends)
+mordred (fate)
+mordred (fate/apocrypha)
+mordred (swimsuit rider) (fate)
+morgan (female) (fire emblem)
+morgan (fire emblem)
+morgan le fay (fate)
+morgana (persona 5)
+morichika rinnosuke
+morikubo nono
+morino rinze
+moriya suwako
+moroboshi kirari
+mostima (arknights)
+motoori kosuzu
+mountain (arknights)
+moze (honkai  star rail)
+mp40 (girls' frontline)
+mp7 (girls' frontline)
+mr. c.b. (umamusume)
+mualani (genshin impact)
+mudrock (arknights)
+mudrock (elite ii) (arknights)
+mudrock (obsidian) (arknights)
+mudrock (silent night) (arknights)
+muelsyse (arknights)
+mukai takumi
+mulberry (arknights)
+munakata atsumi
+murakumo (kancolle)
+murakumo kai ni (kancolle)
+murasa minamitsu
+murasaki shikibu (fate)
+murasaki shikibu (first ascension) (fate)
+murasaki shikibu (swimsuit rider) (fate)
+murasame (kancolle)
+murasame kai ni (kancolle)
+murata himeko
+musashi (azur lane)
+musashi (kancolle)
+musashi kai (kancolle)
+musashi kai ni (kancolle)
+mutsu (kancolle)
+mutsu kai ni (kancolle)
+mutsuki (azur lane)
+mutsuki (kancolle)
+mutsuki kai ni (kancolle)
+myoukou (kancolle)
+myoukou kai ni (kancolle)
+myrrh (fire emblem)
+myrtle (arknights)
+mysterious heroine x (fate)
+mysterious heroine x alter (fate)
+mysterious heroine x alter (first ascension) (fate)
+mysterious heroine x alter (second ascension) (fate)
+mysterious heroine xx (fate)
+mystia lorelei
+nachi (kancolle)
+nachi kai ni (kancolle)
+naga (nikke)
+nagae iku
+naganami (kancolle)
+naganami kai ni (kancolle)
+nagant revolver (girls' frontline)
+nagao kagetora (fate)
+nagara (kancolle)
+nagasaki soyo
+nagato (azur lane)
+nagato (kancolle)
+nagato kai ni (kancolle)
+nagatsuki (kancolle)
+nagayoshi subaru
+nagisa kaworu
+naka (kancolle)
+naka kai ni (kancolle)
+nakasu kasumi
+nakayama festa (umamusume)
+nami (one piece)
+nanakusa hazuki
+nanami kento
+nanao yuriko
+nanjo hikaru
+napoleon bonaparte (fate)
+narciso anasui
+narita brian (umamusume)
+narita taishin (umamusume)
+narita top road (umamusume)
+narmaya (granblue fantasy)
+narmaya (summer) (granblue fantasy)
+narukami yuu
+naruko (naruto)
+narumiya yume
+nasus (league of legends)
+natori sana
+natsu dragneel
+natsuki subaru
+navia (genshin impact)
+nazrin
+ne-class heavy cruiser
+nearl (arknights)
+nearl the radiant knight (arknights)
+neeko (league of legends)
+negev (girls' frontline)
+nelliel tu odelschwanck (bleach)
+nelson (azur lane)
+nelson (kancolle)
+nemo (fate)
+nenohi (kancolle)
+neo universe (umamusume)
+neon (nikke)
+neptune (azur lane)
+nergigante (monster hunter)
+nero (devil may cry)
+nero claudius (bride) (fate)
+nero claudius (bride) (second ascension) (fate)
+nero claudius (bride) (third ascension) (fate)
+nero claudius (fate)
+nero claudius (fate/extra)
+nero claudius (olympian bloomers) (fate)
+nero claudius (swimsuit caster) (fate)
+nero claudius (swimsuit caster) (third ascension) (fate)
+neuvillette (genshin impact)
+new jersey (azur lane)
+new jersey (exhilarating steps!) (azur lane)
+nian (arknights)
+nian (unfettered freedom) (arknights)
+nice nature (run&win) (umamusume)
+nice nature (umamusume)
+nico robin
+nier (brother)
+nier (granblue fantasy)
+nightingale (arknights)
+niijima makoto
+nilou (breeze of sabaa) (genshin impact)
+nilou (genshin impact)
+ning hai (azur lane)
+ningguang (genshin impact)
+ninian (fire emblem)
+ninja (final fantasy)
+nino (fire emblem)
+nishida satono
+nishikino maki
+nishikitaitei-chan
+nishino flower (umamusume)
+nisshin (kancolle)
+nitocris (fate)
+nitta minami
+niwatari kutaka
+noelle (genshin impact)
+non-human admiral (kancolle)
+nonohara akane
+north carolina (azur lane)
+northern ocean princess
+noshiro (azur lane)
+noshiro (kancolle)
+nowaki (kancolle)
+nowi (fire emblem)
+ntw-20 (girls' frontline)
+numby (honkai  star rail)
+nursery rhyme (fate)
+nyatasha nyanners
+nyto (girls' frontline)
+oberon (fate)
+oberon (first ascension) (fate)
+oberon (third ascension) (fate)
+oboro (kancolle)
+oda nobunaga (fate)
+oda nobunaga (koha-ace)
+oda nobunaga (maou avenger) (fate)
+oda nobunaga (swimsuit berserker) (fate)
+ogata chieri
+oguri cap (umamusume)
+ohara mari
+ohishi izumi
+oikawa shizuku
+okada izou (fate)
+okazaki yumemi
+okita j. souji (fate)
+okita j. souji (first ascension) (fate)
+okita souji (fate)
+okita souji (koha-ace)
+okita souji alter (fate)
+okita souji alter (first ascension) (fate)
+okita souji alter (second ascension) (fate)
+okumura haru
+okunoda miyoi
+olga marie animusphere
+olivia (fire emblem)
+olivier mira armstrong (fullmetal alchemist)
+onitsuka natsumi
+onozuka komachi
+ooi (kancolle)
+ooi kai ni (kancolle)
+ooshio (kancolle)
+ooshio kai ni (kancolle)
+ootori emu
+ooyodo (kancolle)
+ophelia phamrsolone
+orochimaru (naruto)
+ortlinde (fate)
+osaka shizuku
+osakabehime (fate)
+osaki amana
+osaki tenka
+otonashi kotori
+ots-14 (girls' frontline)
+owari (azur lane)
+oyashio (kancolle)
+oz (genshin impact)
+p-head producer
+p90 (girls' frontline)
+pa-15 (girls' frontline)
+paimon (genshin impact)
+paladin (final fantasy)
+palla (fire emblem)
+pallas (arknights)
+pamiat merkuria (azur lane)
+pan (dragon ball)
+panette (fire emblem)
+panther (persona 5)
+pardofelis
+parvati (fate)
+passionlip (fate)
+patchouli knowledge
+paul bunyan (fate)
+paya (zelda)
+penance (arknights)
+penelo (final fantasy xii)
+penthesilea (fate)
+perfumer (arknights)
+perseus (azur lane)
+perseus (unfamiliar duties) (azur lane)
+perth (kancolle)
+phainon (honkai  star rail)
+phantom (arknights)
+piers nivans (resident evil)
+pikl (elira pendora)
+pina (sao)
+pinecone (arknights)
+ping hai (azur lane)
+platinum (arknights)
+plume (arknights)
+pochita (chainsaw man)
+pod (nier automata)
+pola (azur lane)
+pola (kancolle)
+pola (seaside coincidence) (azur lane)
+pollux (fate)
+pom-pom (honkai  star rail)
+ponpoko (vtuber)
+portgas d. ace
+portland (azur lane)
+power (chainsaw man)
+pozyomka (arknights)
+ppk (girls' frontline)
+pramanix (arknights)
+priestess (goblin slayer!)
+prince of lan ling (fate)
+prince of wales (azur lane)
+princess zelda
+prinz eugen (azur lane)
+prinz eugen (final lap) (azur lane)
+prinz eugen (kancolle)
+prinz eugen (unfading smile) (azur lane)
+prinz heinrich (azur lane)
+privaty (nikke)
+producer (idolmaster cinderella girls anime)
+projekt red (arknights)
+provence (arknights)
+ptilopsis (arknights)
+puck (re zero)
+qin liangyu (fate)
+qingque (honkai  star rail)
+queen elizabeth (azur lane)
+queen of sheba (fate)
+quetzalcoatl (fate)
+rabbit yukine
+racing miku
+racing miku (2022)
+raiden (metal gear)
+raiden mei (apho)
+raiden mei (herrscher of origin)
+raiden mei (herrscher of thunder)
+raiden shogun
+ram (re zero)
+ranger (kancolle)
+raora panthera
+rapi (nikke)
+rathalos (monster hunter)
+rathian (monster hunter)
+razor (genshin impact)
+re-class battleship
+rebecca (cyberpunk)
+red hood (nikke)
+red mage (final fantasy)
+reed (arknights)
+reed the flame shadow (arknights)
+reiner braun
+reines el-melloi archisorte
+reisen (touhou bougetsushou)
+reisen udongein inaba
+reiuji utsuho
+reiuji utsuho (bird)
+rem (re zero)
+remilia scarlet
+rengar (league of legends)
+rengoku kyoujurou
+reno (azur lane)
+rensouhou-chan
+rensouhou-kun
+revy (black lagoon)
+rex lapis (genshin impact)
+reze (chainsaw man)
+rfb (girls' frontline)
+rhea (fire emblem)
+rhein kraft (umamusume)
+ribeyrolles (girls' frontline)
+rice shower (make up vampire!) (umamusume)
+rice shower (umamusume)
+richelieu (azur lane)
+richelieu (kancolle)
+ridley (metroid)
+rindou mikoto
+rindou mikoto (1st costume)
+ringo (touhou)
+rita rossweisse
+rita rossweisse (umbral rose)
+riven (league of legends)
+riza hawkeye (fullmetal alchemist)
+ro-500 (kancolle)
+ro-class destroyer
+ro635 (girls' frontline)
+robert e. o. speedwagon
+roberta (black lagoon)
+robin (arknights)
+robin (female) (fire emblem)
+robin (female) (seaside tactician) (fire emblem)
+robin (fire emblem)
+robin (honkai  star rail)
+roma (kancolle)
+romani archaman
+roon (azur lane)
+roronoa zoro
+rosa (arknights)
+rosaria (genshin impact)
+rosemi lovelock
+rosetta (granblue fantasy)
+rosmontis (arknights)
+roy (fire emblem)
+roy mustang (fullmetal alchemist)
+rozaliya olenyeva
+rpk-16 (girls' frontline)
+ru-class battleship
+ruan mei (honkai  star rail)
+rukkhadevata (genshin impact)
+rumia
+rupee (nikke)
+ryoma (fire emblem)
+ryoumen sukuna (jujutsu kaisen)
+ryu (street fighter)
+ryugasaki rene
+ryuuhou (kancolle)
+ryuujou (kancolle)
+ryuushen
+ryuzaki kaoru
+saber (fate)
+saber alter
+saber alter (final ascension)
+saber alter (second ascension)
+saber alter (third ascension)
+saber alter (ver. shinjuku 1999)
+saber lily
+sabo (one piece)
+saga (arknights)
+sagiri (kancolle)
+sagiri (swimsuit) (kancolle)
+sagisawa fumika
+saigyouji yuyuko
+saileach (arknights)
+saint-louis (azur lane)
+saionji mary
+saitou hajime (fate)
+sajo yukimi
+sakamoto ryuuji
+sakata nemuno
+sakawa (kancolle)
+sakuma mayu
+sakura (fire emblem)
+sakura chiyono o (umamusume)
+sakura futaba
+sakura laurel (umamusume)
+sakura miku
+sakuragi mano
+sakurai momoka
+sakurakoji kinako
+sakuramori kaori
+sakurauchi riko
+samidare (kancolle)
+samuel b. roberts (kancolle)
+samui (naruto)
+san diego (azur lane)
+sandalphon (granblue fantasy)
+sangonomiya kokomi
+sanji (one piece)
+sansei muramasa
+santa alter
+saratoga (azur lane)
+saratoga (kancolle)
+saratoga mk ii (kancolle)
+saria (arknights)
+saria (zelda)
+sariel (touhou)
+sasaki chie
+sasaki saku
+sasaki saku (1st costume)
+satake minako
+sato shin
+satonaka chie
+satono crown (umamusume)
+satono diamond (umamusume)
+satou kazuma
+satsuki (kancolle)
+satsuki kai ni (kancolle)
+sazanami (kancolle)
+scamp (kancolle)
+scaramouche (genshin impact)
+scarle yonaguni
+scarlet (nikke)
+scathach (fate)
+scathach (swimsuit assassin) (fate)
+scathach skadi (fate)
+scathach skadi (swimsuit ruler) (fate)
+scholar (final fantasy)
+schwarz (arknights)
+scirocco (kancolle)
+seaport princess
+seele (honkai  star rail)
+seele vollerei
+seele vollerei (herrscher of rebirth)
+seele vollerei (starchasm nyx)
+seele vollerei (stygian nymph)
+seele vollerei (swallowtail phantasm)
+seeu
+sei shounagon (fate)
+sei shounagon (first ascension) (fate)
+seiran (touhou)
+seiun sky (umamusume)
+seki hiromi
+sekibanki
+sekishiro mico
+selen tatsuki
+selen tatsuki (1st costume)
+selim bradley (fullmetal alchemist)
+selkie (fire emblem)
+semiramis (fate)
+sen (granblue fantasy)
+sendai (kancolle)
+sendai hakurei no miko
+sendai kai ni (kancolle)
+senkawa chihiro
+seraphine (league of legends)
+serizawa asahi
+sessyoin kiara (lily)
+sessyoin kiara (swimsuit mooncancer) (second ascension)
+seta kaoru
+sett (league of legends)
+severa (fire emblem)
+sf-a2 miki
+shalltear bloodfallen
+shamare (arknights)
+shameimaru aya
+shameimaru aya (newsboy)
+shanghai doll
+sharena (fire emblem)
+shaw (arknights)
+sheffield (azur lane)
+sheffield (kancolle)
+shenhe (frostflower dew) (genshin impact)
+shenhe (genshin impact)
+shenhua (black lagoon)
+shibuya kanon
+shibuya rin
+shigure (azur lane)
+shigure (kancolle)
+shigure kai ni (kancolle)
+shigure kai san (kancolle)
+shigure kai san (swimsuit) (kancolle)
+shigure ui (vtuber)
+shigure ui (vtuber) (1st costume)
+shigure ui (vtuber) (young)
+shihouin yoruichi
+shiina noriko
+shiina taki
+shijou takane
+shikanoin heizou
+shiki eiki
+shiki natsume
+shikinami (kancolle)
+shikinami kai ni (kancolle)
+shimabara elena
+shimakaze (azur lane)
+shimakaze (kancolle)
+shimamura uzuki
+shimushu (kancolle)
+shin'you (kancolle)
+shinano (azur lane)
+shinigami (rain code)
+shining (arknights)
+shinki (touhou)
+shinomiya runa
+shinonome akito
+shinonome ena
+shinosawa hiro
+shinshuu maru (kancolle)
+shiomi kotone
+shiomi syuko
+shiraishi an
+shiraishi tsumugi
+shiranui (kancolle)
+shirasagi chisato
+shirasaka koume
+shirase sakuya
+shiratsuyu (kancolle)
+shiratsuyu kai ni (kancolle)
+shirayuki (kancolle)
+shirayuki tomoe
+shirogane naoto
+shirokane rinko
+shitodo kuroji
+shizuka rin (1st costume)
+shouhou (kancolle)
+shoukaku (azur lane)
+shoukaku (kancolle)
+shu (arknights)
+shu yamino
+shuten douji (fate)
+shuten douji (first ascension) (fate)
+shuten douji (halloween caster) (fate)
+shylily
+sideroca (arknights)
+sieg (fate)
+siege (arknights)
+sigewinne (genshin impact)
+signora (genshin impact)
+silence (arknights)
+silence suzuka (umamusume)
+silica
+silica (sao-alo)
+silva (granblue fantasy)
+silver wolf (honkai  star rail)
+silvervale
+sinon
+sinon (sao-alo)
+sirin
+sirius (azur lane)
+sirius (azure horizons) (azur lane)
+sirius (scorching-hot seirios) (azur lane)
+sirius symboli (umamusume)
+sister claire
+sitonai (fate)
+skadi (arknights)
+skadi (elite ii) (arknights)
+skadi (waverider) (arknights)
+skadi the corrupting heart (arknights)
+skadi the corrupting heart (sublimation) (arknights)
+skyfire (arknights)
+slime (dragon quest)
+smart falcon (umamusume)
+smoker (one piece)
+snow white (nikke)
+societte (granblue fantasy)
+soda (nikke)
+soga no tojiko
+solaire of astora (dark souls)
+solid snake (metal gear)
+sommie (fire emblem)
+son gohan
+son goku
+sona (league of legends)
+sonoda chiyoko
+sonoda umi
+sophia (fire emblem)
+sora (arknights)
+soraka (league of legends)
+soren (fire emblem)
+sothis (fire emblem)
+souryuu (kancolle)
+souryuu asuka langley
+south dakota (azur lane)
+south dakota (kancolle)
+space ereshkigal (fate)
+space ereshkigal (first ascension) (fate)
+space ishtar (fate)
+sparkle (honkai  star rail)
+spas-12 (girls' frontline)
+special week (umamusume)
+specter (arknights)
+specter the unchained (arknights)
+springfield (girls' frontline)
+ssrb (shishiro botan)
+st ar-15 (girls' frontline)
+st. louis (azur lane)
+st. louis (luxurious wheels) (azur lane)
+star sapphire
+stelle (honkai  star rail)
+stheno (fate)
+still in love (umamusume)
+sturm (granblue fantasy)
+subaru duck
+sucrose (genshin impact)
+sui-feng
+sukoya kana
+sukoya kana (1st costume)
+sukuna shinmyoumaru
+sunazuka akira
+sunday (honkai  star rail)
+sunny milk
+suo sango
+suomi (girls' frontline)
+suou momoko
+suou patra
+super creek (umamusume)
+super sass (girls' frontline)
+supply depot princess
+surintendante chevalmarin
+surtr (arknights)
+surtr (colorful wonderland) (arknights)
+surtr (liberte echec) (arknights)
+surtr's golem (arknights)
+sushang (honkai  star rail)
+sussurro (arknights)
+sussurro (summer flower) (arknights)
+suzuhara lulu
+suzuhara lulu (1st costume)
+suzuka gozen (fate)
+suzukaze (kancolle)
+suzuki hana
+suzuran (arknights)
+suzuran (spring praise) (arknights)
+suzuran (yukibare) (arknights)
+suzutsuki (kancolle)
+suzuya (kancolle)
+suzuya kai ni (kancolle)
+svd (girls' frontline)
+sweep tosho (umamusume)
+swire (arknights)
+symboli kris s (umamusume)
+symboli rudolf (umamusume)
+syuen (nikke)
+t-head admiral
+t-head trainer
+t-head trainer (umamusume)
+t.m. opera o (umamusume)
+ta-class battleship
+tachibana arisu
+tachibana hinano
+tada riina
+taigei (kancolle)
+taihou (azur lane)
+taihou (enraptured companion) (azur lane)
+taihou (forbidden fruit) (azur lane)
+taihou (kancolle)
+taihou (seaside daydreams) (azur lane)
+taihou (sweet time after school) (azur lane)
+taihou (temptation on the sea breeze) (azur lane)
+taihou kai (kancolle)
+taiki shuttle (umamusume)
+takafuji kako
+takagaki kaede
+takamatsu tomori
+takami chika
+takamiya rion
+takamori aiko
+takanami (kancolle)
+takao (azur lane)
+takao (beach rhapsody) (azur lane)
+takao (full throttle charmer) (azur lane)
+takao (kancolle)
+takasaki yu
+takatsuki yayoi
+takayama sayoko
+takeba yukari
+takemi tae
+takodachi (ninomae ina'nis)
+takumi (fire emblem)
+talulah (arknights)
+tama (kancolle)
+tamamo (fate)
+tamamo cat (fate)
+tamamo cat (first ascension) (fate)
+tamamo cat (second ascension) (fate)
+tamamo cat (third ascension) (fate)
+tamamo cross (umamusume)
+tamamo no mae (fate/extra)
+tamamo no mae (spring casual) (fate)
+tamamo no mae (swimsuit lancer) (fate)
+tamamo no mae (swimsuit lancer) (second ascension) (fate)
+tamamo no mae (swimsuit lancer) (third ascension) (fate)
+tamatsukuri misumaru
+tana (fire emblem)
+tanaka kotoha
+tanaka mamimi
+tang keke
+tanikaze (kancolle)
+tanino gimlet (umamusume)
+tanned cirno
+tar-21 (girls' frontline)
+tarnished (elden ring)
+tartaglia (genshin impact)
+tashkent (azur lane)
+tashkent (kancolle)
+tatara kogasa
+tatsuta (kancolle)
+tatsuta kai ni (kancolle)
+tayuya (naruto)
+teireida mai
+temari (naruto)
+tenkajin chiyari
+tenkubashi tomoka
+tenkyuu chimata
+tenma saki
+tenma tsukasa
+tennouji rina (love live!)
+tenochtitlan (fate)
+tenochtitlan (second ascension) (fate)
+tenryuu (kancolle)
+tenryuu (swimsuit) (kancolle)
+tenryuu kai ni (kancolle)
+tenten (naruto)
+tequila (arknights)
+terumi mei (naruto)
+teruzuki (kancolle)
+texas (arknights)
+texas (willpower) (arknights)
+texas (winter messenger) (arknights)
+texas the omertosa (arknights)
+tharja (fire emblem)
+the herta (honkai  star rail)
+theresa (arknights)
+theresa apocalypse
+theresa apocalypse (luna kindred)
+theresa apocalypse (lunar vow  crimson love)
+theresa apocalypse (valkyrie pledge)
+thoma (genshin impact)
+thorns (arknights)
+threo (granblue fantasy)
+thresh (league of legends)
+thrud (fate)
+thunder (girls' frontline)
+tiamat (fate)
+tier harribel (bleach)
+tighnari (genshin impact)
+tiki (adult) (fire emblem)
+tiki (fire emblem)
+tiki (young) (fire emblem)
+timerra (fire emblem)
+tingyun (harmony) (honkai  star rail)
+tingyun (honkai  star rail)
+tirpitz (azur lane)
+titan (shingeki no kyojin)
+titania (sao)
+tmp (girls' frontline)
+todo yurika
+todoroki hajime
+togawa sakiko
+tohsaka rin
+tohsaka rin (fate/zero)
+tohsaka tokiomi
+tokai teio (umamusume)
+tokarev (girls' frontline)
+tokiko (touhou)
+tokitarou (fate)
+tokitsukaze (kancolle)
+tokugawa matsuri
+tomari mari
+tomimi (arknights)
+tomioka giyuu
+tomoe gozen (fate)
+tomoe gozen (swimsuit saber) (fate)
+tomoe gozen (swimsuit saber) (first ascension) (fate)
+tone (kancolle)
+tone kai ni (kancolle)
+tony tony chopper
+toon zelda
+topaz (honkai  star rail)
+toramaru shou
+tosa (azur lane)
+tosen jordan (umamusume)
+totoki airi
+toujou nozomi
+toutetsu yuuma
+toyama kasumi
+toyosatomimi no miko
+trafalgar law
+trailblazer (honkai  star rail)
+transcend (umamusume)
+trish (devil may cry)
+trisha elric (fullmetal alchemist)
+trunks (dragon ball)
+tsujino akari
+tsukino mito
+tsukino mito (1st costume)
+tsukioka kogane
+tsukumo benben
+tsukumo yatsuhashi
+tsunade (naruto)
+tsunetsuki matoi
+tsurumaki kokoro
+tsurumaru tsuyoshi (umamusume)
+tsushima (kancolle)
+tsushima yoshiko
+tsuyuri kanao
+tweyen (granblue fantasy)
+twilight (spy x family)
+twin turbo (umamusume)
+type 95 (girls' frontline)
+type 97 (girls' frontline)
+typhon (arknights)
+u-511 (kancolle)
+uchiha itachi (naruto)
+uchiha madara (naruto)
+uchiha sarada (naruto)
+uchiha sasuke
+udagawa tomoe
+uehara ayumu
+uehara himari
+ulquiorra cifer (bleach)
+ulrich von hutten (azur lane)
+umikaze (kancolle)
+ump40 (girls' frontline)
+ump45 (girls' frontline)
+ump9 (girls' frontline)
+unicorn (azur lane)
+unicorn (long-awaited date) (azur lane)
+unohana retsu
+unryuu (kancolle)
+unzan
+urakaze (kancolle)
+urushibara ruka (steins gate)
+usami renko
+usami sumireko
+ushio (kancolle)
+ushio (swimsuit) (kancolle)
+ushio kai ni (kancolle)
+ushiwakamaru (fate)
+ushiwakamaru (swimsuit assassin) (fate)
+ushiwakamaru (swimsuit assassin) (first ascension) (fate)
+ushizaki urumi
+usopp
+usugumo (kancolle)
+uta (one piece)
+utage (arknights)
+utage (summer flowers) (arknights)
+utsumi erice
+utsumi erice (lancer)
+uzui tengen
+uzuki (kancolle)
+uzumaki boruto (naruto)
+uzumaki himawari (naruto)
+uzumaki kushina (naruto)
+uzumaki naruto
+vajra (granblue fantasy)
+valkyrie (fate)
+vampire (azur lane)
+van hohenheim (fullmetal alchemist)
+vector (girls' frontline)
+vegeta
+vegetto (dragon ball)
+vei (vtuber)
+venti (archon) (genshin impact)
+venti (genshin impact)
+vergil (devil may cry)
+vermeil (arknights)
+verniy (kancolle)
+veronica (fire emblem)
+verxina (umamusume)
+veyle (fire emblem)
+victorious (azur lane)
+videl (dragon ball)
+vigna (arknights)
+vikala (granblue fantasy)
+vill-v
+viper (nikke)
+vira (granblue fantasy)
+virtuosa (arknights)
+vita (honkai impact)
+vittorio veneto (azur lane)
+viviana (arknights)
+vivlos (umamusume)
+viy (fate)
+vlad iii (fate/apocrypha)
+vodka (umamusume)
+volibear (league of legends)
+vox akuma
+vsk-94 (girls' frontline)
+w (arknights)
+wa2000 (girls' frontline)
+wakaba (kancolle)
+wakaba mutsumi
+wakana shiki
+wakasa yuuri
+wakasagihime
+wamuu
+wanderer (genshin impact)
+warabeda meiji
+warfarin (arknights)
+warspite (azur lane)
+warspite (kancolle)
+washington (kancolle)
+watanabe you
+watatsuki no toyohime
+watatsuki no yorihime
+waver velvet
+weedy (arknights)
+welrod mkii (girls' frontline)
+whislash (arknights)
+whisperain (arknights)
+white heart (neptunia)
+white len (tsukihime)
+wien margarete
+win variation (umamusume)
+winning ticket (umamusume)
+wiz (konosuba)
+wo-class aircraft carrier
+wolf (league of legends)
+wolf spirit (touhou)
+wolfgang amadeus mozart (fate)
+wonder acute (umamusume)
+wriggle nightbug
+wriothesley (genshin impact)
+wu zetian (fate)
+xiangling (genshin impact)
+xianyun (genshin impact)
+xiao (genshin impact)
+xilonen (genshin impact)
+xingqiu (genshin impact)
+xinyan (genshin impact)
+xuangzang sanzang (fate)
+yabuki kana
+yae miko
+yae miko (fox)
+yae sakura
+yae sakura (goushinnso memento)
+yaeno muteki (umamusume)
+yagami makino
+yagokoro eirin
+yahagi (kancolle)
+yahagi kai ni (kancolle)
+yaia (granblue fantasy)
+yakumo beni
+yakumo ran
+yakumo yukari
+yakumo yukari (young)
+yamabuki saya
+yamagami karuta
+yamagumo (kancolle)
+yamakaze (kancolle)
+yamakaze kai ni (kancolle)
+yamanaka ino
+yamanin zephyr (umamusume)
+yamashiro (azur lane)
+yamashiro (kancolle)
+yamashiro takane
+yamato (kancolle)
+yamato (one piece)
+yamato kai ni (kancolle)
+yamato takeru (fate)
+yan qing (fate)
+yanfei (genshin impact)
+yang guifei (fate)
+yang guifei (first ascension) (fate)
+yang guifei (second ascension) (fate)
+yanqing (honkai  star rail)
+yasaka kanako
+yasuo (league of legends)
+yatadera narumi
+yayoi (kancolle)
+yazawa nico
+yelan (genshin impact)
+ymir (shingeki no kyojin)
+yoimiya (genshin impact)
+yoisaki kanade
+yokoyama chika
+yokoyama nao
+yokune ruko
+yoneme mei
+yor briar
+yorigami jo'on
+yorigami shion
+yorita yoshino
+yorktown (azur lane)
+yoru (chainsaw man)
+yorumi rena
+yoshizawa kasumi
+yowane haku
+yu mei-ren (fate)
+yu mei-ren (first ascension) (fate)
+yu mei-ren (second ascension) (fate)
+yu mei-ren (swimsuit lancer) (fate)
+yu mei-ren (third ascension) (fate)
+yuegui (genshin impact)
+yuel (granblue fantasy)
+yugiri tsuzuri
+yui (sao)
+yui shousetsu (fate)
+yuisis (granblue fantasy)
+yuki (touhou)
+yuki miku
+yuki miku (2011)
+yuki miku (2014)
+yuki miku (2017)
+yuki miku (2019)
+yuki setsuna
+yukikaze (azur lane)
+yukikaze (kancolle)
+yukikaze kai ni (kancolle)
+yukino bijin (umamusume)
+yukoku kiriko
+yukoku roberu
+yumeko (touhou)
+yumemi riamu
+yun jin (genshin impact)
+yunaka (fire emblem)
+yune (fire emblem)
+yunli (honkai  star rail)
+yunyun (konosuba)
+yura (kancolle)
+yura kai ni (kancolle)
+yuri briar
+yusa kozue
+yuubari (kancolle)
+yuubari kai ni (kancolle)
+yuudachi (azur lane)
+yuudachi (kancolle)
+yuudachi kai ni (kancolle)
+yuudachi kai ni (swimsuit) (kancolle)
+yuugumo (kancolle)
+yuuhi kurenai (naruto)
+yuuhi riri
+yuuki (sao)
+yuuki haru
+yuuki makoto (persona 3)
+yuuki setsuna (love live!)
+yuzuki roa
+yuzuki yukari
+yuzuki yukari (shizuku)
+z1 leberecht maass (kancolle)
+z23 (azur lane)
+z3 max schultz (kancolle)
+z46 (azur lane)
+zac (league of legends)
+zaizen tokiko
+zara (azur lane)
+zara (kancolle)
+zara (poolside coincidence) (azur lane)
+zas m21 (girls' frontline)
+zenobia (fate)
+zeta (granblue fantasy)
+zeta (summer) (granblue fantasy)
+zhong lanzhu
+zhongli (archon) (genshin impact)
+zhongli (genshin impact)
+zima (arknights)
+zinogre (monster hunter)
+zooey (granblue fantasy)
+zuihou (kancolle)
+zuikaku (azur lane)
+zuikaku (kancolle)
+zuikaku kai ni (kancolle)
