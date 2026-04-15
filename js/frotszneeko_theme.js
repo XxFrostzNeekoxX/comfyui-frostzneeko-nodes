@@ -13,6 +13,7 @@ const FROTSZ_NODES = [
     "FNKSamplerPreview",
     "FNFaceDetailer",
     "FNImageSaver",
+    "FNMetadataReader",
 ];
 
 const CYAN = {
