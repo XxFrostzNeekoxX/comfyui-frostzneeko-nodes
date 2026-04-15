@@ -11,6 +11,7 @@ from .fn_ksampler_preview import FNKSamplerPreview
 from .fn_face_detailer import FNFaceDetailer
 from .fn_image_saver import FNImageSaver
 from .fn_metadata_reader import FNMetadataReader
+from .fn_random_prompt_generator import FNRandomPromptGenerator
 
 
 NODE_CLASS_MAPPINGS = {
@@ -22,15 +23,17 @@ NODE_CLASS_MAPPINGS = {
     "FNFaceDetailer": FNFaceDetailer,
     "FNImageSaver": FNImageSaver,
     "FNMetadataReader": FNMetadataReader,
+    "FNRandomPromptGenerator": FNRandomPromptGenerator,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "FNPromptFromFile": "FN Prompt From File (All-in-One) 🔹",
-    "FNClipDualEncode": "FN CLIP Dual Encode 🔹",
-    "FNClipAdvanced": "FN CLIP Text Encode (Advanced) 🔹",
-    "FNCheckpointLoader": "FN Checkpoint Loader 🔹",
-    "FNKSamplerPreview": "FN Supreme KSampler 🔹",
-    "FNFaceDetailer": "FN Face Detailer 🔹",
-    "FNImageSaver": "FN Image Saver 🔹",
-    "FNMetadataReader": "FN Metadata Reader 🔹",
+    "FNPromptFromFile": "FN Prompt From File (All-in-One) \U0001f539",
+    "FNClipDualEncode": "FN CLIP Dual Encode \U0001f539",
+    "FNClipAdvanced": "FN CLIP Text Encode (Advanced) \U0001f539",
+    "FNCheckpointLoader": "FN Checkpoint Loader \U0001f539",
+    "FNKSamplerPreview": "FN Supreme KSampler \U0001f539",
+    "FNFaceDetailer": "FN Face Detailer \U0001f539",
+    "FNImageSaver": "FN Image Saver \U0001f539",
+    "FNMetadataReader": "FN Metadata Reader \U0001f539",
+    "FNRandomPromptGenerator": "FN Random Prompt Generator \U0001f539",
 }
