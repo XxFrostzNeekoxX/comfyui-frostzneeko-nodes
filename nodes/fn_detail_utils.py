@@ -59,7 +59,7 @@ except ImportError:
     except ImportError:
         _lp = None
 
-# ── SEG namedtuple (matches Impact Pack exactly) ─────────────────────
+# ── SEG namedtuple (compatible with common SEGS pipelines) ───────────
 SEG = namedtuple(
     "SEG",
     ["cropped_image", "cropped_mask", "confidence", "crop_region", "bbox", "label", "control_net_wrapper"],
@@ -136,10 +136,28 @@ def _tensor_to_pil(image_tensor):
     arr = np.clip(255.0 * image_tensor.cpu().numpy(), 0, 255).astype(np.uint8)
     return Image.fromarray(arr)
 
+def _tensor_resize_image_lanczos(image: torch.Tensor, w: int, h: int) -> torch.Tensor:
+    """
+    Resize an NHWC float tensor image using PIL LANCZOS when possible.
+    Falls back to torch bilinear if PIL path fails.
+    """
+    try:
+        from PIL import Image
+        out = []
+        for i in range(image.shape[0]):
+            arr = (255.0 * image[i].detach().cpu().numpy()).clip(0, 255).astype(np.uint8)
+            pil = Image.fromarray(arr)
+            pil = pil.resize((int(w), int(h)), resample=Image.Resampling.LANCZOS)
+            np_img = np.array(pil).astype(np.float32) / 255.0
+            out.append(torch.from_numpy(np_img))
+        return torch.stack(out, dim=0).to(image.device)
+    except Exception:
+        return _tensor_resize(image, w, h)
+
 
 def _maybe_wrap_differential_diffusion(model, enable: bool):
     """
-    Impact-style: when using soft noise masks and the model doesn't natively support
+    When using soft noise masks and the model doesn't natively support
     denoise_mask_function, wrap model with DifferentialDiffusion if available.
     """
     if not enable:
@@ -161,7 +179,7 @@ def _maybe_wrap_differential_diffusion(model, enable: bool):
 
 def _crop_condition_mask(conditioning, image_tensor, crop_region):
     """
-    Crop any conditioning dict 'mask' entry into crop_region, matching Impact Pack's behavior.
+    Crop any conditioning dict 'mask' entry into crop_region.
     This improves detail quality when masks are present in conditioning (rare, but supported).
     """
     if conditioning is None:
@@ -229,7 +247,7 @@ def _crop_condition_mask(conditioning, image_tensor, crop_region):
     return out
 
 
-# ── YOLO inference (matching Impact Pack subcore.py) ─────────────────
+# ── YOLO inference ──────────────────────────────────────────────────
 
 def _inference_bbox(model, pil_image, confidence=0.3):
     """
@@ -237,7 +255,7 @@ def _inference_bbox(model, pil_image, confidence=0.3):
     Returns: [labels, bboxes, segms, confidences]
       - bboxes: numpy arrays [x1, y1, x2, y2]
       - segms: boolean masks (rectangular, from bbox)
-    Matches Impact Pack's inference_bbox exactly.
+    Bounding-box detection + rectangular mask.
     """
     pred = model(pil_image, conf=confidence, verbose=False)
 
@@ -276,7 +294,7 @@ def _inference_segm(model, pil_image, confidence=0.3):
     Run YOLO segmentation detection on a PIL image.
     Returns: [labels, bboxes, segms, confidences]
       - segms: float32 masks at original image resolution
-    Matches Impact Pack's inference_segm exactly, including aspect ratio gap handling.
+    Segmentation detection with aspect-ratio gap handling.
     """
     pred = model(pil_image, conf=confidence, verbose=False)
 
@@ -285,7 +303,9 @@ def _inference_segm(model, pil_image, confidence=0.3):
     if n == 0:
         return [[], [], [], []]
 
-    # masks.data may be None when n == 0
+    # Some models may return boxes but omit masks.
+    if pred[0].masks is None or getattr(pred[0].masks, "data", None) is None:
+        return [[], [], [], []]
     segms_raw = pred[0].masks.data.cpu().numpy()
 
     h_segms = segms_raw.shape[1]
@@ -295,7 +315,7 @@ def _inference_segm(model, pil_image, confidence=0.3):
     ratio_segms = h_segms / w_segms
     ratio_orig = h_orig / w_orig
 
-    # Handle aspect ratio mismatch (exactly like Impact Pack)
+    # Handle aspect ratio mismatch
     if ratio_segms == ratio_orig:
         h_gap = 0
         w_gap = 0
@@ -330,7 +350,7 @@ def _inference_segm(model, pil_image, confidence=0.3):
     return results
 
 
-# ── Segmask creation (matching Impact Pack subcore.py) ───────────────
+# ── Segmask creation ────────────────────────────────────────────────
 
 def _create_segmasks(results):
     """
@@ -347,10 +367,10 @@ def _create_segmasks(results):
     return out
 
 
-# ── Mask dilation (matching Impact Pack subpack utils.py) ────────────
+# ── Mask dilation ───────────────────────────────────────────────────
 
 def _dilate_masks(segmasks, dilation_factor):
-    """Dilate masks using cv2 kernel (matching Impact Pack exactly)."""
+    """Dilate/erode masks using a cv2 kernel."""
     if dilation_factor == 0:
         return segmasks
 
@@ -401,10 +421,10 @@ def _dilate_single_mask(mask_f32, dilation_factor):
         return mask_f32
 
 
-# ── Crop helpers (matching Impact Pack subpack utils.py) ─────────────
+# ── Crop helpers ────────────────────────────────────────────────────
 
 def _normalize_region(limit, startp, size):
-    """Matches Impact Pack exactly."""
+    """Clamp a crop region to image bounds."""
     if startp < 0:
         new_endp = min(limit, size)
         new_startp = 0
@@ -420,9 +440,9 @@ def _normalize_region(limit, startp, size):
 def _make_crop_region(w, h, bbox, crop_factor):
     """
     Compute crop region from bbox using crop_factor.
-    bbox = (y1, x1, y2, x2) — Impact Pack format
+    bbox = (x1, y1, x2, y2) in xyxy format
     Returns: [x1, y1, x2, y2] as crop_region
-    Matches Impact Pack exactly.
+    Returns: [x1, y1, x2, y2] crop_region.
     """
     x1 = bbox[0]
     y1 = bbox[1]
@@ -459,11 +479,10 @@ def _crop_tensor4(image, crop_region):
     return image[:, y1:y2, x1:x2, :]
 
 
-# ── Mask helpers (matching Impact Pack core.py / utils.py) ───────────
+# ── Mask helpers ────────────────────────────────────────────────────
 
 def _tensor_gaussian_blur_mask(mask, kernel_size, sigma=10.0):
     """
-    Matching Impact Pack's tensor_gaussian_blur_mask exactly.
     input:  2D or 3D tensor mask
     output: [N, H, W, 1] NHWC mask with gaussian blur applied
     """
@@ -504,7 +523,6 @@ def _tensor_gaussian_blur_mask(mask, kernel_size, sigma=10.0):
 
 def _tensor_paste(image, patch, left_top, mask):
     """
-    Matching Impact Pack's tensor_paste:
     Pastes patch onto image at (x, y) using mask for blending.
     image: [1, H, W, C]  (modified in-place)
     patch: [1, h, w, C]
@@ -543,11 +561,11 @@ def _resize_mask(mask, size):
     return m.squeeze(1)     # [N,H,W]
 
 
-# ── SEGS detection (matching Impact Pack UltraBBoxDetector / UltraSegmDetector) ──
+# ── SEGS detection ──────────────────────────────────────────────────
 
 def _detect_segs(detector, image_tensor, threshold, dilation, crop_factor, drop_size=10, use_segm=False):
     """
-    Full Impact Pack detection pipeline:
+    Detection pipeline:
     1. Convert tensor to PIL
     2. Run inference (bbox or segm)
     3. Create segmasks
@@ -608,7 +626,7 @@ def _detect_segs(detector, image_tensor, threshold, dilation, crop_factor, drop_
     return shape, items
 
 
-# ── enhance_detail (matching Impact Pack core.py) ────────────────────
+# ── enhance_detail ───────────────────────────────────────────────────
 
 def _enhance_detail(
     cropped_image,          # [1, crop_h, crop_w, C]  (the cropped region)
@@ -625,7 +643,7 @@ def _enhance_detail(
     cycle=1,
 ):
     """
-    Mirrors Impact Pack's core.enhance_detail():
+    Detail pass:
     1. Determine upscale factor from guide_size
     2. Upscale the cropped image
     3. Encode to latent
@@ -639,7 +657,7 @@ def _enhance_detail(
         noise_mask = _tensor_gaussian_blur_mask(noise_mask, noise_mask_feather)
         noise_mask = noise_mask.squeeze(3)  # → [1, H, W] or [H, W]
 
-        # Impact-style: DifferentialDiffusion improves soft-mask transitions
+        # Improve soft-mask transitions when supported
         model = _maybe_wrap_differential_diffusion(model, enable=(noise_mask_feather > 0))
 
     h = cropped_image.shape[1]
@@ -678,8 +696,8 @@ def _enhance_detail(
 
     print(f"[FrostzNeeko]    upscale ({bbox_w:.0f}x{bbox_h:.0f}) | crop {w}x{h} × {upscale:.2f} → {new_w}x{new_h}")
 
-    # Upscale the cropped image
-    upscaled = _tensor_resize(cropped_image, new_w, new_h)
+    # Upscale the cropped image (high-quality when possible)
+    upscaled = _tensor_resize_image_lanczos(cropped_image, new_w, new_h)
 
     # Encode to latent
     latent = vae.encode(upscaled[:, :, :, :3])
@@ -737,13 +755,13 @@ def _enhance_detail(
     if len(refined.shape) == 5:
         refined = refined.squeeze(0)
 
-    # Downscale back to original crop size
-    refined = _tensor_resize(refined, w, h).cpu()
+    # Downscale back to original crop size (high-quality when possible)
+    refined = _tensor_resize_image_lanczos(refined, w, h).cpu()
 
     return refined
 
 
-# ── Core face-detail pass ────────────────────────────────────────────
+# ── Core detail pass ────────────────────────────────────────────────
 
 def run_face_detail(
     image: torch.Tensor,
@@ -766,7 +784,7 @@ def run_face_detail(
     drop_size: int = 10,
 ) -> torch.Tensor:
     """
-    Detect regions and detail them using the exact Impact Pack pipeline:
+    Detect regions and detail them:
       detect_segs → enhance_detail → tensor_paste
     """
 
@@ -806,7 +824,6 @@ def run_face_detail(
     guide_size_for_bbox = (guide_size_for == "bbox")
 
     # Determine if model is bbox or segm type
-    # Impact Pack checks model type; we'll try segm first, fall back to bbox
     has_segm = hasattr(detector, 'model') and hasattr(detector.model, 'task') and detector.model.task == 'segment'
     if not has_segm:
         # Also check by model name
@@ -815,7 +832,7 @@ def run_face_detail(
     for b in range(image.shape[0]):
         single_image = image[b:b+1]
 
-        # Detect using Impact Pack pipeline
+        # Detect segments
         shape, segs = _detect_segs(
             detector, single_image, threshold, dilation, crop_factor,
             drop_size=drop_size, use_segm=has_segm,
@@ -855,7 +872,7 @@ def run_face_detail(
 
             # enhance_detail
             # bbox for upscale calculation: use the seg.bbox (YOLO xyxy)
-            # Crop conditioning masks (if present) into crop_region, Impact-style
+            # Crop conditioning masks (if present) into crop_region
             pos_c = _crop_condition_mask(positive, single_image, seg.crop_region)
             neg_c = _crop_condition_mask(negative, single_image, seg.crop_region)
 
@@ -875,7 +892,7 @@ def run_face_detail(
             if enhanced is None:
                 continue
 
-            # Paste back using Impact Pack's tensor_paste approach
+            # Paste back using a soft mask
             _tensor_paste(
                 image[b:b+1],
                 enhanced,

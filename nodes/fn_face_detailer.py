@@ -1,12 +1,8 @@
 """
 FN Face Detailer 🔹
-All-in-one face/feature detailer that replaces the entire Impact Pack
-detection + detailing pipeline in a single node.
+All-in-one face/feature detailer that performs detection + detailing in a single node.
 
-Replaces:
-  UltralyticDetectorProvider → BBOX Detector (SEGS) → Detailer (SEGS)
-
-All in one node with matching options:
+All in one node with options for:
   guide_size, guide_size_for, max_size, seed, steps, cfg, sampler,
   scheduler, denoise, feather, noise_mask, force_inpaint, cycle,
   noise_mask_feather, drop_size, dilation, threshold, crop_factor
