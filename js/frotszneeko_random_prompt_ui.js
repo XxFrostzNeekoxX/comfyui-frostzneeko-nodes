@@ -1,29 +1,6 @@
-import { app } from "../../scripts/app.js";
-
 /*
- * FrostzNeeko — Random Prompt Generator: mascot + generated_prompt textbox (same UX as Prompt From File)
+ * FrostzNeeko — Random Prompt Generator: updates generated_prompt textbox after run (no mascot).
  */
-
-let mascotImg = null;
-let mascotLoaded = false;
-
-function ensureMascotLoaded() {
-    if (mascotImg) return;
-    mascotImg = new Image();
-    mascotImg.crossOrigin = "anonymous";
-    mascotImg.onload = () => {
-        mascotLoaded = true;
-        app.graph?.setDirtyCanvas(true, true);
-    };
-    mascotImg.onerror = () => {
-        console.warn("[FrostzNeeko] Could not load mascot (random prompt)");
-        mascotImg = null;
-    };
-    mascotImg.src = "/FrostzNeeko/mascot?v=" + Date.now();
-}
-ensureMascotLoaded();
-
-const IMG_BLOCK_H = 160;
 
 app.registerExtension({
     name: "FrostzNeeko.RandomPromptGeneratorDisplay",
@@ -45,20 +22,6 @@ app.registerExtension({
         const origCreated = nodeType.prototype.onNodeCreated;
         nodeType.prototype.onNodeCreated = function () {
             origCreated?.apply(this, arguments);
-
-            const spacer = {
-                name: "fn_mascot_spacer",
-                type: "custom",
-                value: null,
-                options: { serialize: false },
-                computeSize: () => [200, IMG_BLOCK_H],
-                draw: () => {},
-            };
-
-            if (this.widgets) {
-                this.widgets.unshift(spacer);
-            }
-
             const self = this;
             requestAnimationFrame(() => {
                 const computed = self.computeSize();
@@ -66,27 +29,6 @@ app.registerExtension({
                 self.setSize(computed);
                 self.setDirtyCanvas(true, true);
             });
-        };
-
-        const origFg = nodeType.prototype.onDrawForeground;
-        nodeType.prototype.onDrawForeground = function (ctx) {
-            origFg?.apply(this, arguments);
-            if (this.flags?.collapsed) return;
-            if (!mascotImg || !mascotLoaded) return;
-
-            const spacer = this.widgets?.find((w) => w.name === "fn_mascot_spacer");
-            if (!spacer) return;
-
-            const y = spacer.last_y ?? 0;
-            const nodeW = this.size[0];
-            const imgW = nodeW - 12;
-            const imgH = IMG_BLOCK_H + 130;
-            const imgX = 6;
-            const imgY = y - 130;
-
-            ctx.save();
-            ctx.drawImage(mascotImg, imgX, imgY, imgW, imgH);
-            ctx.restore();
         };
     },
 });
