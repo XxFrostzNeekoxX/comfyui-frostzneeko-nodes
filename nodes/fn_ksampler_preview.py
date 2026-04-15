@@ -116,6 +116,12 @@ def _load_upscale_model(name: str):
 
 def _apply_upscale(up_model, image: torch.Tensor) -> torch.Tensor:
     """Upscale ``image`` [B,H,W,C] using a spandrel model. Tiled for VRAM safety."""
+    if model_management is None:
+        raise RuntimeError(
+            "[FrostzNeeko] comfy.model_management is unavailable; "
+            "cannot run model upscaler in this environment."
+        )
+
     device = model_management.get_torch_device()
 
     memory_required = model_management.module_size(up_model.model)
@@ -285,6 +291,11 @@ class FNKSamplerPreview:
         extra_pnginfo=None,
     ):
         # ══════════════  BUILD / USE LATENT  ═════════════════════════
+        if model_management is not None:
+            latent_device = model_management.intermediate_device()
+        else:
+            latent_device = "cpu"
+
         if latent_image is not None:
             latent = latent_image.copy()
         else:
@@ -292,7 +303,7 @@ class FNKSamplerPreview:
             latent = {
                 "samples": torch.zeros(
                     [batch_size, 4, height // 8, width // 8],
-                    device=comfy.model_management.intermediate_device(),
+                    device=latent_device,
                 )
             }
 

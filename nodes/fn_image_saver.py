@@ -32,9 +32,11 @@ class FNImageSaver:
                 "format": (["png", "jpeg", "webp"],),
                 "quality": ("INT", {"default": 95, "min": 1, "max": 100}),
                 "add_timestamp": ("BOOLEAN", {"default": True}),
+                "numbering_style": (["comfy_default", "prefix_number"], {"default": "comfy_default"}),
             },
             "optional": {
                 "subfolder": ("STRING", {"default": ""}),
+                "number_padding": ("INT", {"default": 3, "min": 1, "max": 8}),
             },
             "hidden": {
                 "prompt": "PROMPT",
@@ -55,7 +57,9 @@ class FNImageSaver:
         format="png",
         quality=95,
         add_timestamp=True,
+        numbering_style="comfy_default",
         subfolder="",
+        number_padding=3,
         prompt=None,
         extra_pnginfo=None,
     ):
@@ -110,7 +114,10 @@ class FNImageSaver:
             elif format == "webp":
                 save_kwargs = {"quality": quality}
 
-            file = f"{filename}_{counter:05}_.{ext}"
+            if numbering_style == "prefix_number":
+                file = f"{filename}_{counter:0{number_padding}d}.{ext}"
+            else:
+                file = f"{filename}_{counter:05}_.{ext}"
             img.save(os.path.join(full_output_folder, file), **save_kwargs)
 
             results.append(

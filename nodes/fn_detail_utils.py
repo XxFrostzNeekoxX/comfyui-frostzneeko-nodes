@@ -461,6 +461,7 @@ def _detect_segs(detector, image_tensor, threshold, dilation, crop_factor, drop_
         detected_results = _inference_bbox(detector, pil_image, threshold)
 
     segmasks = _create_segmasks(detected_results)
+    segmasks = _dilate_masks(segmasks, dilation)
 
     items = []
     h = image_tensor.shape[1]
@@ -468,6 +469,7 @@ def _detect_segs(detector, image_tensor, threshold, dilation, crop_factor, drop_
 
     for idx, (segmask_data, label) in enumerate(zip(segmasks, detected_results[0])):
         item_bbox = segmask_data[0]  # xyxy from YOLO
+        item_mask = segmask_data[1]  # full-image mask (bbox or segm)
         confidence = segmask_data[2]
 
         x1, y1, x2, y2 = int(item_bbox[0]), int(item_bbox[1]), int(item_bbox[2]), int(item_bbox[3])
@@ -479,22 +481,21 @@ def _detect_segs(detector, image_tensor, threshold, dilation, crop_factor, drop_
             # Crop the image to the crop region
             cropped_image = _crop_tensor4(image_tensor, crop_region)
 
-            # Build mask in crop-region coordinates (not from full image)
-            # This ensures the mask aligns perfectly with the cropped image
+            # Build mask in crop-region coordinates from the detector mask.
+            # For segmentation models this keeps the real contour;
+            # for bbox models it behaves as a rectangular region.
             crop_h = cr_y2 - cr_y1
             crop_w = cr_x2 - cr_x1
-            cropped_mask = np.zeros((crop_h, crop_w), dtype=np.float32)
+            cropped_mask = _crop_ndarray2(item_mask.astype(np.float32), crop_region)
 
-            # Place the bbox rectangle relative to the crop region
-            rel_y1 = max(0, y1 - cr_y1)
-            rel_y2 = min(crop_h, y2 - cr_y1)
-            rel_x1 = max(0, x1 - cr_x1)
-            rel_x2 = min(crop_w, x2 - cr_x1)
-            cropped_mask[rel_y1:rel_y2, rel_x1:rel_x2] = 1.0
-
-            # Apply dilation to the cropped mask
-            if dilation != 0:
-                cropped_mask = _dilate_single_mask(cropped_mask, dilation)
+            # Fallback to bbox rectangle if crop/mask comes invalid or empty.
+            if cropped_mask.size == 0 or cropped_mask.shape != (crop_h, crop_w):
+                cropped_mask = np.zeros((crop_h, crop_w), dtype=np.float32)
+                rel_y1 = max(0, y1 - cr_y1)
+                rel_y2 = min(crop_h, y2 - cr_y1)
+                rel_x1 = max(0, x1 - cr_x1)
+                rel_x2 = min(crop_w, x2 - cr_x1)
+                cropped_mask[rel_y1:rel_y2, rel_x1:rel_x2] = 1.0
 
             item = SEG(cropped_image, cropped_mask, confidence, crop_region, item_bbox, label, None)
             items.append(item)
@@ -662,6 +663,36 @@ def run_face_detail(
       detect_segs → enhance_detail → tensor_paste
     """
 
+    def _confidence_to_float(value):
+        """
+        Normalize confidence from scalar / tensor / ndarray / list-like
+        to a Python float for logging.
+        """
+        if value is None:
+            return 0.0
+
+        # Fast-path for normal numeric values.
+        if isinstance(value, (int, float, np.floating)):
+            return float(value)
+
+        # Torch tensors from some detector outputs.
+        if torch.is_tensor(value):
+            try:
+                if value.numel() == 1:
+                    return float(value.item())
+                return float(value.reshape(-1)[0].item())
+            except Exception:
+                return 0.0
+
+        # Numpy / list / tuple / other array-likes.
+        try:
+            arr = np.asarray(value)
+            if arr.size == 0:
+                return 0.0
+            return float(arr.reshape(-1)[0])
+        except Exception:
+            return 0.0
+
     detector = load_detector(detector_model_name)
     image = image.clone()
 
@@ -690,7 +721,14 @@ def run_face_detail(
         mode_label = "segm" if has_segm else "bbox"
         print(f"[FrostzNeeko] 🔍 {len(segs)} detection(s) [{mode_label}] in batch {b}")
 
-        for i, seg in enumerate(segs):
+        # Process large areas first, then small regions (small details last)
+        segs_sorted = sorted(
+            segs,
+            key=lambda s: ((s.bbox[2] - s.bbox[0]) * (s.bbox[3] - s.bbox[1])),
+            reverse=True,
+        )
+
+        for i, seg in enumerate(segs_sorted):
             crop_region = seg.crop_region
             cr_x1, cr_y1, cr_x2, cr_y2 = crop_region
 
@@ -734,24 +772,7 @@ def run_face_detail(
                 paste_mask,
             )
 
-            try:
-                # Safely extract confidence value from various numpy/array formats
-                confidence = seg.confidence
-                conf_array = np.asarray(confidence)
-                
-                if conf_array.ndim == 0:
-                    # Already a scalar
-                    conf_val = float(conf_array)
-                elif conf_array.size > 0:
-                    # Array with elements - extract first one safely using .item()
-                    conf_val = float(conf_array.flat[0].item())
-                else:
-                    # Empty array - use default
-                    conf_val = 0.0
-            except (TypeError, ValueError, AttributeError) as e:
-                # Final fallback
-                print(f"[FrostzNeeko] ⚠️ Warning: Could not extract confidence - {e}")
-                conf_val = 0.0
+            conf_val = _confidence_to_float(seg.confidence)
             print(f"[FrostzNeeko]    ✅ Detection {i + 1} [{mode_label}] detailed (conf={conf_val:.2f})")
 
     return image

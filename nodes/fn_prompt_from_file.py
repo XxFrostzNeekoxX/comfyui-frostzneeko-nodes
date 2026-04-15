@@ -6,14 +6,14 @@ loads LoRAs from inline tags, and encodes with CLIP — all in one node.
 Optionally loads a checkpoint internally so you don't need a separate
 Checkpoint Loader node connected.
 
-Each line in the file is one prompt. Line selection is driven by the
-seed value:
-  • sequential: seed % num_lines  (use control_after_generate to advance)
-  • random:     Random(seed).randint(...)
-  • ping_pong:  seed-based ping-pong oscillation
+Each line in the file is one prompt. Line selection follows Butcher-style
+stateful modes:
+  • increment / decrement / fixed
+  • random
+  • random no repetitions
 
-This means if you cancel a run and re-queue, the SAME line is used
-(because seed didn't change). Only when seed advances does the line change.
+Batch progression is driven by the hidden ``count`` input (fed by frontend JS),
+with optional manual reset.
 
 Display widgets:
   • current_prompt → the clean prompt text (no lora tags, wildcards resolved)
@@ -23,6 +23,9 @@ Display widgets:
 import os
 import re
 import random
+import time
+import secrets
+import hashlib
 
 import folder_paths
 import comfy.sd
@@ -30,7 +33,7 @@ import comfy.utils
 
 
 # Module-level state — survives ComfyUI cache resets and cancels
-_auto_state = {}  # {node_unique_id: {"counter": int, "prev_remaining": int}}
+_line_state = {}  # {node_unique_id: {"batch_counter": int, "line_counter": int, "random_list": list[int], "rng": random.Random}}
 
 
 class FNPromptFromFile:
@@ -45,10 +48,14 @@ class FNPromptFromFile:
                     "STRING",
                     {"default": "prompts.txt", "multiline": False},
                 ),
-                "mode": (["auto_cycle", "sequential", "random", "ping_pong"],),
-                "seed": (
+                "mode": (["increment", "decrement", "random", "random no repetitions", "fixed"],),
+                "line_to_start_from": (
                     "INT",
-                    {"default": 0, "min": 0, "max": 0xFFFFFFFFFFFFFFFF},
+                    {"default": 0, "min": 0, "step": 1},
+                ),
+                "count": (
+                    "INT",
+                    {"default": 0, "min": 0, "step": 1},
                 ),
                 "reset": ("BOOLEAN", {"default": False}),
             },
@@ -85,7 +92,7 @@ class FNPromptFromFile:
     RETURN_NAMES = (
         "model",
         "clip",
-        "detailer_clip",
+        "no_lora_clip",
         "vae",
         "conditioning",
         "processed_prompt",
@@ -148,6 +155,16 @@ class FNPromptFromFile:
                 result = result.replace(f"__{name}__", replacement, 1)
 
         return result, replacements
+
+    @staticmethod
+    def _compute_wildcard_seed(uid, batch_counter, line_num, prompt_text):
+        """
+        Build a stable per-run seed for wildcard resolution without exposing
+        a dedicated UI seed widget.
+        """
+        base = f"{uid}|{batch_counter}|{line_num}|{prompt_text}"
+        digest = hashlib.sha256(base.encode("utf-8")).hexdigest()
+        return int(digest[:16], 16)
 
     # ── LoRA tag parsing + loading ───────────────────────────────────
 
@@ -241,44 +258,67 @@ class FNPromptFromFile:
     # ── Line selection ────────────────────────────────────────────────
 
     @staticmethod
-    def _pick_line(lines, mode, seed, uid="default"):
-        """
-        Pick a line index based on mode and seed.
+    def _unique_seed():
+        return time.time_ns() ^ secrets.randbits(64)
 
-        auto_cycle:  Advances one line per run (0, 1, 2, 0, 1, 2, ...).
-                     Resets to line 1 when a new batch is queued.
-        sequential:  seed % num_lines (seed-driven)
-        random:      Random(seed).randint(...)
-        ping_pong:   seed-based ping-pong oscillation
+    @staticmethod
+    def _get_state(uid):
+        if uid not in _line_state:
+            _line_state[uid] = {
+                "batch_counter": 0,
+                "line_counter": 0,
+                "random_list": [],
+                "rng": random.Random(),
+            }
+        return _line_state[uid]
+
+    @classmethod
+    def _pick_line(cls, lines, mode, uid="default", start=0, count=0, reset=False):
+        """
+        Pick a line index using the same stateful style as Butcher:
+          - count==0 (or reset=True): reset counters and start position
+          - increment/decrement/fixed use persistent line counter
+          - random uses per-node RNG reseeded on reset
+          - random no repetitions shuffles once per reset and walks that list
         """
         n = len(lines)
         if n == 0:
-            return 0, ""
+            return 0, "", 0
 
-        if mode == "auto_cycle":
-            if uid not in _auto_state:
-                _auto_state[uid] = {"counter": 0, "prev_remaining": 0}
-            st = _auto_state[uid]
-            idx = st["counter"] % n
-            st["counter"] += 1
-            print(f"[FrostzNeeko] 📄 Auto-cycle: line {idx + 1}/{n}")
-        elif mode == "sequential":
-            idx = seed % n
+        st = cls._get_state(uid)
+
+        if count == 0 or reset:
+            st["batch_counter"] = 0
+            st["line_counter"] = start
+            st["random_list"] = []
+            print(f"[FrostzNeeko] 🔄 Clear counter ({uid})")
+
+        st["batch_counter"] += 1
+
+        if mode == "random no repetitions":
+            if count == 0 or reset or len(st["random_list"]) != n:
+                st["rng"].seed(cls._unique_seed())
+                st["random_list"] = list(range(0, n))
+                st["rng"].shuffle(st["random_list"])
+            rnd = st["batch_counter"] % len(st["random_list"])
+            st["line_counter"] = st["random_list"][rnd]
         elif mode == "random":
-            rng = random.Random(seed)
-            idx = rng.randint(0, n - 1)
-        elif mode == "ping_pong":
-            # Ping-pong: 0,1,2,...,n-1,n-2,...,1,0,1,2,...
-            cycle = max(1, (n - 1) * 2)
-            pos = seed % cycle
-            if pos < n:
-                idx = pos
-            else:
-                idx = cycle - pos
-        else:
-            idx = seed % n
+            if count == 0 or reset:
+                st["rng"].seed(cls._unique_seed())
+            st["line_counter"] = st["rng"].randint(0, n - 1)
 
-        return idx, lines[idx]
+        st["line_counter"] = st["line_counter"] % n
+        idx = st["line_counter"]
+
+        if mode == "increment":
+            st["line_counter"] += 1
+        elif mode == "decrement":
+            st["line_counter"] -= 1
+            if st["line_counter"] < 0:
+                st["line_counter"] = n - 1
+        # fixed: keep current line counter unchanged
+
+        return idx, lines[idx], st["batch_counter"]
 
     # ── Main entry point ─────────────────────────────────────────────
 
@@ -286,9 +326,9 @@ class FNPromptFromFile:
         self,
         file_path,
         mode,
-        seed,
+        line_to_start_from,
+        count=0,
         reset=False,
-        control_after_generate="randomize",
         ckpt_name="none",
         model=None,
         clip=None,
@@ -313,34 +353,11 @@ class FNPromptFromFile:
                 "Connect MODEL + CLIP inputs or select a checkpoint."
             )
 
-        # 1. Handle auto_cycle batch detection ----------------------------
-        if mode == "auto_cycle":
-            uid = kwargs.get("unique_id", "default")
-            if uid not in _auto_state:
-                _auto_state[uid] = {"counter": 0, "prev_remaining": 0}
-            st = _auto_state[uid]
-
-            # Detect new batch via ComfyUI's prompt queue
-            try:
-                from server import PromptServer
-                remaining = PromptServer.instance.prompt_queue.get_tasks_remaining()
-            except Exception:
-                remaining = -1
-
-            if remaining >= 0:
-                if remaining >= st["prev_remaining"]:
-                    # Queue grew or same size → new batch → reset to line 1
-                    st["counter"] = 0
-                    print("[FrostzNeeko] 🔄 New batch detected — starting from line 1")
-                st["prev_remaining"] = remaining
-
-            # Manual reset override
-            if reset:
-                st["counter"] = 0
-
         # 2. Read lines -----------------------------------------------
         raw_prompt = ""
         line_num = 0
+        uid = kwargs.get("unique_id", "default")
+        batch_counter = 0
 
         if not os.path.isfile(file_path):
             print(f"[FrostzNeeko] ❌ File not found: {file_path}")
@@ -349,14 +366,24 @@ class FNPromptFromFile:
                 lines = [l.strip() for l in fh if l.strip()]
 
             if lines:
-                line_num, raw_prompt = self._pick_line(lines, mode, seed, uid=kwargs.get("unique_id", "default"))
-                if mode == "auto_cycle":
-                    print(f"[FrostzNeeko] 🔄 Auto-cycle: line {line_num + 1}/{len(lines)}")
+                line_num, raw_prompt, batch_counter = self._pick_line(
+                    lines,
+                    mode,
+                    uid=uid,
+                    start=line_to_start_from,
+                    count=count,
+                    reset=reset,
+                )
+                print(
+                    f"[FrostzNeeko] 📄 Batch {batch_counter} -> "
+                    f"Line {line_num}/{len(lines)} ({mode})"
+                )
 
         # 2. Wildcards -------------------------------------------------
         full = raw_prompt
         wc_dir = self._resolve_wildcard_dir(wildcard_dir)
-        full, wildcard_replacements = self.process_wildcards(full, wc_dir, seed)
+        wildcard_seed = self._compute_wildcard_seed(uid, batch_counter, line_num, full)
+        full, wildcard_replacements = self.process_wildcards(full, wc_dir, wildcard_seed)
 
         # 3. LoRAs -----------------------------------------------------
         #    Save base clip BEFORE LoRA patching for detailer output
