@@ -41,7 +41,7 @@ Ya sea para generación masiva para tu Patreon, armar una galería en Pixiv, o s
 ## ✨ Destacados
 
 - 🎨 **Tema cyan neón** — todos los nodos tienen un look dark teal personalizado que resalta
-- 📄 **Prompt From File** — lee prompts de `.txt`, auto-cicla entre ellos, resuelve wildcards, carga LoRAs inline
+- 📄 **Prompt From File** — lee prompts de `.txt` con modos de línea con estado, resuelve wildcards y carga LoRAs inline
 - ⚡ **Supreme KSampler** — latent vacío integrado, preview en vivo, upscaler y toggles de detailer en una bestia
 - 👁️ **Face Detailer en un nodo** — reemplaza 3+ nodos del Impact Pack con un solo nodo
 - 🔧 **Soporte BREAK y corchetes** — keyword `BREAK` y `[de-emphasis]` funcionan en todas partes
@@ -91,16 +91,17 @@ El cerebro de los workflows de generación masiva. Lee prompts de un archivo `.t
 
 | Característica | Descripción |
 |---|---|
-| **Selección de Línea** | `auto_cycle` (avanza cada run), `sequential` (basado en seed), `random`, `ping_pong` |
-| **Auto-Cycle** | Cada run = siguiente línea en orden. Nueva cola siempre empieza desde línea 1 |
+| **Selección de Línea** | `increment`, `decrement`, `random`, `random no repetitions`, `fixed` |
+| **Contador de Lote** | `count` oculto, alimentado por JS y reiniciado al enviar una nueva cola |
+| **Línea Inicial** | `line_to_start_from` define desde qué línea comienza la progresión |
 | **Wildcards** | Sintaxis `__tag__` — lee de una carpeta `wildcards/` |
 | **LoRAs Inline** | Tags `<lora:nombre:peso>` en tu prompt — cargadas y aplicadas automáticamente |
 | **Checkpoint** | Cargador de checkpoint integrado opcional — sin nodo separado |
 | **CLIP Skip** | Parámetro `clip_skip` integrado (predeterminado 1, usa 2 para modelos anime) |
 | **BREAK** | Divide el prompt en chunks de conditioning de 77 tokens |
-| **Detailer CLIP** | Salida extra `detailer_clip` — CLIP limpio sin parches de LoRA para Face Detailer |
+| **CLIP sin LoRA** | Salida extra `no_lora_clip` — CLIP limpio sin parches de LoRA |
 
-**Salidas:** `MODEL`, `CLIP`, `detailer_clip`, `VAE`, `CONDITIONING`, `processed_prompt`, `raw_prompt`, `line_number`
+**Salidas:** `MODEL`, `CLIP`, `no_lora_clip`, `VAE`, `CONDITIONING`, `processed_prompt`, `raw_prompt`, `line_number`
 
 ---
 

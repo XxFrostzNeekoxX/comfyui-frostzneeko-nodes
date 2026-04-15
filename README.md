@@ -41,7 +41,7 @@ Whether you're doing bulk generation for your Patreon, building a Pixiv gallery,
 ## ✨ Highlights
 
 - 🎨 **Cyan neon theme** — all nodes have a custom dark teal look that stands out
-- 📄 **Prompt From File** — reads prompts from `.txt`, auto-cycles through them, resolves wildcards, loads LoRAs inline
+- 📄 **Prompt From File** — reads prompts from `.txt` with stateful line modes, resolves wildcards, loads LoRAs inline
 - ⚡ **Supreme KSampler** — built-in empty latent, live preview, upscaler, and detailer toggle slots in one beast
 - 👁️ **One-node Face Detailer** — replaces 3+ Impact Pack nodes with a single node
 - 🔧 **BREAK & bracket support** — `BREAK` keyword and `[de-emphasis]` brackets work everywhere
@@ -91,16 +91,17 @@ The brain of bulk generation workflows. Reads prompts from a `.txt` file and han
 
 | Feature | Description |
 |---|---|
-| **Line Selection** | `auto_cycle` (advances each run), `sequential` (seed-based), `random`, `ping_pong` |
-| **Auto-Cycle** | Each run = next line in order. New queue always starts from line 1 |
+| **Line Selection** | `increment`, `decrement`, `random`, `random no repetitions`, `fixed` |
+| **Batch Counter** | Hidden `count` input is fed by frontend JS and resets on queue |
+| **Start Line** | `line_to_start_from` sets where batch progression begins |
 | **Wildcards** | `__tag__` syntax — reads from a `wildcards/` folder |
 | **Inline LoRAs** | `<lora:name:weight>` tags in your prompt — auto-loaded and applied |
 | **Checkpoint** | Optional built-in checkpoint loader — no separate node needed |
 | **CLIP Skip** | Built-in `clip_skip` parameter (default 1, set to 2 for anime models) |
 | **BREAK** | Splits prompt into separate 77-token conditioning chunks |
-| **Detailer CLIP** | Extra `detailer_clip` output — clean CLIP without LoRA patches for Face Detailer |
+| **No-LoRA CLIP** | Extra `no_lora_clip` output — clean CLIP without LoRA patches for dual-encode/detail workflows |
 
-**Outputs:** `MODEL`, `CLIP`, `detailer_clip`, `VAE`, `CONDITIONING`, `processed_prompt`, `raw_prompt`, `line_number`
+**Outputs:** `MODEL`, `CLIP`, `no_lora_clip`, `VAE`, `CONDITIONING`, `processed_prompt`, `raw_prompt`, `line_number`
 
 <details>
 <summary>💡 Prompt file format</summary>
@@ -199,6 +200,7 @@ Saves images with full control over format and naming.
 | **Formats** | PNG, JPEG, WebP |
 | **Quality** | Adjustable quality slider (1-100) |
 | **Naming** | Custom prefix + optional timestamp |
+| **Numbering Style** | `comfy_default` or `prefix_number` (`teto_001`) with configurable padding |
 | **Subfolder** | Custom output subfolder |
 | **Metadata** | Full workflow metadata embedded (PNG) |
 | **Preview** | Built-in preview of saved images |
@@ -269,15 +271,15 @@ Yes. The sampling and CLIP encoding logic is identical to ComfyUI's built-in nod
 </details>
 
 <details>
-<summary><b>What's the `detailer_clip` output on Prompt From File?</b></summary>
+<summary><b>What's the `no_lora_clip` output on Prompt From File?</b></summary>
 
 It's a clean CLIP model **without LoRA patches**. Some workflows encode the negative prompt with an unpatched CLIP for better results. Connect it to the `negative_clip` input on FN CLIP Dual Encode if you want this behavior.
 </details>
 
 <details>
-<summary><b>What's <code>auto_cycle</code> mode?</b></summary>
+<summary><b>How does line progression work in Prompt From File now?</b></summary>
 
-Every run in a batch uses the next line: run 1 = line 1, run 2 = line 2, run 3 = line 3, then loops back. When you start a **new queue** (cancel all and re-queue, or after a batch finishes), it always resets to **line 1**. If you cancel just one run mid-batch, the next queued run picks the next line normally.
+It uses stateful progression with `increment`, `decrement`, `random`, `random no repetitions`, and `fixed`. The hidden `count` input is auto-fed by frontend JS and resets when a new queue is submitted.
 </details>
 
 ---

@@ -41,7 +41,7 @@
 ## ✨ 亮点
 
 - 🎨 **青色霓虹主题** — 所有节点都有自定义深青色外观，在工作流中一目了然
-- 📄 **文件提示词** — 从 `.txt` 读取提示词，自动循环，解析通配符，内联加载 LoRA
+- 📄 **文件提示词** — 从 `.txt` 读取提示词，使用有状态行模式，解析通配符并内联加载 LoRA
 - ⚡ **Supreme KSampler** — 内置空白潜空间、实时预览、放大器和细节器开关，一个节点搞定一切
 - 👁️ **单节点面部细节器** — 用一个节点替代 3+ 个 Impact Pack 节点
 - 🔧 **BREAK 和方括号支持** — `BREAK` 关键词和 `[降权]` 方括号全局可用
@@ -91,16 +91,17 @@ pip install ultralytics
 
 | 功能 | 描述 |
 |---|---|
-| **行选择** | `auto_cycle`（每次运行推进），`sequential`（基于种子），`random`，`ping_pong` |
-| **自动循环** | 每次运行 = 按顺序下一行。新队列总是从第1行开始 |
+| **行选择** | `increment`、`decrement`、`random`、`random no repetitions`、`fixed` |
+| **批次计数** | 隐藏的 `count` 由前端 JS 自动提供，并在新队列时重置 |
+| **起始行** | `line_to_start_from` 用于设置从哪一行开始 |
 | **通配符** | `__tag__` 语法 — 从 `wildcards/` 文件夹读取 |
 | **内联 LoRA** | 提示词中的 `<lora:名称:权重>` 标签 — 自动加载和应用 |
 | **检查点** | 可选的内置检查点加载器 — 无需单独节点 |
 | **CLIP Skip** | 内置 `clip_skip` 参数（默认1，动漫模型设为2） |
 | **BREAK** | 将提示词分割为独立的77令牌条件块 |
-| **细节器 CLIP** | 额外的 `detailer_clip` 输出 — 无 LoRA 补丁的干净 CLIP |
+| **无 LoRA CLIP** | 额外的 `no_lora_clip` 输出 — 无 LoRA 补丁的干净 CLIP |
 
-**输出：** `MODEL`、`CLIP`、`detailer_clip`、`VAE`、`CONDITIONING`、`processed_prompt`、`raw_prompt`、`line_number`
+**输出：** `MODEL`、`CLIP`、`no_lora_clip`、`VAE`、`CONDITIONING`、`processed_prompt`、`raw_prompt`、`line_number`
 
 ---
 

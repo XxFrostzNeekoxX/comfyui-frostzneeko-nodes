@@ -41,7 +41,7 @@ Seja pra geração em massa pro seu Patreon, montar uma galeria no Pixiv, ou só
 ## ✨ Destaques
 
 - 🎨 **Tema cyan neon** — todos os nodes têm visual dark teal customizado que se destaca
-- 📄 **Prompt From File** — lê prompts de `.txt`, faz auto-cycle, resolve wildcards, carrega LoRAs inline
+- 📄 **Prompt From File** — lê prompts de `.txt` com modos de linha stateful, resolve wildcards e carrega LoRAs inline
 - ⚡ **Supreme KSampler** — latent vazio embutido, preview ao vivo, upscaler e toggles de detailer em um monstro só
 - 👁️ **Face Detailer em um node** — substitui 3+ nodes do Impact Pack em um único node
 - 🔧 **Suporte a BREAK & colchetes** — keyword `BREAK` e `[de-emphasis]` funcionam em todo lugar
@@ -91,16 +91,17 @@ O cérebro de workflows de geração em massa. Lê prompts de um arquivo `.txt` 
 
 | Recurso | Descrição |
 |---|---|
-| **Seleção de Linha** | `auto_cycle` (avança cada run), `sequential` (baseado na seed), `random`, `ping_pong` |
-| **Auto-Cycle** | Cada run = próxima linha em ordem. Nova fila sempre começa da linha 1 |
+| **Seleção de Linha** | `increment`, `decrement`, `random`, `random no repetitions`, `fixed` |
+| **Contador de Batch** | `count` fica oculto e é alimentado por JS, resetando em nova fila |
+| **Linha Inicial** | `line_to_start_from` define de onde começa a progressão |
 | **Wildcards** | Sintaxe `__tag__` — lê de uma pasta `wildcards/` |
 | **LoRAs Inline** | Tags `<lora:nome:peso>` no prompt — carregadas e aplicadas automaticamente |
 | **Checkpoint** | Loader de checkpoint embutido opcional — sem necessidade de node separado |
 | **CLIP Skip** | Parâmetro `clip_skip` embutido (padrão 1, use 2 para modelos anime) |
 | **BREAK** | Divide o prompt em chunks de conditioning de 77 tokens |
-| **Detailer CLIP** | Saída extra `detailer_clip` — CLIP limpo sem patches de LoRA para Face Detailer |
+| **No-LoRA CLIP** | Saída extra `no_lora_clip` — CLIP limpo sem patches de LoRA para dual-encode/detail |
 
-**Saídas:** `MODEL`, `CLIP`, `detailer_clip`, `VAE`, `CONDITIONING`, `processed_prompt`, `raw_prompt`, `line_number`
+**Saídas:** `MODEL`, `CLIP`, `no_lora_clip`, `VAE`, `CONDITIONING`, `processed_prompt`, `raw_prompt`, `line_number`
 
 <details>
 <summary>💡 Formato do arquivo de prompts</summary>
@@ -199,6 +200,7 @@ Salva imagens com controle total de formato e nomenclatura.
 | **Formatos** | PNG, JPEG, WebP |
 | **Qualidade** | Slider de qualidade ajustável (1-100) |
 | **Nomenclatura** | Prefixo customizado + timestamp opcional |
+| **Estilo de Numeração** | `comfy_default` ou `prefix_number` (`teto_001`) com padding configurável |
 | **Subpasta** | Subpasta de saída customizada |
 | **Metadata** | Metadata completa do workflow embutida (PNG) |
 | **Preview** | Preview embutido das imagens salvas |
@@ -243,9 +245,9 @@ Sim. A lógica de sampling e encoding CLIP é idêntica aos nodes nativos do Com
 </details>
 
 <details>
-<summary><b>O que é o modo <code>auto_cycle</code>?</b></summary>
+<summary><b>Como funciona a progressão de linhas no Prompt From File agora?</b></summary>
 
-Cada run em um batch usa a próxima linha: run 1 = linha 1, run 2 = linha 2, run 3 = linha 3, depois volta ao início. Quando você começa uma **nova fila** (cancela tudo e dá queue de novo, ou depois de um batch terminar), sempre reseta para a **linha 1**. Se cancelar apenas uma run no meio do batch, a próxima run pega a próxima linha normalmente.
+Agora ele usa progressão stateful com `increment`, `decrement`, `random`, `random no repetitions` e `fixed`. O `count` fica oculto e é alimentado automaticamente pelo JS, resetando em nova fila.
 </details>
 
 ---
