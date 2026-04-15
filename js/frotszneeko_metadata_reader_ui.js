@@ -64,6 +64,15 @@ app.registerExtension({
             const imageIndexWidget = this.widgets.find((w) => w.name === "image_index");
             const selectionModeWidget = this.widgets.find((w) => w.name === "selection_mode");
 
+            // Inline displays (read-only)
+            const selectedPathDisplay = this.addWidget("text", "selected_path", "", () => {});
+            selectedPathDisplay.options = { multiline: false, serialize: false };
+            selectedPathDisplay.inputEl?.setAttribute?.("readonly", "readonly");
+
+            const prettyDisplay = this.addWidget("text", "pretty_metadata_display", "", () => {});
+            prettyDisplay.options = { multiline: true, serialize: false };
+            prettyDisplay.inputEl?.setAttribute?.("readonly", "readonly");
+
             const prevBtn = this.addWidget("button", "⬅ Prev Image", null, () => {
                 if (selectionModeWidget) selectionModeWidget.value = "index";
                 if (imageIndexWidget) imageIndexWidget.value = Math.max(0, (imageIndexWidget.value || 0) - 1);
@@ -81,9 +90,25 @@ app.registerExtension({
             requestAnimationFrame(() => {
                 const sz = self.computeSize();
                 sz[0] = Math.max(sz[0], 420);
+                sz[1] = Math.max(sz[1], 700);
                 self.setSize(sz);
                 self.setDirtyCanvas(true, true);
             });
+        };
+
+        const origExecuted = nodeType.prototype.onExecuted;
+        nodeType.prototype.onExecuted = function (data) {
+            origExecuted?.apply(this, arguments);
+            if (!data || !this.widgets) return;
+            const pathW = this.widgets.find((w) => w.name === "selected_path");
+            const metaW = this.widgets.find((w) => w.name === "pretty_metadata_display");
+            if (pathW && Array.isArray(data.selected_image_path) && data.selected_image_path.length > 0) {
+                pathW.value = data.selected_image_path[0] || "";
+            }
+            if (metaW && Array.isArray(data.pretty_metadata) && data.pretty_metadata.length > 0) {
+                metaW.value = data.pretty_metadata[0] || "";
+            }
+            this.setDirtyCanvas(true, true);
         };
     },
 });

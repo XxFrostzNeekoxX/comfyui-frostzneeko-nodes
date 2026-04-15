@@ -3,11 +3,9 @@ FN Metadata Reader
 Read metadata from saved images and present a formatted text view.
 """
 
-import json
 import os
 
 import numpy as np
-import torch
 from PIL import Image
 
 import folder_paths
@@ -32,15 +30,8 @@ class FNMetadataReader:
             },
         }
 
-    RETURN_TYPES = ("STRING", "STRING", "IMAGE", "STRING", "INT", "INT")
-    RETURN_NAMES = (
-        "pretty_metadata",
-        "raw_metadata_json",
-        "image_preview",
-        "selected_image_path",
-        "selected_index",
-        "total_images",
-    )
+    RETURN_TYPES = ()
+    RETURN_NAMES = ()
     FUNCTION = "read_metadata"
     OUTPUT_NODE = True
     CATEGORY = "FrostzNeeko 🔹/Image"
@@ -72,13 +63,6 @@ class FNMetadataReader:
             return text[i : j + len(end)].strip()
         except Exception:
             return ""
-
-    @staticmethod
-    def _safe_json(value):
-        try:
-            return json.dumps(value, ensure_ascii=False, indent=2)
-        except Exception:
-            return str(value)
 
     def _save_ui_preview(self, pil_img, selected_path):
         arr = np.array(pil_img.convert("RGB"), dtype=np.uint8)
@@ -121,8 +105,7 @@ class FNMetadataReader:
         resolved = self._resolve_path(image_path, prefer_output_dir)
         if not resolved or not os.path.exists(resolved):
             msg = f"❌ File not found: {resolved or image_path}"
-            dummy = torch.zeros((1, 64, 64, 3), dtype=torch.float32)
-            return {"ui": {"text": [msg]}, "result": (msg, "{}", dummy, "", 0, 0)}
+            return {"ui": {"text": [msg], "pretty_metadata": [msg], "selected_image_path": [""], "selected_index": [0], "total_images": [0]}, "result": ()}
 
         selected_path = resolved
         candidates = []
@@ -130,13 +113,11 @@ class FNMetadataReader:
         if path_mode == "folder":
             if not os.path.isdir(resolved):
                 msg = f"❌ Expected a folder path but got: {resolved}"
-                dummy = torch.zeros((1, 64, 64, 3), dtype=torch.float32)
-                return {"ui": {"text": [msg]}, "result": (msg, "{}", dummy, "", 0, 0)}
+                return {"ui": {"text": [msg], "pretty_metadata": [msg], "selected_image_path": [""], "selected_index": [0], "total_images": [0]}, "result": ()}
             candidates = self._list_image_files(resolved)
             if not candidates:
                 msg = f"⚠️ No image files found in folder: {resolved}"
-                dummy = torch.zeros((1, 64, 64, 3), dtype=torch.float32)
-                return {"ui": {"text": [msg]}, "result": (msg, "{}", dummy, "", 0, 0)}
+                return {"ui": {"text": [msg], "pretty_metadata": [msg], "selected_image_path": [""], "selected_index": [0], "total_images": [0]}, "result": ()}
             if selection_mode == "index":
                 selected_idx = max(0, min(int(image_index), len(candidates) - 1))
                 selected_path = candidates[selected_idx]
@@ -153,8 +134,7 @@ class FNMetadataReader:
                 rgb = img.convert("RGB")
         except Exception as exc:
             msg = f"❌ Failed to open image metadata: {exc}"
-            dummy = torch.zeros((1, 64, 64, 3), dtype=torch.float32)
-            return {"ui": {"text": [msg]}, "result": (msg, "{}", dummy, "", 0, 0)}
+            return {"ui": {"text": [msg], "pretty_metadata": [msg], "selected_image_path": [""], "selected_index": [0], "total_images": [0]}, "result": ()}
 
         tail = self._extract_notepad_tail(selected_path)
         pretty_block = info.get("fn_pretty_metadata", "")
@@ -196,28 +176,16 @@ class FNMetadataReader:
             summary.append("🔧 Workflow metadata key found.")
 
         pretty_text = "\n".join(summary) if output_pretty_metadata else ""
-        preview_tensor = torch.from_numpy(np.array(rgb).astype(np.float32) / 255.0).unsqueeze(0)
         ui_images = self._save_ui_preview(rgb, selected_path)
-        raw_json = self._safe_json(
-            {
-                "path": selected_path,
-                "path_mode": path_mode,
-                "selection_mode": selection_mode,
-                "image_index": selected_idx,
-                "folder_candidates": candidates[:100],
-                "image_info": info,
-                "notepad_tail": tail,
-            }
-        )
         return {
-            "ui": {"text": [pretty_text or "🧾 Pretty metadata output disabled."], "images": ui_images},
-            "result": (
-                pretty_text,
-                raw_json,
-                preview_tensor,
-                selected_path,
-                int(selected_idx),
-                int(len(candidates)) if path_mode == "folder" else 1,
-            ),
+            "ui": {
+                "text": [pretty_text or "🧾 Pretty metadata output disabled."],
+                "images": ui_images,
+                "pretty_metadata": [pretty_text or ""],
+                "selected_image_path": [selected_path],
+                "selected_index": [int(selected_idx)],
+                "total_images": [int(len(candidates)) if path_mode == "folder" else 1],
+            },
+            "result": (),
         }
 
