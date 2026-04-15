@@ -227,7 +227,10 @@ class FNMetadataReader:
         model = "?"
         clip_skip = "?"
 
-        # 1) Pull seed/steps/cfg/sampler/scheduler from sampler-like nodes
+        # 1) Samplers first: positive/negative must come from the graph links (KSampler inputs),
+        #    not from iterating encode nodes. Encode nodes like PCTextEncode often appear *before*
+        #    the sampler in serialized prompt order; treating them as "fill positive if empty" would
+        #    wrongly assign the negative-only encode text to positive.
         for _, node in prompt_obj.items():
             if not isinstance(node, dict):
                 continue
@@ -260,11 +263,22 @@ class FNMetadataReader:
                 cs = inputs.get("stop_at_clip_layer")
                 if cs is not None and str(cs).strip():
                     clip_skip = str(cs).strip()
-            if ctype in ("CLIPTextEncode", "PCTextEncode", "FNClipDualEncode", "FNCLIPDualEncode"):
-                if not positive:
-                    positive = self._resolve_prompt_text_ref(prompt_obj, inputs.get("text", inputs.get("positive")))
-                if not negative:
-                    negative = self._resolve_prompt_text_ref(prompt_obj, inputs.get("negative"))
+
+        # 2) Fallback when there is no sampler (or links could not be resolved): CLIP / dual encode
+        #    only — not PCTextEncode, which is commonly wired only to the negative path.
+        if not positive or not negative:
+            for _, node in prompt_obj.items():
+                if not isinstance(node, dict):
+                    continue
+                ctype = node.get("class_type")
+                inputs = node.get("inputs") if isinstance(node.get("inputs"), dict) else {}
+                if ctype in ("CLIPTextEncode", "FNClipDualEncode", "FNCLIPDualEncode"):
+                    if not positive:
+                        positive = self._resolve_prompt_text_ref(
+                            prompt_obj, inputs.get("text", inputs.get("positive"))
+                        )
+                    if not negative:
+                        negative = self._resolve_prompt_text_ref(prompt_obj, inputs.get("negative"))
 
         return {
             "positive": positive.strip(),
