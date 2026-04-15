@@ -29,6 +29,18 @@ import comfy.samplers
 import comfy.utils
 import folder_paths
 
+# DifferentialDiffusion (optional, built into many ComfyUI installs)
+try:
+    import nodes_differential_diffusion as _nodes_dd
+except Exception:
+    _nodes_dd = None
+
+try:
+    # Some installs place it under comfy_extras
+    from comfy_extras import nodes_differential_diffusion as _nodes_dd_extras
+except Exception:
+    _nodes_dd_extras = None
+
 try:
     import cv2
 except ImportError:
@@ -123,6 +135,98 @@ def _tensor_to_pil(image_tensor):
         image_tensor = image_tensor.squeeze(0)
     arr = np.clip(255.0 * image_tensor.cpu().numpy(), 0, 255).astype(np.uint8)
     return Image.fromarray(arr)
+
+
+def _maybe_wrap_differential_diffusion(model, enable: bool):
+    """
+    Impact-style: when using soft noise masks and the model doesn't natively support
+    denoise_mask_function, wrap model with DifferentialDiffusion if available.
+    """
+    if not enable:
+        return model
+    try:
+        if hasattr(model, "model_options") and "denoise_mask_function" in model.model_options:
+            return model
+    except Exception:
+        pass
+
+    dd_mod = _nodes_dd_extras or _nodes_dd
+    if dd_mod is None:
+        return model
+    try:
+        return dd_mod.DifferentialDiffusion().execute(model)[0]
+    except Exception:
+        return model
+
+
+def _crop_condition_mask(conditioning, image_tensor, crop_region):
+    """
+    Crop any conditioning dict 'mask' entry into crop_region, matching Impact Pack's behavior.
+    This improves detail quality when masks are present in conditioning (rare, but supported).
+    """
+    if conditioning is None:
+        return conditioning
+
+    try:
+        img_h = int(image_tensor.shape[1])
+        img_w = int(image_tensor.shape[2])
+    except Exception:
+        return conditioning
+
+    x1, y1, x2, y2 = crop_region
+
+    out = []
+    for item in conditioning:
+        # Comfy CONDITIONING items are typically [cond_tensor, cond_dict]
+        try:
+            cond, meta = item
+        except Exception:
+            out.append(item)
+            continue
+
+        if not isinstance(meta, dict) or "mask" not in meta:
+            out.append(item)
+            continue
+
+        mask = meta.get("mask")
+        if mask is None or not torch.is_tensor(mask):
+            out.append(item)
+            continue
+
+        try:
+            # mask usually is [B,H,W] or [H,W]
+            if mask.ndim == 2:
+                mask_h, mask_w = int(mask.shape[0]), int(mask.shape[1])
+                b = None
+            else:
+                mask_h, mask_w = int(mask.shape[-2]), int(mask.shape[-1])
+                b = int(mask.shape[0])
+
+            sx = mask_w / float(img_w) if img_w > 0 else 1.0
+            sy = mask_h / float(img_h) if img_h > 0 else 1.0
+
+            mx1 = int(round(x1 * sx))
+            mx2 = int(round(x2 * sx))
+            my1 = int(round(y1 * sy))
+            my2 = int(round(y2 * sy))
+
+            mx1 = max(0, min(mask_w, mx1))
+            mx2 = max(0, min(mask_w, mx2))
+            my1 = max(0, min(mask_h, my1))
+            my2 = max(0, min(mask_h, my2))
+
+            if mask.ndim == 2:
+                cropped = mask[my1:my2, mx1:mx2]
+            else:
+                cropped = mask[:, my1:my2, mx1:mx2]
+
+            new_meta = dict(meta)
+            new_meta["mask"] = cropped
+            out.append((cond, new_meta))
+        except Exception:
+            out.append(item)
+
+    return out
 
 
 # ── YOLO inference (matching Impact Pack subcore.py) ─────────────────
@@ -535,6 +639,9 @@ def _enhance_detail(
         noise_mask = _tensor_gaussian_blur_mask(noise_mask, noise_mask_feather)
         noise_mask = noise_mask.squeeze(3)  # → [1, H, W] or [H, W]
 
+        # Impact-style: DifferentialDiffusion improves soft-mask transitions
+        model = _maybe_wrap_differential_diffusion(model, enable=(noise_mask_feather > 0))
+
     h = cropped_image.shape[1]
     w = cropped_image.shape[2]
 
@@ -748,12 +855,16 @@ def run_face_detail(
 
             # enhance_detail
             # bbox for upscale calculation: use the seg.bbox (YOLO xyxy)
+            # Crop conditioning masks (if present) into crop_region, Impact-style
+            pos_c = _crop_condition_mask(positive, single_image, seg.crop_region)
+            neg_c = _crop_condition_mask(negative, single_image, seg.crop_region)
+
             enhanced = _enhance_detail(
                 cropped_image, model, vae,
                 guide_size, guide_size_for_bbox, max_size,
                 seg.bbox, seed + i, steps, cfg,
                 sampler_name, scheduler,
-                positive, negative,
+                pos_c, neg_c,
                 denoise,
                 noise_mask_for_detail,
                 force_inpaint,
