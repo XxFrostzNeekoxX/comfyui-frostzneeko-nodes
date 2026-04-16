@@ -11,7 +11,6 @@ from .fn_ksampler_preview import FNKSamplerPreview
 from .fn_face_detailer import FNFaceDetailer
 from .fn_image_saver import FNImageSaver
 from .fn_metadata_reader import FNMetadataReader
-from .fn_random_prompt_generator import FNRandomPromptGenerator
 
 
 NODE_CLASS_MAPPINGS = {
@@ -23,7 +22,6 @@ NODE_CLASS_MAPPINGS = {
     "FNFaceDetailer": FNFaceDetailer,
     "FNImageSaver": FNImageSaver,
     "FNMetadataReader": FNMetadataReader,
-    "FNRandomPromptGenerator": FNRandomPromptGenerator,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -35,5 +33,4 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "FNFaceDetailer": "FN Face Detailer \U0001f539",
     "FNImageSaver": "FN Image Saver \U0001f539",
     "FNMetadataReader": "FN Metadata Reader \U0001f539",
-    "FNRandomPromptGenerator": "FN Random Prompt Generator \U0001f539",
 }
