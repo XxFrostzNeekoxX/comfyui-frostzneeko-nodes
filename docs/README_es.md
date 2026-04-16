@@ -166,6 +166,17 @@ Cargador de checkpoint limpio, consistente con el tema del pack.
 Guarda imágenes con control total de formato y nomenclatura. Soporta PNG, JPEG y WebP, con metadata bonita opcional (`save_pretty_metadata`).
 
 ---
+### FN Metadata Reader
+
+Lee metadata de imágenes guardadas y la presenta en un texto formateado.
+
+| Recurso | Descripción |
+|---|---|
+| **Selección de Imagen** | Leer el archivo más reciente o un índice específico (archivo/carpeta) |
+| **Metadata Bonita** | Opcional (`output_pretty_metadata`) |
+| **Preview + Texto** | Rellena `metadata_textbox` con el texto formateado |
+
+---
 
 ## 🔌 Workflow Típico
 

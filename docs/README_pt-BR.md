@@ -216,6 +216,17 @@ Salva imagens com controle total de formato e nomenclatura.
 | **Passthrough** | Saída `IMAGE` para encadeamento |
 
 ---
+### FN Metadata Reader
+
+Lê metadados de imagens salvas e mostra uma visão em texto formatado.
+
+| Recurso | Descrição |
+|---|---|
+| **Seleção de Imagem** | Ler o arquivo mais recente ou um índice específico (arquivo/pasta) |
+| **Metadata Bonita** | Opcional (`output_pretty_metadata`) |
+| **Preview + Texto** | Preenche `metadata_textbox` com o texto formatado |
+
+---
 
 ## 🔌 Workflow Típico
 

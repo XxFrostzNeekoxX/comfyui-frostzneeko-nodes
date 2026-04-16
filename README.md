@@ -234,6 +234,17 @@ Saves images with full control over format and naming.
 
 
 ---
+### FN Metadata Reader
+
+Reads metadata from saved images and presents a formatted text view (pretty metadata block, notepad tail, or normalized parameters).
+
+| Feature | Description |
+|---|---|
+| **Image Selection** | Read the latest file or a specific index from a file/folder |
+| **Pretty Metadata** | Optional `output_pretty_metadata` formatting |
+| **Preview + Text** | Fills `metadata_textbox` with the formatted metadata |
+
+---
 
 ## 🔌 Typical Workflow
 
