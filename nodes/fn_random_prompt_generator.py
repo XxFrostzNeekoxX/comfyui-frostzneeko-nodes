@@ -1,6 +1,6 @@
 """
-FN Random Prompt Generator — Danbooru tag pools (from gist-built JSON) + character list.
-Structured prompt with blank-line breaks. OUTPUT_NODE shows result in generated_prompt.
+FN Random Prompt Generator — ordered prompt: quality → subject → outfit → pose → expression
+→ (sex acts) → BREAK → (male / partner) → BREAK → background. Uses Danbooru pools JSON when present.
 """
 
 from __future__ import annotations
@@ -106,7 +106,7 @@ def _underscore_token(s: str) -> str:
     return s.strip().replace(" ", "_")
 
 
-def _join_section_unique(parts: list[str]) -> str:
+def _join_unique(parts: list[str]) -> str:
     seen: set[str] = set()
     out: list[str] = []
     for chunk in parts:
@@ -126,9 +126,7 @@ def _join_section_unique(parts: list[str]) -> str:
 
 def _pick(rng: random.Random, pool: list[str], fallback: list[str]) -> str:
     p = pool if pool else fallback
-    if not p:
-        return ""
-    return rng.choice(p)
+    return rng.choice(p) if p else ""
 
 
 def _pick_n(rng: random.Random, pool: list[str], fallback: list[str], n: int) -> list[str]:
@@ -167,6 +165,10 @@ class FNRandomPromptGenerator:
                     {"default": -1, "min": -1, "max": 0x7FFFFFFF, "step": 1},
                 ),
                 "include_quality_prefix": ("BOOLEAN", {"default": True}),
+                "use_clip_break": (
+                    "BOOLEAN",
+                    {"default": True},
+                ),
             },
             "optional": {
                 "exclude_line_substrings": (
@@ -198,9 +200,9 @@ class FNRandomPromptGenerator:
     OUTPUT_NODE = True
     CATEGORY = "FrostzNeeko 🔹/Prompt"
     DESCRIPTION = (
-        "Random Danbooru-style positive prompt using pools built from the community tag list (see "
-        "scripts/build_danbooru_pools.py). Sections separated by blank lines. "
-        "Hetero explicit adds faceless_male, bald, and optional penis-size tags."
+        "Ordered prompt: quality → 1girl/2girls + characters → clothing → pose → expression → "
+        "(sex / soft tags) → BREAK → (male partner, hetero only) → BREAK → background. "
+        "Disable use_clip_break for a single-line prompt."
     )
 
     @classmethod
@@ -211,6 +213,7 @@ class FNRandomPromptGenerator:
         girl_count,
         seed,
         include_quality_prefix,
+        use_clip_break,
         exclude_line_substrings="",
         extra_tags_append="",
         generated_prompt="",
@@ -226,6 +229,7 @@ class FNRandomPromptGenerator:
         girl_count,
         seed,
         include_quality_prefix,
+        use_clip_break,
         exclude_line_substrings="",
         extra_tags_append="",
         generated_prompt="",
@@ -256,105 +260,127 @@ class FNRandomPromptGenerator:
         n_girls = 2 if girl_count == "2girls" else 1
         chars = _pick_unique(rng, char_pool, n_girls)
 
-        section_lines: list[str] = []
-
-        # --- Quality ---
-        if include_quality_prefix:
-            q = _underscore_token(rng.choice(QUALITY_PREFIX))
-            section_lines.append(q)
-
-        # --- Subject (count + characters) ---
-        subject_tags = [girl_count] + list(chars)
-        section_lines.append(_join_section_unique(subject_tags))
-
         is_sfw = content_mode == "SFW"
         is_soft = content_mode == "NSFW soft"
         is_het = content_mode == "NSFW explicit (hetero)"
         is_yuri = content_mode == "NSFW explicit (yuri)"
 
+        # --- 1) Quality (optional, still first in order) ---
+        quality_str = ""
+        if include_quality_prefix:
+            quality_str = _underscore_token(rng.choice(QUALITY_PREFIX))
+
+        # --- 2–4) Clothing / pose / expression pools by mode ---
         if is_sfw:
-            section_lines.append(
-                _join_section_unique(
-                    [
-                        _pick(rng, pools["clothing"], CLOTHING_SFW),
-                        _pick(rng, pools["pose"], POSE_ACTION_SFW),
-                        _pick(rng, pools["expression"], EXPRESSION_SFW),
-                        _pick(rng, pools["background"], BACKGROUND_SFW),
-                    ]
-                )
-            )
-            if n_girls == 2 and rng.random() < 0.45:
-                section_lines.append(_join_section_unique([rng.choice(["holding_hands", "looking_at_another", "hugging", "yuri"])]))
-
+            clothing = _pick(rng, pools["clothing"], CLOTHING_SFW)
+            pose = _pick(rng, pools["pose"], POSE_ACTION_SFW)
+            expression = _pick(rng, pools["expression"], EXPRESSION_SFW)
+            soft_bits: list[str] = []
         elif is_soft:
-            section_lines.append(
-                _join_section_unique(
-                    [
-                        _pick(rng, pools["nsfw_soft"], CLOTHING_NSFW_SOFT),
-                        _pick(rng, pools["pose"], POSE_ACTION_NSFW_SOFT),
-                        _pick(rng, pools["expression"], EXPRESSION_NSFW_SOFT),
-                        _pick(rng, pools["background"], BACKGROUND_NSFW),
-                    ]
-                )
-            )
-            if n_girls == 2:
-                section_lines.append(_join_section_unique([rng.choice(["yuri", "looking_at_another", "blush", "symmetrical_docking"])]))
-
+            clothing = _pick(rng, pools["clothing"], CLOTHING_SFW + CLOTHING_NSFW_SOFT)
+            pose = _pick(rng, pools["pose"], POSE_ACTION_NSFW_SOFT + POSE_ACTION_SFW)
+            expression = _pick(rng, pools["expression"], EXPRESSION_NSFW_SOFT + EXPRESSION_SFW)
+            s1 = _pick(rng, pools["nsfw_soft"], CLOTHING_NSFW_SOFT)
+            soft_bits = [s1] if s1 else []
         elif is_yuri:
-            section_lines.append(
-                _join_section_unique(
-                    [
-                        _pick(rng, pools["nsfw_soft"], CLOTHING_NSFW_SOFT),
-                        _pick(rng, pools["clothing"], CLOTHING_NSFW_SOFT + CLOTHING_SFW),
-                        _pick(rng, pools["pose"], POSE_ACTION_NSFW_SOFT + POSE_ACTION_SFW),
-                        _pick(rng, pools["expression"], EXPRESSION_NSFW_SOFT + EXPRESSION_SFW),
-                        _pick(rng, pools["background"], BACKGROUND_NSFW),
-                    ]
-                )
-            )
-            ypool = pools["explicit_yuri"] or list(EXPLICIT_YURI)
-            yuri_acts = ["yuri"] + _pick_n(rng, pools["explicit_yuri"], list(EXPLICIT_YURI), min(3, len(ypool)))
-            section_lines.append(_join_section_unique(yuri_acts))
-
+            clothing = _pick(rng, pools["clothing"], CLOTHING_NSFW_SOFT + CLOTHING_SFW)
+            pose = _pick(rng, pools["pose"], POSE_ACTION_NSFW_SOFT + POSE_ACTION_SFW)
+            expression = _pick(rng, pools["expression"], EXPRESSION_NSFW_SOFT + EXPRESSION_SFW)
+            soft_bits = []
+            s1 = _pick(rng, pools["nsfw_soft"], CLOTHING_NSFW_SOFT)
+            if s1:
+                soft_bits.append(s1)
         else:
-            # NSFW explicit hetero
-            section_lines.append(
-                _join_section_unique(
-                    [
-                        _pick(rng, pools["nsfw_soft"], CLOTHING_NSFW_SOFT),
-                        _pick(rng, pools["clothing"], CLOTHING_NSFW_SOFT + CLOTHING_SFW),
-                        _pick(rng, pools["pose"], POSE_ACTION_NSFW_SOFT + POSE_ACTION_SFW),
-                        _pick(rng, pools["expression"], EXPRESSION_NSFW_SOFT + EXPRESSION_SFW),
-                        _pick(rng, pools["background"], BACKGROUND_NSFW),
-                    ]
-                )
-            )
-            male_line = ["faceless_male", "bald", "hetero"]
-            if rng.random() < 0.85:
-                male_line.append(rng.choice(["large_penis", "small_penis", "huge_penis"]))
-            section_lines.append(_join_section_unique(male_line))
+            clothing = _pick(rng, pools["clothing"], CLOTHING_NSFW_SOFT + CLOTHING_SFW)
+            pose = _pick(rng, pools["pose"], POSE_ACTION_NSFW_SOFT + POSE_ACTION_SFW)
+            expression = _pick(rng, pools["expression"], EXPRESSION_NSFW_SOFT + EXPRESSION_SFW)
+            soft_bits = []
+            s1 = _pick(rng, pools["nsfw_soft"], CLOTHING_NSFW_SOFT)
+            if s1:
+                soft_bits.append(s1)
 
+        # --- 5) Couple / interaction (non-explicit) ---
+        couple_tags: list[str] = []
+        if is_sfw and n_girls == 2 and rng.random() < 0.45:
+            couple_tags.append(rng.choice(["holding_hands", "looking_at_another", "hugging", "yuri"]))
+        if is_soft and n_girls == 2 and rng.random() < 0.55:
+            couple_tags.append(rng.choice(["yuri", "looking_at_another", "blush", "symmetrical_docking"]))
+
+        # --- 6) Sex acts (explicit only, girl-side / scene) ---
+        sex_tags: list[str] = []
+        partnered_het = False
+        if is_yuri:
+            ypool = pools["explicit_yuri"] or list(EXPLICIT_YURI)
+            sex_tags = ["yuri"] + _pick_n(
+                rng,
+                pools["explicit_yuri"],
+                list(EXPLICIT_YURI),
+                min(3, max(1, len(ypool))),
+            )
+        elif is_het:
             if n_girls == 2:
                 hpool = pools["explicit_hetero"] or list(EXPLICIT_PARTNERED_MM)
-                acts = _pick_n(
+                sex_tags = _pick_n(
                     rng,
                     pools["explicit_hetero"],
                     list(EXPLICIT_PARTNERED_MM),
                     min(3, max(1, len(hpool))),
                 )
-                section_lines.append(_join_section_unique(acts))
+                partnered_het = bool(sex_tags)
             else:
                 if rng.random() < 0.55:
-                    act = _pick(rng, pools["explicit_hetero"], EXPLICIT_PARTNERED_MM)
-                    section_lines.append(_join_section_unique([act] if act else []))
+                    act = _pick(rng, pools["explicit_hetero"], list(EXPLICIT_PARTNERED_MM))
+                    if act:
+                        sex_tags = [act]
+                    partnered_het = bool(sex_tags)
                 else:
-                    solo = _pick_n(rng, pools["explicit_solo"], EXPLICIT_SOLO, 2)
-                    section_lines.append(_join_section_unique(solo))
+                    sex_tags = _pick_n(rng, pools["explicit_solo"], list(EXPLICIT_SOLO), 2)
 
+        # --- Assemble line 1: quality → count → names → clothing → pose → expression → soft → couple → sex ---
+        line1_parts: list[str] = []
+        if quality_str:
+            line1_parts.append(quality_str)
+        line1_parts.append(girl_count)
+        line1_parts.extend(chars)
+        if clothing:
+            line1_parts.append(clothing)
+        if pose:
+            line1_parts.append(pose)
+        if expression:
+            line1_parts.append(expression)
+        line1_parts.extend(soft_bits)
+        line1_parts.extend(couple_tags)
+        line1_parts.extend(sex_tags)
         if extra_tags_append.strip():
-            section_lines.append(_join_section_unique([extra_tags_append.strip()]))
+            line1_parts.append(extra_tags_append.strip())
 
-        prompt = "\n\n".join(line for line in section_lines if line.strip())
+        line1 = _join_unique(line1_parts)
+
+        # --- Background: 2–4 tags for a coherent scene (always last segment) ---
+        bg_n = rng.randint(2, 4)
+        fallback_bg = BACKGROUND_SFW if is_sfw else BACKGROUND_NSFW
+        bg_tags = _pick_n(rng, pools["background"], fallback_bg, bg_n)
+        bg_line = _join_unique(bg_tags)
+
+        brk = "BREAK" if use_clip_break else ""
+
+        # --- Male / partner line (hetero + partnered only) ---
+        male_line = ""
+        if is_het and partnered_het:
+            male_parts = ["faceless_male", "bald", "hetero"]
+            if rng.random() < 0.85:
+                male_parts.append(rng.choice(["large_penis", "small_penis", "huge_penis"]))
+            if rng.random() < 0.35:
+                male_parts.append(rng.choice(["muscular_male", "toned_male", "barrel_chest"]))
+            male_line = _join_unique(male_parts)
+
+        if use_clip_break:
+            if male_line:
+                prompt = "\n".join([line1, brk, male_line, brk, bg_line])
+            else:
+                prompt = "\n".join([line1, brk, bg_line])
+        else:
+            prompt = _join_unique([line1, male_line, bg_line])
 
         return {
             "ui": {"generated_prompt": (prompt,)},
