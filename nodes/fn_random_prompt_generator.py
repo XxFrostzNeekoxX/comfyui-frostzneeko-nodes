@@ -1,6 +1,6 @@
 """
-FN Random Prompt Generator — Danbooru-style tag pools + optional character list (.txt).
-Character file: one entry per line as `label, danbooru_tag` (tag = text after the first comma).
+FN Random Prompt Generator — Danbooru tag pools (from gist-built JSON) + character list.
+Structured prompt with blank-line breaks. OUTPUT_NODE shows result in generated_prompt.
 """
 
 from __future__ import annotations
@@ -11,6 +11,7 @@ import time
 
 import folder_paths
 
+from .fn_danbooru_pools import pool_or_fallback
 from .fn_random_prompt_data import (
     BACKGROUND_NSFW,
     BACKGROUND_SFW,
@@ -101,12 +102,11 @@ def _pick_unique(rng: random.Random, pool: list[str], n: int) -> list[str]:
     return out[:n]
 
 
-def _underscore_phrase(s: str) -> str:
-    """Turn comma-separated phrases into Danbooru-style tokens (spaces -> underscores)."""
-    return ", ".join(p.strip().replace(" ", "_") for p in s.split(",") if p.strip())
+def _underscore_token(s: str) -> str:
+    return s.strip().replace(" ", "_")
 
 
-def _join_prompt(parts: list[str]) -> str:
+def _join_section_unique(parts: list[str]) -> str:
     seen: set[str] = set()
     out: list[str] = []
     for chunk in parts:
@@ -116,12 +116,27 @@ def _join_prompt(parts: list[str]) -> str:
             s = t.strip()
             if not s:
                 continue
-            key = s.lower()
-            if key in seen:
+            k = s.lower()
+            if k in seen:
                 continue
-            seen.add(key)
+            seen.add(k)
             out.append(s)
     return ", ".join(out)
+
+
+def _pick(rng: random.Random, pool: list[str], fallback: list[str]) -> str:
+    p = pool if pool else fallback
+    if not p:
+        return ""
+    return rng.choice(p)
+
+
+def _pick_n(rng: random.Random, pool: list[str], fallback: list[str], n: int) -> list[str]:
+    p = pool if pool else fallback
+    if not p or n <= 0:
+        return []
+    n = min(n, len(p))
+    return rng.sample(p, n)
 
 
 class FNRandomPromptGenerator:
@@ -138,7 +153,12 @@ class FNRandomPromptGenerator:
                     },
                 ),
                 "content_mode": (
-                    ["SFW", "NSFW soft", "NSFW explicit"],
+                    [
+                        "SFW",
+                        "NSFW soft",
+                        "NSFW explicit (hetero)",
+                        "NSFW explicit (yuri)",
+                    ],
                     {"default": "SFW"},
                 ),
                 "girl_count": (["1girl", "2girls"], {"default": "1girl"}),
@@ -161,7 +181,6 @@ class FNRandomPromptGenerator:
                     "STRING",
                     {"default": "", "multiline": False},
                 ),
-                # Display-only — filled from execution (same pattern as FN Prompt From File)
                 "generated_prompt": (
                     "STRING",
                     {
@@ -179,9 +198,9 @@ class FNRandomPromptGenerator:
     OUTPUT_NODE = True
     CATEGORY = "FrostzNeeko 🔹/Prompt"
     DESCRIPTION = (
-        "Random Danbooru-style positive prompt from curated pools. "
-        "Leave character_list_path empty to use the bundled list of 300 curated female adult-presenting tags. "
-        "Or set a path to a label,tag file. Edit scripts/write_300_female_adult_tags.py to change the 300."
+        "Random Danbooru-style positive prompt using pools built from the community tag list (see "
+        "scripts/build_danbooru_pools.py). Sections separated by blank lines. "
+        "Hetero explicit adds faceless_male, bald, and optional penis-size tags."
     )
 
     @classmethod
@@ -194,7 +213,7 @@ class FNRandomPromptGenerator:
         include_quality_prefix,
         exclude_line_substrings="",
         extra_tags_append="",
-        generated_prompt="",  # display-only; ignored for cache key
+        generated_prompt="",
     ):
         if int(seed) < 0:
             return time.time_ns()
@@ -213,6 +232,17 @@ class FNRandomPromptGenerator:
     ):
         rng = random.Random(int(seed)) if int(seed) >= 0 else random.Random()
 
+        pools = {
+            "clothing": pool_or_fallback("clothing", CLOTHING_SFW + CLOTHING_NSFW_SOFT),
+            "pose": pool_or_fallback("pose", POSE_ACTION_SFW + POSE_ACTION_NSFW_SOFT),
+            "expression": pool_or_fallback("expression", EXPRESSION_SFW + EXPRESSION_NSFW_SOFT),
+            "background": pool_or_fallback("background", BACKGROUND_SFW + BACKGROUND_NSFW),
+            "nsfw_soft": pool_or_fallback("nsfw_soft", CLOTHING_NSFW_SOFT),
+            "explicit_hetero": pool_or_fallback("explicit_hetero", EXPLICIT_PARTNERED_MM),
+            "explicit_yuri": pool_or_fallback("explicit_yuri", list(EXPLICIT_YURI) + list(EXPLICIT_YURI_EXTRA)),
+            "explicit_solo": pool_or_fallback("explicit_solo", EXPLICIT_SOLO),
+        }
+
         excl = [s.strip() for s in exclude_line_substrings.split(",") if s.strip()]
         resolved = _resolve_character_file(character_list_path)
         if not resolved:
@@ -223,58 +253,109 @@ class FNRandomPromptGenerator:
         if not char_pool:
             char_pool = list(FALLBACK_CHARACTER_TAGS)
 
-        parts: list[str] = []
-
-        if include_quality_prefix:
-            parts.append(_underscore_phrase(rng.choice(QUALITY_PREFIX)))
-
-        parts.append(girl_count)
-
         n_girls = 2 if girl_count == "2girls" else 1
         chars = _pick_unique(rng, char_pool, n_girls)
-        for c in chars:
-            parts.append(c)
 
-        if content_mode == "SFW":
-            parts.append(_underscore_phrase(rng.choice(CLOTHING_SFW)))
-            parts.append(_underscore_phrase(rng.choice(POSE_ACTION_SFW)))
-            parts.append(_underscore_phrase(rng.choice(EXPRESSION_SFW)))
-            parts.append(_underscore_phrase(rng.choice(BACKGROUND_SFW)))
+        section_lines: list[str] = []
+
+        # --- Quality ---
+        if include_quality_prefix:
+            q = _underscore_token(rng.choice(QUALITY_PREFIX))
+            section_lines.append(q)
+
+        # --- Subject (count + characters) ---
+        subject_tags = [girl_count] + list(chars)
+        section_lines.append(_join_section_unique(subject_tags))
+
+        is_sfw = content_mode == "SFW"
+        is_soft = content_mode == "NSFW soft"
+        is_het = content_mode == "NSFW explicit (hetero)"
+        is_yuri = content_mode == "NSFW explicit (yuri)"
+
+        if is_sfw:
+            section_lines.append(
+                _join_section_unique(
+                    [
+                        _pick(rng, pools["clothing"], CLOTHING_SFW),
+                        _pick(rng, pools["pose"], POSE_ACTION_SFW),
+                        _pick(rng, pools["expression"], EXPRESSION_SFW),
+                        _pick(rng, pools["background"], BACKGROUND_SFW),
+                    ]
+                )
+            )
             if n_girls == 2 and rng.random() < 0.45:
-                parts.append(_underscore_phrase(rng.choice(["holding hands", "looking at another", "hugging", "yuri"])))
-        elif content_mode == "NSFW soft":
-            parts.append(_underscore_phrase(rng.choice(CLOTHING_NSFW_SOFT)))
-            parts.append(_underscore_phrase(rng.choice(POSE_ACTION_NSFW_SOFT)))
-            parts.append(_underscore_phrase(rng.choice(EXPRESSION_NSFW_SOFT)))
-            parts.append(_underscore_phrase(rng.choice(BACKGROUND_NSFW)))
+                section_lines.append(_join_section_unique([rng.choice(["holding_hands", "looking_at_another", "hugging", "yuri"])]))
+
+        elif is_soft:
+            section_lines.append(
+                _join_section_unique(
+                    [
+                        _pick(rng, pools["nsfw_soft"], CLOTHING_NSFW_SOFT),
+                        _pick(rng, pools["pose"], POSE_ACTION_NSFW_SOFT),
+                        _pick(rng, pools["expression"], EXPRESSION_NSFW_SOFT),
+                        _pick(rng, pools["background"], BACKGROUND_NSFW),
+                    ]
+                )
+            )
             if n_girls == 2:
-                parts.append(_underscore_phrase(rng.choice(["yuri", "looking at another", "blush", "symmetrical docking"])))
+                section_lines.append(_join_section_unique([rng.choice(["yuri", "looking_at_another", "blush", "symmetrical_docking"])]))
+
+        elif is_yuri:
+            section_lines.append(
+                _join_section_unique(
+                    [
+                        _pick(rng, pools["nsfw_soft"], CLOTHING_NSFW_SOFT),
+                        _pick(rng, pools["clothing"], CLOTHING_NSFW_SOFT + CLOTHING_SFW),
+                        _pick(rng, pools["pose"], POSE_ACTION_NSFW_SOFT + POSE_ACTION_SFW),
+                        _pick(rng, pools["expression"], EXPRESSION_NSFW_SOFT + EXPRESSION_SFW),
+                        _pick(rng, pools["background"], BACKGROUND_NSFW),
+                    ]
+                )
+            )
+            ypool = pools["explicit_yuri"] or list(EXPLICIT_YURI)
+            yuri_acts = ["yuri"] + _pick_n(rng, pools["explicit_yuri"], list(EXPLICIT_YURI), min(3, len(ypool)))
+            section_lines.append(_join_section_unique(yuri_acts))
+
         else:
-            # NSFW explicit
-            parts.append(_underscore_phrase(rng.choice(CLOTHING_NSFW_SOFT + CLOTHING_SFW)))
-            parts.append(_underscore_phrase(rng.choice(POSE_ACTION_NSFW_SOFT + POSE_ACTION_SFW)))
-            parts.append(_underscore_phrase(rng.choice(EXPRESSION_NSFW_SOFT + EXPRESSION_SFW)))
-            parts.append(_underscore_phrase(rng.choice(BACKGROUND_NSFW)))
+            # NSFW explicit hetero
+            section_lines.append(
+                _join_section_unique(
+                    [
+                        _pick(rng, pools["nsfw_soft"], CLOTHING_NSFW_SOFT),
+                        _pick(rng, pools["clothing"], CLOTHING_NSFW_SOFT + CLOTHING_SFW),
+                        _pick(rng, pools["pose"], POSE_ACTION_NSFW_SOFT + POSE_ACTION_SFW),
+                        _pick(rng, pools["expression"], EXPRESSION_NSFW_SOFT + EXPRESSION_SFW),
+                        _pick(rng, pools["background"], BACKGROUND_NSFW),
+                    ]
+                )
+            )
+            male_line = ["faceless_male", "bald", "hetero"]
+            if rng.random() < 0.85:
+                male_line.append(rng.choice(["large_penis", "small_penis", "huge_penis"]))
+            section_lines.append(_join_section_unique(male_line))
+
             if n_girls == 2:
-                yuri_pool = list(EXPLICIT_YURI)
-                if rng.random() < 0.35:
-                    yuri_pool.extend(EXPLICIT_YURI_EXTRA)
-                k = min(3, len(yuri_pool))
-                parts.extend(_underscore_phrase(t) for t in rng.sample(yuri_pool, k))
+                hpool = pools["explicit_hetero"] or list(EXPLICIT_PARTNERED_MM)
+                acts = _pick_n(
+                    rng,
+                    pools["explicit_hetero"],
+                    list(EXPLICIT_PARTNERED_MM),
+                    min(3, max(1, len(hpool))),
+                )
+                section_lines.append(_join_section_unique(acts))
             else:
                 if rng.random() < 0.55:
-                    parts.append(_underscore_phrase(rng.choice(EXPLICIT_PARTNERED_MM)))
-                    if rng.random() < 0.4:
-                        parts.append("hetero")
-                    if rng.random() < 0.25:
-                        parts.append(_underscore_phrase("faceless male"))
+                    act = _pick(rng, pools["explicit_hetero"], EXPLICIT_PARTNERED_MM)
+                    section_lines.append(_join_section_unique([act] if act else []))
                 else:
-                    parts.append(_underscore_phrase(rng.choice(EXPLICIT_SOLO)))
+                    solo = _pick_n(rng, pools["explicit_solo"], EXPLICIT_SOLO, 2)
+                    section_lines.append(_join_section_unique(solo))
 
         if extra_tags_append.strip():
-            parts.append(extra_tags_append.strip())
+            section_lines.append(_join_section_unique([extra_tags_append.strip()]))
 
-        prompt = _join_prompt(parts)
+        prompt = "\n\n".join(line for line in section_lines if line.strip())
+
         return {
             "ui": {"generated_prompt": (prompt,)},
             "result": (prompt,),

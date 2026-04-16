@@ -1,3 +1,5 @@
+import { app } from "../../scripts/app.js";
+
 /*
  * FrostzNeeko — Random Prompt Generator: updates generated_prompt textbox after run (no mascot).
  */
@@ -12,9 +14,14 @@ app.registerExtension({
         nodeType.prototype.onExecuted = function (data) {
             origExecuted?.apply(this, arguments);
             if (!data) return;
-            if (data.generated_prompt?.length > 0) {
+            const gp = data.generated_prompt;
+            const text = Array.isArray(gp) ? (gp[0] ?? "") : typeof gp === "string" ? gp : "";
+            if (text) {
                 const w = this.widgets?.find((w) => w.name === "generated_prompt");
-                if (w) w.value = data.generated_prompt[0] || "";
+                if (w) {
+                    w.value = text;
+                    if (typeof w.callback === "function") w.callback(text);
+                }
             }
             this.setDirtyCanvas(true, true);
         };
