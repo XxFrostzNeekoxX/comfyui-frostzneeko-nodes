@@ -4,10 +4,47 @@ Tags follow https://danbooru.donmai.us/wiki_pages/help:tagging conventions (unde
 Expand or edit this file to tune generations — the full Danbooru corpus is not bundled.
 """
 
+# Comma-separated, no space after commas (CLIP / user preference). Weights optional.
 QUALITY_PREFIX = [
-    "masterpiece, best quality, newest, absurdres, highly detailed",
-    "masterpiece, best quality, very aesthetic, absurdres, detailed eyes, detailed skin",
-    "masterpiece, best quality, newest, highres, intricate details, sharp focus",
+    "masterpiece:1.2,best quality,highly detailed:1.1",
+    "masterpiece:1.2,best quality,newest,absurdres,highly detailed:1.1",
+    "masterpiece:1.2,best quality,very aesthetic,absurdres,detailed eyes,detailed skin",
+    "masterpiece:1.2,best quality,newest,highres,intricate details,sharp focus",
+]
+
+EYE_COLOR_EXTRA = [
+    "amber eyes",
+    "blue eyes",
+    "green eyes",
+    "red eyes",
+    "yellow eyes",
+    "purple eyes",
+    "pink eyes",
+    "heterochromia",
+    "glowing eyes",
+]
+
+BODY_EXTRA = [
+    "huge breasts",
+    "large breasts",
+    "medium breasts",
+    "pregnant",
+    "thick thighs",
+    "wide hips",
+    "slim waist",
+    "mole under eye",
+    "freckles",
+]
+
+# Appended after background tags when non-empty.
+CAMERA_FRAMING = [
+    "front view",
+    "low angle",
+    "from above",
+    "cowboy shot",
+    "dutch angle",
+    "from side",
+    "three-quarter view",
 ]
 
 # SFW outfits / states
@@ -237,6 +274,249 @@ BACKGROUND_NSFW = [
     "mirror",
     "simple background",
     "dark background",
+]
+
+# --- Coherent NSFW scenario bundles (one RNG pick = matching pose + acts + flavor) ---
+# Generator picks one scenario, chooses 1 pose from "poses", includes all "core", plus 0–2 from "optional".
+
+NSFW_HETERO_PARTNERED_SCENARIOS = [
+    {
+        "poses": ["kneeling", "on knees", "squatting"],
+        "core": ["fellatio", "licking penis", "oral"],
+        "optional": ["saliva trail", "hands on another's thighs", "eye contact", "trembling", "blush"],
+    },
+    {
+        "poses": ["lying", "lying on back", "on bed"],
+        "core": ["irrumatio", "deepthroat", "fellatio"],
+        "optional": ["tears", "saliva", "hands on head", "gagging"],
+    },
+    {
+        "poses": ["straddling", "sitting", "girl on top"],
+        "core": ["paizuri", "breasts squeeze"],
+        "optional": ["licking penis", "saliva", "cleavage", "nipples"],
+    },
+    {
+        "poses": ["lying", "lying on back", "on bed", "spread legs"],
+        "core": ["missionary", "sex", "vaginal"],
+        "optional": ["leg lock", "hands intertwined", "pillow grab", "sweat"],
+    },
+    {
+        "poses": ["straddling", "cowgirl position", "girl on top"],
+        "core": ["cowgirl position", "sex", "vaginal"],
+        "optional": ["bouncing breasts", "hands on chest", "hip grab", "grinding"],
+    },
+    {
+        "poses": ["all fours", "on all fours", "top-down bottom-up"],
+        "core": ["doggystyle", "sex", "from behind"],
+        "optional": ["ass grab", "hip grab", "hair pull", "looking back"],
+    },
+    {
+        "poses": ["standing", "against wall", "leg up"],
+        "core": ["standing sex", "against wall", "sex"],
+        "optional": ["leg lock", "lifted", "pinned", "kiss"],
+    },
+    {
+        "poses": ["sitting", "on chair", "spread legs"],
+        "core": ["handjob", "penis", "erection"],
+        "optional": ["precum", "blush", "looking at penis", "two-handed handjob"],
+    },
+    {
+        "poses": ["lying", "sixty-nine", "on side"],
+        "core": ["sixty-nine", "cunnilingus", "fellatio"],
+        "optional": ["mutual oral", "spread legs", "trembling"],
+    },
+    {
+        "poses": ["sitting on face", "facesitting", "spread legs"],
+        "core": ["facesitting", "cunnilingus", "girl on top"],
+        "optional": ["thigh grab", "wet pussy", "trembling", "grab sheets"],
+    },
+    {
+        "poses": ["all fours", "on all fours", "ass up"],
+        "core": ["anal sex", "doggystyle", "sex"],
+        "optional": ["spread anus", "painful", "tears", "hip grab"],
+    },
+    {
+        "poses": ["lying", "lying on stomach", "on bed"],
+        "core": ["prone bone", "sex", "from behind"],
+        "optional": ["ass grab", "pinned", "sheets grab"],
+    },
+]
+
+NSFW_SOLO_SCENARIOS = [
+    {
+        "poses": ["sitting", "spread legs", "on bed"],
+        "core": ["masturbation", "fingering"],
+        "optional": ["wet pussy", "blush", "trembling", "pussy juice"],
+    },
+    {
+        "poses": ["lying", "lying on back", "on bed"],
+        "core": ["masturbation", "breast grab", "nipple tweak"],
+        "optional": ["spread legs", "arched back", "sweat"],
+    },
+    {
+        "poses": ["kneeling", "on bed"],
+        "core": ["dildo", "object insertion", "masturbation"],
+        "optional": ["saliva", "blush", "trembling"],
+    },
+    {
+        "poses": ["squatting", "on bed", "spread legs"],
+        "core": ["spread pussy", "fingering"],
+        "optional": ["mirror", "embarrassed", "wet pussy"],
+    },
+    {
+        "poses": ["lying", "on stomach"],
+        "core": ["pillow humping", "grinding"],
+        "optional": ["blush", "grab pillow", "sweat"],
+    },
+    {
+        "poses": ["standing", "against wall"],
+        "core": ["egg vibrator", "masturbation", "public vibrator"],
+        "optional": ["trembling", "biting lip", "hand over mouth"],
+    },
+]
+
+NSFW_YURI_SCENARIOS = [
+    {
+        "poses": ["lying", "on bed", "cuddle"],
+        "core": ["cunnilingus", "spread legs", "yuri"],
+        "optional": ["thigh grab", "trembling", "wet pussy", "blush"],
+    },
+    {
+        "poses": ["all fours", "on all fours"],
+        "core": ["cunnilingus", "from behind", "yuri"],
+        "optional": ["ass grab", "looking back", "trembling"],
+    },
+    {
+        "poses": ["scissoring", "lying", "on bed"],
+        "core": ["tribadism", "scissoring", "yuri"],
+        "optional": ["holding hands", "sweat", "kiss", "blush"],
+    },
+    {
+        "poses": ["straddling", "girl on top"],
+        "core": ["kissing", "breast sucking", "yuri"],
+        "optional": ["groping", "hip grab", "eye contact"],
+    },
+    {
+        "poses": ["lying", "sixty-nine"],
+        "core": ["sixty-nine", "cunnilingus", "yuri"],
+        "optional": ["mutual masturbation", "trembling", "spread legs"],
+    },
+    {
+        "poses": ["doggystyle", "strap-on"],
+        "core": ["strap-on", "sex", "yuri"],
+        "optional": ["hip grab", "hair pull", "looking back"],
+    },
+]
+
+# When girl_count = 2girls + explicit yuri: pair-focused bundles (still one shared scene).
+NSFW_YURI_PAIR_SCENARIOS = [
+    {
+        "poses": ["cuddling", "on bed", "lying"],
+        "core": ["yuri", "kissing", "fingering", "2girls"],
+        "optional": ["blush", "embrace", "hand on breast", "symmetrical docking"],
+    },
+    {
+        "poses": ["scissoring", "tribadism", "on bed"],
+        "core": ["yuri", "tribadism", "scissoring", "2girls"],
+        "optional": ["holding hands", "sweat", "trembling"],
+    },
+    {
+        "poses": ["mutual masturbation", "sitting", "facing each other"],
+        "core": ["yuri", "mutual masturbation", "2girls"],
+        "optional": ["eye contact", "spread legs", "blush"],
+    },
+    {
+        "poses": ["shared dildo", "straddling"],
+        "core": ["yuri", "shared dildo", "2girls"],
+        "optional": ["cooperative", "kiss", "groping"],
+    },
+]
+
+NSFW_HETERO_TWO_GIRLS_SCENARIOS = [
+    {
+        "poses": ["cowgirl position", "straddling", "symmetrical pose"],
+        "core": [
+            "cowgirl position",
+            "each girl riding a different man",
+            "parallel cowgirl",
+            "middle finger",
+            "fertilized ovum",
+            "impregnation",
+            "ffm threesome",
+        ],
+        "optional": ["creampie", "looking at viewer", "smug", "hand on hip", "bouncing breasts"],
+    },
+    {
+        "poses": ["kneeling", "side by side", "symmetrical pose"],
+        "core": [
+            "cooperative fellatio",
+            "two penises",
+            "penis in the middle",
+            "ffm threesome",
+        ],
+        "optional": [
+            "cum on face",
+            "cum on tongue",
+            "licking penis",
+            "saliva trail",
+            "eye contact",
+            "blush",
+        ],
+    },
+    {
+        "poses": ["paizuri", "symmetrical pose"],
+        "core": ["double paizuri", "two penises", "ffm threesome", "cooperative"],
+        "optional": ["saliva", "cleavage", "nipples", "licking penis"],
+    },
+    {
+        "poses": ["straddling", "cowgirl position"],
+        "core": [
+            "cowgirl position",
+            "taking turns",
+            "one girl waiting",
+            "ffm threesome",
+        ],
+        "optional": ["kissing", "breast press", "sweat", "grinding"],
+    },
+    {
+        "poses": ["lying", "on bed", "group sex"],
+        "core": ["threesome", "ffm threesome", "group sex", "multiple partners"],
+        "optional": ["cunnilingus", "fellatio", "kiss", "spread legs"],
+    },
+    {
+        "poses": ["standing", "against wall"],
+        "core": [
+            "standing sex",
+            "spitroast",
+            "one girl bent over",
+            "ffm threesome",
+        ],
+        "optional": ["hair pull", "hip grab", "tears", "ahegao"],
+    },
+]
+
+# NSFW soft: suggestive coherence (optional in generator).
+NSFW_SOFT_SCENARIOS = [
+    {
+        "poses": ["bent over", "skirt lift", "from behind"],
+        "tags": ["panties", "embarrassed", "pantyshot"],
+    },
+    {
+        "poses": ["lying", "on bed", "sheet grab"],
+        "tags": ["underwear only", "cleavage", "bed sheet"],
+    },
+    {
+        "poses": ["stretching", "arms up", "shirt lift"],
+        "tags": ["midriff", "underboob", "sweat"],
+    },
+    {
+        "poses": ["sitting", "crossed legs"],
+        "tags": ["miniskirt", "zettai ryouiki", "smug"],
+    },
+    {
+        "poses": ["towel", "wet hair", "steam"],
+        "tags": ["bathroom", "naked towel", "skinny dipping"],
+    },
 ]
 
 # Explicit sex-act tags (Danbooru naming). Used only when content_mode = NSFW explicit.
