@@ -342,7 +342,7 @@ NSFW_HETERO_PARTNERED_SCENARIOS = [
     },
 ]
 
-NSFW_SOLO_SCENARIOS = [
+NSFW_SOLO_SCENARIOS: list[dict] = [
     {
         "poses": ["sitting", "spread legs", "on bed"],
         "core": ["masturbation", "fingering"],
@@ -434,64 +434,24 @@ NSFW_YURI_PAIR_SCENARIOS = [
 
 NSFW_HETERO_TWO_GIRLS_SCENARIOS = [
     {
-        "poses": ["cowgirl position", "straddling", "symmetrical pose"],
-        "core": [
-            "cowgirl position",
-            "each girl riding a different man",
-            "parallel cowgirl",
-            "middle finger",
-            "fertilized ovum",
-            "impregnation",
-            "ffm threesome",
-        ],
-        "optional": ["creampie", "looking at viewer", "smug", "hand on hip", "bouncing breasts"],
+        "poses": ["kneeling", "side by side", "double kneeling", "kneeling facing viewer"],
+        "core": ["cooperative fellatio", "2girls", "teamwork"],
+        "optional": ["licking penis", "handjob", "eye contact", "blush"],
     },
     {
-        "poses": ["kneeling", "side by side", "symmetrical pose"],
-        "core": [
-            "cooperative fellatio",
-            "two penises",
-            "penis in the middle",
-            "ffm threesome",
-        ],
-        "optional": [
-            "cum on face",
-            "cum on tongue",
-            "licking penis",
-            "saliva trail",
-            "eye contact",
-            "blush",
-        ],
+        "poses": ["paizuri", "2girls", "double paizuri pose", "chest to chest"],
+        "core": ["double paizuri", "2girls", "paizuri"],
+        "optional": ["cooperative", "saliva", "cleavage"],
     },
     {
-        "poses": ["paizuri", "symmetrical pose"],
-        "core": ["double paizuri", "two penises", "ffm threesome", "cooperative"],
-        "optional": ["saliva", "cleavage", "nipples", "licking penis"],
+        "poses": ["straddling", "cowgirl position", "double cowgirl", "reverse cowgirl position"],
+        "core": ["cowgirl position", "2girls", "taking turns"],
+        "optional": ["kissing", "breast press", "sweat"],
     },
     {
-        "poses": ["straddling", "cowgirl position"],
-        "core": [
-            "cowgirl position",
-            "taking turns",
-            "one girl waiting",
-            "ffm threesome",
-        ],
-        "optional": ["kissing", "breast press", "sweat", "grinding"],
-    },
-    {
-        "poses": ["lying", "on bed", "group sex"],
-        "core": ["threesome", "ffm threesome", "group sex", "multiple partners"],
-        "optional": ["cunnilingus", "fellatio", "kiss", "spread legs"],
-    },
-    {
-        "poses": ["standing", "against wall"],
-        "core": [
-            "standing sex",
-            "spitroast",
-            "one girl bent over",
-            "ffm threesome",
-        ],
-        "optional": ["hair pull", "hip grab", "tears", "ahegao"],
+        "poses": ["lying", "on bed", "split level", "spitroast pose", "sandwich position"],
+        "core": ["2girls", "group pose", "taking turns"],
+        "optional": ["cunnilingus", "fellatio", "kiss"],
     },
 ]
 

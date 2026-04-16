@@ -1,8 +1,8 @@
 """
-FN Random Prompt Generator — single-line comma-separated tags (no space after commas), optional weights
-on quality. Explicit NSFW uses coherent scenario bundles. Hetero + 2girls uses layout + 2boys + male tags.
-Order: quality → count → characters → (2girls layout) → outfit → pose → scene → expression
-→ (2boys / male tags when hetero partnered) → background → camera.
+FN Random Prompt Generator — compact comma-separated tags (no space after commas), optional weights
+on quality. Explicit NSFW uses coherent scenario bundles (e.g. BJ → kneeling + fellatio + related tags).
+Order: quality → count → characters → body/eyes → outfit → pose → sex acts → expression
+→ (hetero partner tags) → background → camera. Optional BREAK only before background when use_clip_break.
 """
 
 from __future__ import annotations
@@ -152,6 +152,8 @@ def _is_spurious_color_penis_tag(tag: str) -> bool:
 def _looks_like_danbooru_character_tag(tag: str) -> bool:
     """Pools may leak character tags into act lists; drop name_(copyright) shaped tokens."""
     s = tag.strip().lower().replace(" ", "_")
+    if "_(" in s and s.endswith(")"):
+        return True
     return bool(re.match(r"^[a-z0-9]+(?:_[a-z0-9]+)*_\([^)]+\)$", s))
 
 
@@ -218,6 +220,40 @@ def _pick_scenario_tags(rng: random.Random, scenario: dict) -> tuple[str, list[s
     return pose, core + extras
 
 
+def _fixed_two_girls_opening() -> str:
+    # Keep this opening stable for layout consistency across generations.
+    return "masterpiece,best quality,2girls,one girl on the right one on the left"
+
+
+def _is_relation_style_action(action: str) -> bool:
+    a = (action or "").lower()
+    relation_keys = (
+        "cowgirl",
+        "vaginal",
+        "sex",
+        "missionary",
+        "doggystyle",
+        "anal",
+        "riding",
+        "straddling",
+    )
+    return any(k in a for k in relation_keys)
+
+
+TWO_BOYS_VAGINAL_POSITIONS = [
+    "doggystyle",
+    "missionary",
+    "cowgirl position",
+    "reverse cowgirl position",
+    "standing sex",
+    "spooning",
+    "against wall",
+    "legs up",
+    "on bed",
+    "all fours",
+]
+
+
 class FNRandomPromptGenerator:
     @classmethod
     def INPUT_TYPES(cls):
@@ -246,6 +282,10 @@ class FNRandomPromptGenerator:
                     {"default": -1, "min": -1, "max": 0x7FFFFFFF, "step": 1},
                 ),
                 "include_quality_prefix": ("BOOLEAN", {"default": True}),
+                "use_clip_break": (
+                    "BOOLEAN",
+                    {"default": False},
+                ),
             },
             "optional": {
                 "exclude_line_substrings": (
@@ -277,9 +317,9 @@ class FNRandomPromptGenerator:
     OUTPUT_NODE = True
     CATEGORY = "FrostzNeeko 🔹/Prompt"
     DESCRIPTION = (
-        "Single-line prompt (comma, no space). Explicit NSFW uses scenario bundles. "
-        "Hetero + 2girls: one girl on the left/right, 2boys, then male tags. "
-        "Order: quality → count → chars → clothing → pose → scene → expression → partners → bg → camera."
+        "Compact tags (comma, no space): explicit NSFW picks coherent scenario bundles (pose + acts). "
+        "Order: quality → count → characters → clothing → pose → scene tags → expression → "
+        "(hetero partner) → background → camera. Prompt output is always one line."
     )
 
     @classmethod
@@ -290,6 +330,7 @@ class FNRandomPromptGenerator:
         girl_count,
         seed,
         include_quality_prefix,
+        use_clip_break,
         exclude_line_substrings="",
         extra_tags_append="",
         generated_prompt="",
@@ -305,6 +346,7 @@ class FNRandomPromptGenerator:
         girl_count,
         seed,
         include_quality_prefix,
+        use_clip_break,
         exclude_line_substrings="",
         extra_tags_append="",
         generated_prompt="",
@@ -389,6 +431,7 @@ class FNRandomPromptGenerator:
         # --- 6) Explicit scenes: coherent scenario (pose + core acts + optional flavor) ---
         sex_tags: list[str] = []
         partnered_het = False
+        partner_count = 0
         scenario_pose = ""
         if is_yuri:
             scen_pool = NSFW_YURI_PAIR_SCENARIOS if n_girls == 2 else NSFW_YURI_SCENARIOS
@@ -399,10 +442,12 @@ class FNRandomPromptGenerator:
                 scen = rng.choice(NSFW_HETERO_TWO_GIRLS_SCENARIOS)
                 scenario_pose, sex_tags = _pick_scenario_tags(rng, scen)
                 partnered_het = True
+                partner_count = 2 if rng.random() < 0.75 else 1
             elif rng.random() < 0.55:
                 scen = rng.choice(NSFW_HETERO_PARTNERED_SCENARIOS)
                 scenario_pose, sex_tags = _pick_scenario_tags(rng, scen)
                 partnered_het = True
+                partner_count = 1
             else:
                 scen = rng.choice(NSFW_SOLO_SCENARIOS)
                 scenario_pose, sex_tags = _pick_scenario_tags(rng, scen)
@@ -413,41 +458,28 @@ class FNRandomPromptGenerator:
 
         sex_tags = _filter_girl_side_tags(sex_tags)
 
-        two_girls_layout: list[str] = []
-        if is_het and n_girls == 2:
-            two_girls_layout = ["one girl on the left", "one girl on the right"]
-
-        # --- Male / partner tags (hetero + partnered only) ---
-        male_early = ""
-        male_late = ""
+        # --- Male / partner tags (hetero + partnered only), inline before background ---
+        male_inline = ""
         if is_het and partnered_het:
+            # 2girls template keeps action clean; avoid male appearance clutter.
             if n_girls == 2:
-                male_parts = ["2boys", "faceless_male", "bald", "hetero"]
-                if rng.random() < 0.45:
-                    male_parts.append("two penises")
-                if rng.random() < 0.88:
-                    male_parts.append(rng.choice(["large_penis", "small_penis", "huge_penis"]))
-                if rng.random() < 0.3:
-                    male_parts.append(rng.choice(["muscular_male", "toned_male"]))
-                male_early = _join_unique(male_parts, char_keys)
+                male_inline = ""
             else:
                 male_parts = ["faceless_male", "bald", "hetero"]
+                male_parts.append("1boy")
                 if rng.random() < 0.88:
                     male_parts.append(rng.choice(["large_penis", "small_penis", "huge_penis"]))
-                male_late = _join_unique(male_parts, char_keys)
+                male_inline = _join_unique(male_parts, char_keys)
 
-        # --- Assemble main stack: quality → count → names → 2girls layout → clothing →
-        #     (2boys + male tags) → pose → sex → … → (1girl male at end) ---
+        # --- Assemble main stack: quality → count → names → clothing → pose →
+        #     sex → soft → couple → expression → male (hetero) ---
         main_parts: list[str] = []
         if quality_str:
             main_parts.append(quality_str)
         main_parts.append(girl_count)
         main_parts.extend(chars)
-        main_parts.extend(two_girls_layout)
         if clothing:
             main_parts.append(clothing)
-        if male_early:
-            main_parts.append(male_early)
         if pose:
             main_parts.append(pose)
         main_parts.extend(sex_tags)
@@ -455,8 +487,8 @@ class FNRandomPromptGenerator:
         main_parts.extend(couple_tags)
         if expression:
             main_parts.append(expression)
-        if male_late:
-            main_parts.append(male_late)
+        if male_inline:
+            main_parts.append(male_inline)
         if extra_tags_append.strip():
             main_parts.append(extra_tags_append.strip())
 
@@ -473,6 +505,54 @@ class FNRandomPromptGenerator:
         tail_line = _join_unique(tail_parts, char_keys)
 
         prompt = _join_unique([main_line, tail_line], char_keys)
+
+        # --- Special stable template for 2girls ---
+        # Fixed opening → girl names → location → clothing → action/interaction
+        if n_girls == 2:
+            girl1 = chars[0] if len(chars) > 0 else "original"
+            girl2 = chars[1] if len(chars) > 1 else "original"
+            girls_with_break = _join_unique([girl1, "BREAK", girl2], char_keys)
+            # Use curated fallback locations here to keep the fixed template clean.
+            location = _pick(rng, BACKGROUND_NSFW if (is_soft or is_het or is_yuri) else BACKGROUND_SFW, BACKGROUND_SFW)
+            action_parts: list[str] = []
+            primary_action = ""
+            suppress_primary_action = False
+            if sex_tags:
+                primary_action = sex_tags[0]
+            elif couple_tags:
+                primary_action = couple_tags[0]
+            elif pose:
+                primary_action = pose
+            # Keep action focused: male count (when present) + single primary interaction.
+            if is_het and partnered_het:
+                if "cooperative" in primary_action.lower():
+                    action_parts.append("1boy")
+                else:
+                    male_count_tag = "2boys" if partner_count == 2 else "1boy"
+                    action_parts.append(male_count_tag)
+                    if male_count_tag == "2boys":
+                        action_parts.append("vaginal")
+                        action_parts.append(rng.choice(TWO_BOYS_VAGINAL_POSITIONS))
+                        if rng.random() < 0.8:
+                            action_parts.append("fertilized ovum")
+                        suppress_primary_action = True
+            if primary_action and not suppress_primary_action:
+                action_parts.append(primary_action)
+            # Stable framing tail.
+            action_parts.extend(["front view", "looking at viewer", "detailed faces"])
+            if extra_tags_append.strip():
+                action_parts.append(extra_tags_append.strip())
+            action_block = _join_unique(action_parts, char_keys)
+            prompt = _join_unique(
+                [
+                    _fixed_two_girls_opening(),
+                    girls_with_break,
+                    location,
+                    clothing,
+                    action_block,
+                ],
+                char_keys,
+            )
 
         return {
             "ui": {"generated_prompt": (prompt,)},
